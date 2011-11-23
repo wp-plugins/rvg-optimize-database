@@ -15,6 +15,7 @@ Version: 1.0
 == Description ==
 
 This plugin is a 'one click' database optimizer. It deletes the redundant revisions of posts and pages and then optimizes all Wordpress database tables.
+http://cagewebdev.com/
 
 == Installation ==
 
