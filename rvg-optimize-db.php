@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.0
+ * @version 1.0.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com
-Description: Optimizes the Wordpress Database after Deleting Revisions - release: 08-10-2011
+Description: Optimizes the Wordpress Database after Deleting Revisions
 Author: Rolf van Gelder
-Version: 1.0
+Version: 1.0.1
 Author URI: http://cagewebdev.com
 */
 ?>
