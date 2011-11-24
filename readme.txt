@@ -36,4 +36,5 @@ No Screenshots available.
 
 == Frequently Asked Questions ==
 
-No FAQ available yet.
+Q: How do I run this plugin?
+A: In the WordPress ADMIN panel go to 'Settings'. Click on 'Optimize Database'. Et voila!
