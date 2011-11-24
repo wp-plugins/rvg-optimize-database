@@ -4,13 +4,13 @@ Contributors: Rolf van Gelder
 Donate link: http://cagewebdev.com
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/wp-plugins
-Tags: wp, database, delete, revisions, optimize, php
+Tags: wp, database, delete, revisions, optimize, posts, pages
 Author URI: http://cagewebdev.com
 Author: Rolf van Gelder
 Requires at least: 2.0
 Tested up to: 3.2.1
-Stable tag: 1.0
-Version: 1.0
+Stable tag: 1.0.1
+Version: 1.0.1
 
 == Description ==
 
@@ -32,7 +32,8 @@ No Screenshots available.
 
 == Changelog ==
 
-1.0 11/22/2011 Initial release
+1.0   11/22/2011 Initial release
+1.0.1 11/24/2011 A few updates for the readme.txt file
 
 == Frequently Asked Questions ==
 
