@@ -37,7 +37,7 @@ No Screenshots available.
 
 <p>1.0   11/22/2011 Initial release</p>
 <p>1.0.1 11/24/2011 A few updates for the readme.txt file</p>
-<p>1.0.2 12/02/2011 Some minor updates
+<p>1.0.2 12/02/2011 Some minor updates</p>
 
 == Frequently Asked Questions ==
 
