@@ -1,19 +1,18 @@
 <?php
-$version = '1.0.2';
+$version = '1.0.3';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.0.2
+ * @version 1.0.3
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions
 Author: Rolf van Gelder
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://cagewebdev.com
 */
-?>
-<?php
+?><?php
 function optimize_db_main()
 {	if (function_exists('add_options_page')) {
 	add_options_page('Optimize Database', 'Optimize Database',8 ,'rvg-optimize-db.php', 'rvg_optimize_db');
@@ -40,11 +39,12 @@ function rvg_optimize_db()
 	{	$cnt = count($results);
 		# print_r($results);
 ?>
-<table border="0" cellspacing="5" cellpadding="5">
+
+<table border="0" cellspacing="0" cellpadding="4">
   <tr>
     <td colspan="3" style="font-weight:bold;color:#00F;">DELETING REVISIONS:</td>
   </tr>
-<?php		
+  <?php		
 		for($i=0;$i<$cnt;$i++)
 		{	# MULTI LINGUAL?
 			$post_title = str_replace('--><!--','--> | <!--',$results[$i]->post_title);
@@ -54,7 +54,7 @@ function rvg_optimize_db()
     <td><?=$results[$i]->post_modified?></td>
     <td style="font-weight:bold;"><?=$post_title?></td>
   </tr>
-<?php			
+  <?php			
 		}
 ?>
 </table>
@@ -76,11 +76,11 @@ function rvg_optimize_db()
 	$Tables_in_DB_NAME = 'Tables_in_'.DB_NAME;
 	# print_r($Tables);
 ?>
-<table border="0" cellspacing="5" cellpadding="5">
+<table border="0" cellspacing="0" cellpadding="4">
   <tr>
     <td colspan="3" style="font-weight:bold;color:#00F;">OPTIMIZING DATABASE TABLES:</td>
   </tr>
-<?php	
+  <?php	
 	for ($i=0; $i<count($Tables); $i++)
 	{
 		$query  = "OPTIMIZE TABLE ".$Tables[$i]->$Tables_in_DB_NAME;
@@ -89,14 +89,15 @@ function rvg_optimize_db()
 ?>
   <tr>
     <td style="font-weight:bold;"><?=$Tables[$i]->$Tables_in_DB_NAME?></td>
-    <td style="font-weight:bold;">=&gt;</td>    
+    <td style="font-weight:bold;">=&gt;</td>
     <td><?=$result[0]->Msg_text?></td>
   </tr>
-<?php
+  <?php
 	}
 	$query = "$operation TABLE ";
 ?>
-</table><br />
+</table>
+<br />
 <span style="font-weight:bold;color:#00F;padding-left:5px;">DONE!</span>
 <?php	
 }
