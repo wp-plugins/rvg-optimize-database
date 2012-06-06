@@ -1,15 +1,15 @@
 <?php
-$version = '1.0.3';
+$version = '1.0.4';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.0.3
+ * @version 1.0.4
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions
 Author: Rolf van Gelder
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://cagewebdev.com
 */
 ?><?php
@@ -50,9 +50,9 @@ function rvg_optimize_db()
 			$post_title = str_replace('--><!--','--> | <!--',$results[$i]->post_title);
 ?>
   <tr valign="top">
-    <td align="right" style="font-weight:bold;"><?=($i+1)?></td>
-    <td><?=$results[$i]->post_modified?></td>
-    <td style="font-weight:bold;"><?=$post_title?></td>
+    <td align="right" style="font-weight:bold;"><?php echo ($i+1) ?></td>
+    <td><?php echo $results[$i]->post_modified ?></td>
+    <td style="font-weight:bold;"><?php echo $post_title ?></td>
   </tr>
   <?php			
 		}
@@ -88,9 +88,9 @@ function rvg_optimize_db()
 		# print_r($result);
 ?>
   <tr>
-    <td style="font-weight:bold;"><?=$Tables[$i]->$Tables_in_DB_NAME?></td>
+    <td style="font-weight:bold;"><?php echo $Tables[$i]->$Tables_in_DB_NAME ?></td>
     <td style="font-weight:bold;">=&gt;</td>
-    <td><?=$result[0]->Msg_text?></td>
+    <td><?php echo $result[0]->Msg_text ?></td>
   </tr>
   <?php
 	}
