@@ -8,9 +8,9 @@ Tags: wp, database, delete, revisions, optimize, posts, pages
 Author URI: http://cagewebdev.com
 Author: Rolf van Gelder
 Requires at least: 2.0
-Tested up to: 3.3.2
-Stable tag: 1.0.4
-Version: 1.0.4
+Tested up to: 3.4.1
+Stable tag: 1.0.5
+Version: 1.0.5
 
 == Description ==
 
@@ -40,6 +40,7 @@ No Screenshots available.
 <p><b>1.0.2</b> 12/02/2011 Some minor updates</p>
 <p><b>1.0.3</b> 12/15/2011 Some minor layout updates</p>
 <p><b>1.0.4</b> 06/06/2012 Now also works with non short_open_tag's</p>
+<p><b>1.0.5</b> 21/08/2012 Depreciated item ('has_cap') replaced, abandoned line of code removed</p>
 
 == Frequently Asked Questions ==
 
