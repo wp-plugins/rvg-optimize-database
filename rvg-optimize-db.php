@@ -1,21 +1,21 @@
 <?php
-$version = '1.0.4';
+$version = '1.0.5';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.0.4
+ * @version 1.0.5
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions
 Author: Rolf van Gelder
-Version: 1.0.4
+Version: 1.0.5
 Author URI: http://cagewebdev.com
 */
 ?><?php
 function optimize_db_main()
 {	if (function_exists('add_options_page')) {
-	add_options_page('Optimize Database', 'Optimize Database',8 ,'rvg-optimize-db.php', 'rvg_optimize_db');
+	add_options_page('Optimize Database', 'Optimize Database','administrator' ,'rvg-optimize-db.php', 'rvg_optimize_db');
     }
 }
 add_action('admin_menu', 'optimize_db_main');
@@ -94,7 +94,6 @@ function rvg_optimize_db()
   </tr>
   <?php
 	}
-	$query = "$operation TABLE ";
 ?>
 </table>
 <br />
