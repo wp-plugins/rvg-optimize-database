@@ -9,20 +9,20 @@ Author URI: http://cagewebdev.com
 Author: Rolf van Gelder
 Requires at least: 2.0
 Tested up to: 3.4.1
-Stable tag: 1.0.5
-Version: 1.0.5
+Stable tag: 1.1
+Version: 1.1
 
 == Description ==
 
 <p>This plugin is a 'one click' database optimizer.</p>
-<p>It deletes the redundant revisions of posts and pages and then optimizes all Wordpress database tables.</p>
+<p>It deletes the redundant revisions of posts and pages and, after that, optimizes all database tables.</p>
 <p>http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin</p>
 
 == Installation ==
 
 <ol>
 <li>Upload `rvg-optimize-db.php` to the `/wp-content/plugins/` directory</li>
-<li>Activate the plugin through the 'Plugins' menu in WordPress</li>
+<li>Activate the plugin through the 'Plugins' menu in the WordPress Dashboard</li>
 </ol>
 
 == Upgrade Notice ==
@@ -40,9 +40,13 @@ No Screenshots available.
 <p><b>1.0.2</b> 12/02/2011 Some minor updates</p>
 <p><b>1.0.3</b> 12/15/2011 Some minor layout updates</p>
 <p><b>1.0.4</b> 06/06/2012 Now also works with non short_open_tag's</p>
-<p><b>1.0.5</b> 21/08/2012 Depreciated item ('has_cap') replaced, abandoned line of code removed</p>
+<p><b>1.0.5</b> 08/21/2012 Depreciated item ('has_cap') replaced, abandoned line of code removed</p>
+<p><b>1.1</b> 08/29/2012 Added: a new option page, in de plugins section, where you can define the maximum number of - most recent - revisions you want to keep per post or page</p>
 
 == Frequently Asked Questions ==
 
+<p><b>Q:</b> How can I change the settings of this plugin?</p>
+<p><b>A:</b> In the WordPress Dashboard go to '<b>Plugins / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page.</p>
+<br /><br />
 <p><b>Q:</b> How do I run this plugin?</p>
-<p><b>A:</b> In the WordPress Admin panel go to '<b>Settings</b>'. Click on '<b>Optimize Database</b>'. Et voila!</p>
+<p><b>A:</b> In the WordPress Dashboard go to '<b>Settings</b>'. Click on '<b>Optimize Database</b>'. Et voila!</p>
