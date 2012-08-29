@@ -1,16 +1,16 @@
 <?php
-$version = '1.1';
+$version = '1.1.1';
 $release_date = '08/30/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.1
+ * @version 1.1.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="plugins.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.1
+Version: 1.1.1
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -61,6 +61,7 @@ function rvg_odb_options_page() {
 		// Give an updated message
 		echo "<div class='updated'><p><strong>Optimize Database after Deleting Revisions options updated</strong> - Click <a href='options-general.php?page=rvg-optimize-db.php' style='font-weight:bold'>HERE</a> to run the optimization</p></div>";
 	}
+	$rvg_odb_number = get_option('rvg_odb_number');
 	if(!$rvg_odb_number) $rvg_odb_number = '0';
 
 	// Output the options page
@@ -74,7 +75,7 @@ function rvg_odb_options_page() {
       <p>Below you can define the <u>maximum number</u> of - most recent - revisions you want to <u>keep</u> per post or page.</p>
       <p>If you set the maximum number to '<strong>0</strong>' it means <strong>ALL REVISIONS</strong> will be deleted for all posts and pages.</p>
       <p>To start the optimization:<br />
-In the WordPress Dashboard go to                     &lsquo;<strong>Settings</strong>&lsquo;.<br />
+        In the WordPress Dashboard go to &lsquo;<strong>Settings</strong>&lsquo;.<br />
         Click on &lsquo;<strong>Optimize Database</strong>&lsquo;. Et voila! </p>
       <p>Plugin version:<br />
         <strong>v<?php echo $version ?> (<?php echo $release_date?>)</strong> </p>
@@ -95,7 +96,7 @@ In the WordPress Dashboard go to                     &lsquo;<strong>Settings</st
           <tr>
             <td><label for="<?php echo rvg_odb_number; ?>" style="font-weight:bold;">Maximum number of - most recent - revisions to keep per post / page<br />
               </label></td>
-            <td><input type="text" size="5" name="rvg_odb_number" id="rvg_odb_number" value="<?php echo get_option('rvg_odb_number')?>" style="font-weight:bold;color:#00F;" /></td>
+            <td><input type="text" size="5" name="rvg_odb_number" id="rvg_odb_number" value="<?php echo $rvg_odb_number?>" style="font-weight:bold;color:#00F;" /></td>
           </tr>
         </table>
       </fieldset>
