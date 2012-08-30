@@ -6,11 +6,11 @@ Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
 Tags: wp, database, delete, revisions, optimize, posts, pages
 Author URI: http://cagewebdev.com
-Author: Rolf van Gelder
+Author: Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.4.1
-Stable tag: 1.1
-Version: 1.1
+Stable tag: 1.1.2
+Version: 1.1.2
 
 == Description ==
 
@@ -23,6 +23,7 @@ Version: 1.1
 <ol>
 <li>Upload `rvg-optimize-db.php` to the `/wp-content/plugins/` directory</li>
 <li>Activate the plugin through the 'Plugins' menu in the WordPress Dashboard</li>
+<li>Change the settings (if needed) through WordPress Dashboard, Plugins, Optimize DB Options</li>
 </ol>
 
 == Upgrade Notice ==
@@ -41,12 +42,12 @@ No Screenshots available.
 <p><b>1.0.3</b> 12/15/2011 Some minor layout updates</p>
 <p><b>1.0.4</b> 06/06/2012 Now also works with non short_open_tag's</p>
 <p><b>1.0.5</b> 08/21/2012 Depreciated item ('has_cap') replaced, abandoned line of code removed</p>
-<p><b>1.1</b> 08/29/2012 Added: a new option page, in de plugins section, where you can define the maximum number of - most recent - revisions you want to keep per post or page</p>
+<p><b>1.1</b>   08/29/2012 Added: a new option page, in de plugins section, where you can define the maximum number of - most recent - revisions you want to keep per post or page</p>
+<p><b>1.1.1</b> 08/30/2012 Minor bug fix for the new option page</p>
 
 == Frequently Asked Questions ==
 
-<p><b>Q:</b> How can I change the settings of this plugin?</p>
+<p><b>Q:</b> <em>How can I change the settings of this plugin?</em></p>
 <p><b>A:</b> In the WordPress Dashboard go to '<b>Plugins / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page.</p>
-<br /><br />
-<p><b>Q:</b> How do I run this plugin?</p>
+<p><b>Q:</b> <em>How do I run this plugin?</em></p>
 <p><b>A:</b> In the WordPress Dashboard go to '<b>Settings</b>'. Click on '<b>Optimize Database</b>'. Et voila!</p>
