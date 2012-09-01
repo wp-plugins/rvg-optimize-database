@@ -8,7 +8,7 @@ $release_date = '08/30/2012';
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
-Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="plugins.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
+Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="plugins.php?page=rvg_odb_admin"><strong>plugin options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
 Version: 1.1.2
 Author URI: http://cagewebdev.com

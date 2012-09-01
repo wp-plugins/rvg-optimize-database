@@ -9,21 +9,22 @@ Author URI: http://cagewebdev.com
 Author: Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.4.1
-Stable tag: 1.1.2
-Version: 1.1.2
+Stable tag: 1.1.3
+Version: 1.1.3
 
 == Description ==
 
 <p>This plugin is a 'one click' database optimizer.</p>
 <p>It deletes the redundant revisions of posts and pages and, after that, optimizes all database tables.</p>
 <p>http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin</p>
+<p>Author: Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com</p>
 
 == Installation ==
 
 <ol>
 <li>Upload `rvg-optimize-db.php` to the `/wp-content/plugins/` directory</li>
 <li>Activate the plugin through the 'Plugins' menu in the WordPress Dashboard</li>
-<li>Change the settings (if needed) through WordPress Dashboard, Plugins, Optimize DB Options</li>
+<li>Change the settings (if needed) through WordPress Dashboard, Settings, Optimize DB Options</li>
 </ol>
 
 == Upgrade Notice ==
@@ -43,11 +44,14 @@ No Screenshots available.
 <p><b>1.0.4</b> 06/06/2012 Now also works with non short_open_tag's</p>
 <p><b>1.0.5</b> 08/21/2012 Depreciated item ('has_cap') replaced, abandoned line of code removed</p>
 <p><b>1.1</b>   08/29/2012 Added: a new option page, in de plugins section, where you can define the maximum number of - most recent - revisions you want to keep per post or page</p>
-<p><b>1.1.1</b> 08/30/2012 Minor bug fix for the new option page</p>
+<p><b>1.1.2</b> 08/30/2012 Minor bug fix for the new option page</p>
+<p><b>1.1.3</b> 09/01/2012 Moved the 'Optimize DB Options' item to Dashboard 'Settings' Menu and the 'Optimize Database' item to the Dashboard 'Tools' Menu. That makes more sense!</p>
 
 == Frequently Asked Questions ==
 
 <p><b>Q:</b> <em>How can I change the settings of this plugin?</em></p>
-<p><b>A:</b> In the WordPress Dashboard go to '<b>Plugins / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page.</p>
+<p><b>A:</b> In the WordPress Dashboard go to '<b>Settings / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page.</p>
 <p><b>Q:</b> <em>How do I run this plugin?</em></p>
 <p><b>A:</b> In the WordPress Dashboard go to '<b>Settings</b>'. Click on '<b>Optimize Database</b>'. Et voila!</p>
+<p><b>Q:</b> <em>Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database?</em></p>
+<p><b>A:</b> That is because the table type of that table is not 'MyISAM'</p>
