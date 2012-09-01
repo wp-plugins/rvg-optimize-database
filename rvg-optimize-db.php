@@ -128,7 +128,7 @@ function rvg_optimize_db()
 
 <h2 style="padding-left:8px;">Optimizing your WordPress Database</h2>
 <p><span style="padding-left:8px;font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $version?></a> - A WordPress Plugin by <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, The Netherlands</span></p>
-<p><span style="padding-left:8px;font-style:normal;">Maximum number of - most recent - revisions to keep per post / page: <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span> - click <a href="plugins.php?page=rvg_odb_admin" style="font-weight:bold;">HERE</a> to change this value.</span></p>
+<p><span style="padding-left:8px;font-style:normal;">Maximum number of - most recent - revisions to keep per post / page: <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span> - click <a href="options-general.php?page=rvg_odb_admin" style="font-weight:bold;">HERE</a> to change this value.</span></p>
 <?php
 	$sql = "
 	SELECT `post_parent`, `post_title`, COUNT(*) cnt
