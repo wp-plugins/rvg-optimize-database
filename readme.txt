@@ -9,8 +9,8 @@ Author URI: http://cagewebdev.com
 Author: Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.4.1
-Stable tag: 1.1.5
-Version: 1.1.5
+Stable tag: 1.1.6
+Version: 1.1.6
 
 == Description ==
 
@@ -48,6 +48,7 @@ No Screenshots available.
 <p><b>1.1.3</b> 09/01/2012 Moved the 'Optimize DB Options' item to Dashboard 'Settings' Menu and the 'Optimize Database' item to the Dashboard 'Tools' Menu. That makes more sense!</p>
 <p><b>1.1.4</b> 09/01/2012 Something went wrong deploying 1.1.3, so I deployed it again as 1.1.4</p>
 <p><b>1.1.5</b> 09/01/2012 Something went wrong deploying 1.1.4, so I deployed it again as 1.1.5. *sigh*</p>
+<p><b>1.1.6</b> 09/01/2012 Fixed the link to the options page</p>
 == Frequently Asked Questions ==
 
 <p><b>Q:</b> <em>How can I change the settings of this plugin?</em></p>
