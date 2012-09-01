@@ -1,28 +1,28 @@
 <?php
-$version = '1.1.2';
-$release_date = '08/30/2012';
+$version = '1.1.3';
+$release_date = '09/01/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.1.2
+ * @version 1.1.3
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
-Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="plugins.php?page=rvg_odb_admin"><strong>plugin options</strong></a>
+Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="plugins.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.1.2
+Version: 1.1.3
 Author URI: http://cagewebdev.com
 */
 ?>
 <?php
 /********************************************************************************************
 
-	ADD THE 'OPTIMIZE DATABASE' ITEM TO THE SETTINGS MENU
+	ADD THE 'OPTIMIZE DATABASE' ITEM TO THE TOOLS MENU
 
 *********************************************************************************************/
 function optimize_db_main()
-{	if (function_exists('add_options_page'))
-	{	add_options_page('Optimize Database', 'Optimize Database','administrator' ,'rvg-optimize-db.php', 'rvg_optimize_db');
+{	if (function_exists('add_management_page'))
+	{	add_management_page(__('Optimize Database'), __('Optimize Database'),'administrator' ,'rvg-optimize-db.php', 'rvg_optimize_db');
     }
 }
 add_action('admin_menu', 'optimize_db_main');
@@ -30,16 +30,15 @@ add_action('admin_menu', 'optimize_db_main');
 
 /********************************************************************************************
 
-	ADD THE 'OPTIMIZE DATABASE OPTION' ITEM TO THE PLUGINS MENU
+	ADD THE 'OPTIMIZE DB OPTIONS' ITEM TO THE SETTINGS MENU
 
 *********************************************************************************************/
 function rvg_odb_admin_menu()
-{	$hook = add_submenu_page('plugins.php', __('Optimize DB Options'), __('Optimize DB Options'), 'manage_options', 'rvg_odb_admin', 'rvg_odb_options_page');
+{	if (function_exists('add_options_page'))
+	{	add_options_page(__('Optimize DB Options'), __('Optimize DB Options'), 'manage_options', 'rvg_odb_admin', 'rvg_odb_options_page');
+    }
 }
 add_action( 'admin_menu', 'rvg_odb_admin_menu' );
-function rvg_odb_option_page()
-{	add_options_page('Optimize Database Options', 'rvg_odb', 'manage_options', basename(__FILE__), 'rvg_odb_options_page');
-}
 
 
 /********************************************************************************************
