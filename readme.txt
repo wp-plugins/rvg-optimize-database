@@ -9,8 +9,8 @@ Author URI: http://cagewebdev.com
 Author: Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.4.1
-Stable tag: 1.1.6
-Version: 1.1.6
+Stable tag: 1.1.7
+Version: 1.1.7
 
 == Description ==
 
@@ -49,11 +49,13 @@ No Screenshots available.
 <p><b>1.1.4</b> 09/01/2012 Something went wrong deploying 1.1.3, so I deployed it again as 1.1.4</p>
 <p><b>1.1.5</b> 09/01/2012 Something went wrong deploying 1.1.4, so I deployed it again as 1.1.5. *sigh*</p>
 <p><b>1.1.6</b> 09/01/2012 Fixed the link to the options page</p>
+<p><b>1.1.7</b> 09/03/2012 Some textual and link fixes</p>
+
 == Frequently Asked Questions ==
 
 <p><b>Q:</b> <em>How can I change the settings of this plugin?</em></p>
 <p><b>A:</b> In the WordPress Dashboard go to '<b>Settings / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page.</p>
 <p><b>Q:</b> <em>How do I run this plugin?</em></p>
-<p><b>A:</b> In the WordPress Dashboard go to '<b>Settings</b>'. Click on '<b>Optimize Database</b>'. Et voila!</p>
+<p><b>A:</b> In the WordPress Dashboard go to '<b>Tools</b>'. Click on '<b>Optimize Database</b>'. Et voila!</p>
 <p><b>Q:</b> <em>Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database?</em></p>
 <p><b>A:</b> That is because the table type of that table is not 'MyISAM'</p>

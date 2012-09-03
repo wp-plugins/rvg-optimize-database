@@ -1,16 +1,16 @@
 <?php
-$version = '1.1.6';
-$release_date = '09/01/2012';
+$version = '1.1.7';
+$release_date = '09/03/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.1.6
+ * @version 1.1.7
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="plugins.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.1.6
+Version: 1.1.7
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -74,7 +74,7 @@ function rvg_odb_options_page() {
       <p>Below you can define the <u>maximum number</u> of - most recent - revisions you want to <u>keep</u> per post or page.</p>
       <p>If you set the maximum number to '<strong>0</strong>' it means <strong>ALL REVISIONS</strong> will be deleted for all posts and pages.</p>
       <p>To start the optimization:<br />
-        In the WordPress Dashboard go to &lsquo;<strong>Settings</strong>&lsquo;.<br />
+        In the WordPress Dashboard go to &lsquo;<strong>Tools</strong>&lsquo;.<br />
         Click on &lsquo;<strong>Optimize Database</strong>&lsquo;. Et voila! </p>
       <p>Plugin version:<br />
         <strong>v<?php echo $version ?> (<?php echo $release_date?>)</strong> </p>
