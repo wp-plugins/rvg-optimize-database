@@ -8,9 +8,9 @@ Tags: wp, database, delete, revisions, optimize, posts, pages
 Author URI: http://cagewebdev.com
 Author: Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
-Tested up to: 3.4.1
-Stable tag: 1.1.7
-Version: 1.1.7
+Tested up to: 3.4.2
+Stable tag: 1.1.8
+Version: 1.1.8
 
 == Description ==
 
@@ -50,6 +50,7 @@ No Screenshots available.
 <p><b>1.1.5</b> 09/01/2012 Something went wrong deploying 1.1.4, so I deployed it again as 1.1.5. *sigh*</p>
 <p><b>1.1.6</b> 09/01/2012 Fixed the link to the options page</p>
 <p><b>1.1.7</b> 09/03/2012 Some textual and link fixes</p>
+<p><b>1.1.8</b> 09/08/2012 Another link fix</p>
 
 == Frequently Asked Questions ==
 

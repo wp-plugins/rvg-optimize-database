@@ -1,16 +1,16 @@
 <?php
-$version = '1.1.7';
-$release_date = '09/03/2012';
+$version = '1.1.8';
+$release_date = '08/09/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.1.7
+ * @version 1.1.8
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
-Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="plugins.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
+Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.1.7
+Version: 1.1.8
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -58,7 +58,7 @@ function rvg_odb_options_page() {
 		update_option('rvg_odb_number', $rvg_odb_number);
 
 		// Give an updated message
-		echo "<div class='updated'><p><strong>Optimize Database after Deleting Revisions options updated</strong> - Click <a href='options-general.php?page=rvg-optimize-db.php' style='font-weight:bold'>HERE</a> to run the optimization</p></div>";
+		echo "<div class='updated'><p><strong>Optimize Database after Deleting Revisions options updated</strong> - Click <a href='tools.php?page=rvg-optimize-db.php' style='font-weight:bold'>HERE</a> to run the optimization</p></div>";
 	}
 	$rvg_odb_number = get_option('rvg_odb_number');
 	if(!$rvg_odb_number) $rvg_odb_number = '0';
