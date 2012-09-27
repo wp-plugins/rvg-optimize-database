@@ -1,16 +1,16 @@
 <?php
-$version = '1.1.8';
-$release_date = '08/09/2012';
+$version = '1.1.9';
+$release_date = '27/09/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.1.8
+ * @version 1.1.9
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.1.8
+Version: 1.1.9
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -123,7 +123,11 @@ function rvg_optimize_db()
 		DELETE REVISIONS
 	
 	******************************************************************************************/
-	$max_revisions = get_option('rvg_odb_number');	
+	$max_revisions = get_option('rvg_odb_number');
+	if(!$max_revisions)
+	{	$max_revisions = 0;
+		update_option('rvg_odb_number', $max_revisions);
+	}
 ?>
 
 <h2 style="padding-left:8px;">Optimizing your WordPress Database</h2>
@@ -207,9 +211,6 @@ function rvg_optimize_db()
 		OPTIMIZE TABLES
 	
 	******************************************************************************************/
-	# GET TABLE NAMES
-	$Tables = $wpdb -> get_results('SHOW TABLES IN '.DB_NAME);
-	$Tables_in_DB_NAME = 'Tables_in_'.DB_NAME;
 ?>
 <table border="0" cellspacing="8" cellpadding="2">
   <tr>
@@ -220,15 +221,19 @@ function rvg_optimize_db()
     <th style="border-bottom:solid 1px #999;" align="left">table name</th>
     <th style="border-bottom:solid 1px #999;" align="left">optimization result</th>
   </tr>
-  <?php	
-	for ($i=0; $i<count($Tables); $i++)
+  <?php
+	# GET TABLE NAMES
+	$names = mysql_list_tables(DB_NAME);
+	$cnt   = 0;
+	while($row = mysql_fetch_row($names))
 	{
-		$query  = "OPTIMIZE TABLE ".$Tables[$i]->$Tables_in_DB_NAME;
+		$cnt++;
+		$query  = "OPTIMIZE TABLE ".$row[0];
 		$result = $wpdb -> get_results($query);
 ?>
   <tr>
-    <td align="right"><?php echo ($i+1)?>.</td>
-    <td style="font-weight:bold;"><?php echo $Tables[$i]->$Tables_in_DB_NAME ?></td>
+    <td align="right"><?php echo $cnt?>.</td>
+    <td style="font-weight:bold;"><?php echo $row[0] ?></td>
     <td><?php echo $result[0]->Msg_text ?></td>
   </tr>
   <?php
