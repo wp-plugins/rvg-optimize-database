@@ -4,18 +4,18 @@ Contributors: Rolf van Gelder
 Donate link: http://cagewebdev.com
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
-Tags: wp, database, delete, revisions, optimize, posts, pages
+Tags: wp, database, delete, revisions, optimize, posts, pages, clean up, trash, spam, trashed, spammed
 Author URI: http://cagewebdev.com
 Author: Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.4.2
-Stable tag: 1.1.9
-Version: 1.1.9
+Stable tag: 1.2
+Version: 1.2
 
 == Description ==
 
-<p>This plugin is a 'one click' database optimizer.</p>
-<p>It deletes the redundant revisions of posts and pages and, after that, optimizes all database tables.</p>
+<p><b>This plugin is a 'one click' database optimizer.</b></p>
+<p>It deletes the redundant revisions of posts and pages, trashed items and/or spammed items and, after that, optimizes all database tables.</p>
 <p>http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin</p>
 <p>Author: Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com</p>
 
@@ -52,6 +52,7 @@ No Screenshots available.
 <p><b>1.1.7</b> 09/03/2012 Some textual and link fixes</p>
 <p><b>1.1.8</b> 09/08/2012 Another link fix</p>
 <p><b>1.1.9</b> 09/27/2012 Using a different method for retrieving database table names</p>
+<p><b>1.2</b>   10/03/2012 Major update: new options 'delete trash', 'delete spam', 'only optimize WordPress tables'</p>
 
 == Frequently Asked Questions ==
 

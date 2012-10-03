@@ -1,16 +1,16 @@
 <?php
-$version = '1.1.9';
-$release_date = '27/09/2012';
+$version = '1.2';
+$release_date = '03/10/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.1.9
+ * @version 1.2
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.1.9
+Version: 1.2
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -49,30 +49,52 @@ add_action( 'admin_menu', 'rvg_odb_admin_menu' );
 function rvg_odb_options_page() {
 	global $version, $release_date;
 	
-	// If we are a postback, store the options
+	// SAVE THE OPTIONS
  	if ( isset( $_POST['info_update'] ) ) {
 		check_admin_referer();
-		
-		// Update the Project ID
+
 		$rvg_odb_number = trim($_POST['rvg_odb_number']);
 		update_option('rvg_odb_number', $rvg_odb_number);
+		
+		$rvg_clear_trash = 'N';
+		if($_POST['rvg_clear_trash'] == 'Y') $rvg_clear_trash = 'Y';
+		update_option('rvg_clear_trash', $rvg_clear_trash);
+		
+		$rvg_clear_spam = 'N';
+		if($_POST['rvg_clear_spam'] == 'Y') $rvg_clear_spam = 'Y';
+		update_option('rvg_clear_spam', $rvg_clear_spam);
+		
+		$rvg_wp_only = 'N';
+		if($_POST['rvg_wp_only'] == 'Y') $rvg_wp_only = 'Y';
+		update_option('rvg_wp_only', $rvg_wp_only);			
 
-		// Give an updated message
+		// UPDATED MESSAGE
 		echo "<div class='updated'><p><strong>Optimize Database after Deleting Revisions options updated</strong> - Click <a href='tools.php?page=rvg-optimize-db.php' style='font-weight:bold'>HERE</a> to run the optimization</p></div>";
 	}
 	$rvg_odb_number = get_option('rvg_odb_number');
 	if(!$rvg_odb_number) $rvg_odb_number = '0';
+	
+	$rvg_clear_trash = get_option('rvg_clear_trash');
+	if(!$rvg_clear_trash) $rvg_clear_trash = 'N';
+	
+	$rvg_clear_spam = get_option('rvg_clear_spam');
+	if(!$rvg_clear_spam) $rvg_clear_spam = 'N';
+	
+	$rvg_wp_only = get_option('rvg_wp_only');
+	if(!$rvg_wp_only) $rvg_wp_only = 'N';		
 
-	// Output the options page
+	// CREATE THE OPTIONS PAGE
 	?>
+
 <form method="post" action="">
   <div class="wrap">
     <h2>Using Optimize Database after Deleting Revisions</h2>
     <blockquote>
       <p><strong>'<em>Optimize Database after Deleting Revisions</em>' is an one-click plugin to optimize your WordPress database.<br />
-        It deletes redundant revisions of posts and pages and, after that, optimizes all database tables.</strong></p>
-      <p>Below you can define the <u>maximum number</u> of - most recent - revisions you want to <u>keep</u> per post or page.</p>
-      <p>If you set the maximum number to '<strong>0</strong>' it means <strong>ALL REVISIONS</strong> will be deleted for all posts and pages.</p>
+        It deletes redundant revisions of posts and pages, trashed and/or spammed items and, after that, optimizes all database tables.</strong></p>
+      <p>Below you can define the <u>maximum number</u> of - most recent - revisions you want to <u>keep</u> per post or page.<br />
+        If you set the maximum number to '<strong>0</strong>' it means <strong>ALL REVISIONS</strong> will be deleted for all posts and pages.</p>
+      <p>You also can choose if you want to <u>delete</u> all <u>trashed items</u> and/or <u>spammed items</u> during the optimization.</p>
       <p>To start the optimization:<br />
         In the WordPress Dashboard go to &lsquo;<strong>Tools</strong>&lsquo;.<br />
         Click on &lsquo;<strong>Optimize Database</strong>&lsquo;. Et voila! </p>
@@ -93,15 +115,36 @@ function rvg_odb_options_page() {
       <fieldset class='options'>
         <table class="editform" cellspacing="2" cellpadding="5">
           <tr>
-            <td><label for="<?php echo rvg_odb_number; ?>" style="font-weight:bold;">Maximum number of - most recent - revisions to keep per post / page<br />
-              </label></td>
+            <td align="right"><label for="<?php echo rvg_odb_number; ?>" style="font-weight:bold;">Maximum number of - most recent - revisions to keep per post / page<br />
+                ('0' means: delete ALL revisions) </label></td>
             <td><input type="text" size="5" name="rvg_odb_number" id="rvg_odb_number" value="<?php echo $rvg_odb_number?>" style="font-weight:bold;color:#00F;" /></td>
+          </tr>
+          <?php
+if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
+if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
+if($rvg_wp_only == 'Y')     $rvg_wp_only_checked     = ' checked="checked"'; else $rvg_wp_only_checked = '';
+?>
+          <tr>
+            <td align="right"><label for="rvg_clear_trash" style="font-weight:bold;">Delete all trashed items<br />
+              </label></td>
+            <td><input name="rvg_clear_trash" type="checkbox" value="Y" <?php echo $rvg_clear_trash_checked?> /></td>
+          </tr>
+          <tr>
+            <td align="right"><label for="rvg_clear_spam" style="font-weight:bold;">Delete all spammed items<br />
+              </label></td>
+            <td><input name="rvg_clear_spam" type="checkbox" value="Y" <?php echo $rvg_clear_spam_checked?> /></td>
+          </tr>
+          <tr>
+            <td align="right"><label for="rvg_wp_only" style="font-weight:bold;">Only optimize WordPress tables<br />
+                (if not checked ALL tables in the database will be optimized)<br />
+              </label></td>
+            <td><input name="rvg_wp_only" type="checkbox" value="Y" <?php echo $rvg_wp_only_checked?> /></td>
           </tr>
         </table>
       </fieldset>
     </blockquote>
     <p class="submit">
-      <input type='submit' name='info_update' value='Update Options' />
+      <input type='submit' name='info_update' value='Save Options' />
     </p>
   </div>
 </form>
@@ -111,12 +154,12 @@ function rvg_odb_options_page() {
 
 /********************************************************************************************
 
-	MAIN FUNCTION FOR DELETING REVISIONS AND OPTIMIZING DATABASE TABLES
+	MAIN FUNCTION FOR DELETING REVISIONS, TRASH, SPAM AND OPTIMIZING DATABASE TABLES
 
 *********************************************************************************************/
 function rvg_optimize_db()
 {
-	global $wpdb, $version;
+	global $wpdb, $version, $table_prefix;
 
 	/****************************************************************************************
 	
@@ -128,11 +171,40 @@ function rvg_optimize_db()
 	{	$max_revisions = 0;
 		update_option('rvg_odb_number', $max_revisions);
 	}
+	
+	$clear_trash = get_option('rvg_clear_trash');
+	if(!$clear_trash)
+	{	$clear_trash = 'N';
+		update_option('rvg_clear_trash', $clear_trash);
+	}
+	$clear_trash_yn = ($clear_trash == 'N') ? 'NO' : 'YES';
+	
+	$clear_spam = get_option('rvg_clear_spam');
+	if(!$clear_spam)
+	{	$clear_spam = 'N';
+		update_option('rvg_clear_spam', $clear_spam);
+	}
+	$clear_spam_yn = ($clear_spam == 'N') ? 'NO' : 'YES';
+	
+	$wp_only = get_option('rvg_wp_only');
+	if(!$wp_only)
+	{	$wp_only = 'N';
+		update_option('rvg_wp_only', $wp_only);
+	}
+	$wp_only_yn = ($wp_only == 'N') ? 'NO' : 'YES';	
 ?>
-
-<h2 style="padding-left:8px;">Optimizing your WordPress Database</h2>
-<p><span style="padding-left:8px;font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $version?></a> - A WordPress Plugin by <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, The Netherlands</span></p>
-<p><span style="padding-left:8px;font-style:normal;">Maximum number of - most recent - revisions to keep per post / page: <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span> - click <a href="options-general.php?page=rvg_odb_admin" style="font-weight:bold;">HERE</a> to change this value.</span></p>
+<div style="padding-left:8px;">
+  <h2>Optimizing your WordPress Database</h2>
+  <p><span style="font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $version?></a> - A WordPress Plugin by <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, The Netherlands</span></p>
+  <p><span style="font-style:normal;">Current options:<br />
+    <strong>Maximum number of - most recent - revisions to keep per post / page:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span><br />
+    <strong>Delete trashed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
+    <strong>Delete spammed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_spam_yn?></span><br />
+    <strong>Only optimize WordPress tables:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $wp_only_yn?></span><br />
+    <br />
+    Click <a href="options-general.php?page=rvg_odb_admin" style="font-weight:bold;">HERE</a> to change the above options.</span></p>
+</div><br />
+<h2 style="padding-left:8px;">Starting optimization...</h2>
 <?php
 	$sql = "
 	SELECT `post_parent`, `post_title`, COUNT(*) cnt
@@ -197,21 +269,167 @@ function rvg_optimize_db()
     <td align="right" style="border-top:solid 1px #999;font-weight:bold;"><?php echo $total_deleted?></td>
   </tr>
 </table>
-<br />
 <?php		
 	}
 	else
 	{
-		echo '<br /><span style="font-weight:bold;color:#00F;padding-left:8px;">NO REVISIONS FOUND TO DELETE...</span><br /><br />';
-	}
+?>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td style="font-weight:bold;color:#21759b;">No REVISIONS found to delete...</td>
+  </tr>
+</table>
+<?php		
+	} // if(count($results)>0)
 ?>
 <?php
 	/****************************************************************************************
 	
-		OPTIMIZE TABLES
+		DELETE TRASHED ITEMS
 	
 	******************************************************************************************/
 ?>
+<?php
+	if($clear_trash == 'Y')
+	{
+		$sql = "
+		SELECT	`post_title`, `post_modified`
+		FROM	$wpdb->posts
+		WHERE	`post_status` = 'trash'
+		ORDER BY UCASE(`post_title`)
+		";
+		$results = $wpdb -> get_results($sql);
+		
+		if(count($results)>0)
+		{	// WE HAVE TRASH TO DELETE!
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td colspan="4" style="font-weight:bold;color:#00F;">DELETING TRASHED ITEMS:</td>
+  </tr>
+  <tr>
+    <th align="right" style="border-bottom:solid 1px #999;">#</th>
+    <th align="left" style="border-bottom:solid 1px #999;">post / page</th>
+    <th align="left" style="border-bottom:solid 1px #999;">last modified</th>
+  </tr>
+  <?php	
+			$nr = 1;
+			$total_deleted = count($results);
+			for($i=0; $i<count($results); $i++)
+			{
+?>
+  <tr>
+    <td align="right"><?php echo $nr; ?></td>
+    <td><?php echo $results[$i]->post_title; ?></td>
+    <td><?php echo $results[$i]->post_modified; ?></td>
+  </tr>
+  <?php	
+				$nr++;
+			}
+			$sql_delete = "
+			DELETE FROM $wpdb->posts WHERE `post_status` = 'trash'			
+			";
+			$wpdb -> get_results($sql_delete);
+?>
+</table>
+<?php			
+		}
+		else
+		{
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td style="font-weight:bold;color:#21759b;">No TRASHED ITEMS found to delete...</td>
+  </tr>
+</table>
+<?php		
+		} // if(count($results)>0)
+		
+	} // if($clear_trash == 'Y')
+?>
+<?php
+	/****************************************************************************************
+	
+		DELETE SPAMMED ITEMS
+	
+	******************************************************************************************/
+?>
+<?php
+	if($clear_spam == 'Y')
+	{
+		$sql = "
+		SELECT	`comment_ID`, `comment_author`, `comment_author_email`, `comment_date`
+		FROM	$wpdb->comments
+		WHERE	`comment_approved` = 'spam'
+		ORDER BY UCASE(`comment_author`)
+		";
+		$results = $wpdb -> get_results($sql);
+		
+		if(count($results)>0)
+		{	// WE HAVE SPAM TO DELETE!
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td colspan="4" style="font-weight:bold;color:#00F;">DELETING SPAMMED ITEMS:</td>
+  </tr>
+  <tr>
+    <th align="right" style="border-bottom:solid 1px #999;">#</th>
+    <th align="left" style="border-bottom:solid 1px #999;">comment author</th>
+    <th align="left" style="border-bottom:solid 1px #999;">comment author email</th>
+    <th align="left" style="border-bottom:solid 1px #999;">comment date</th>
+  </tr>
+  <?php	
+			$nr = 1;
+			$total_deleted = count($results);
+			for($i=0; $i<count($results); $i++)
+			{
+?>
+  <tr>
+    <td align="right"><?php echo $nr; ?></td>
+    <td><?php echo $results[$i]->comment_author; ?></td>
+    <td><?php echo $results[$i]->comment_author_email; ?></td>
+    <td><?php echo $results[$i]->comment_date; ?></td>
+  </tr>
+  <?php
+				$sql_delete = "
+				DELETE FROM $wpdb->commentmeta WHERE `comment_id` = ".$results[$i]->comment_ID."
+				";
+				$wpdb -> get_results($sql_delete);
+				$nr++;				
+			}
+			$sql_delete = "
+			DELETE FROM $wpdb->comments WHERE `comment_approved` = 'spam'
+			";
+			$wpdb -> get_results($sql_delete);			
+?>
+</table>
+<?php			
+		}
+		else
+		{
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td style="font-weight:bold;color:#21759b;">No SPAMMED ITEMS found to delete...</td>
+  </tr>
+</table>
+<?php		
+		} // if(count($results)>0)
+		
+	} // if($clear_spam == 'Y')
+?>
+<?php
+	/****************************************************************************************
+	
+		OPTIMIZE DATABASE TABLES
+	
+	******************************************************************************************/
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
 <table border="0" cellspacing="8" cellpadding="2">
   <tr>
     <td colspan="3" style="font-weight:bold;color:#00F;">OPTIMIZING DATABASE TABLES:</td>
@@ -227,9 +445,11 @@ function rvg_optimize_db()
 	$cnt   = 0;
 	while($row = mysql_fetch_row($names))
 	{
-		$cnt++;
-		$query  = "OPTIMIZE TABLE ".$row[0];
-		$result = $wpdb -> get_results($query);
+		if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
+		{	# ALL TABLES OR THIS IS A WORDPRESS TABLE
+			$cnt++;
+			$query  = "OPTIMIZE TABLE ".$row[0];
+			$result = $wpdb -> get_results($query);
 ?>
   <tr>
     <td align="right"><?php echo $cnt?>.</td>
@@ -237,11 +457,12 @@ function rvg_optimize_db()
     <td><?php echo $result[0]->Msg_text ?></td>
   </tr>
   <?php
-	}
+		} // if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
+	} // while($row = mysql_fetch_row($names))
 ?>
 </table>
 <br />
-<span style="font-weight:bold;color:#00F;padding-left:5px;">DONE!</span>
+<span style="font-weight:bold;color:#00F;padding-left:8px;">D O N E !</span>
 <?php	
 }
 ?>
