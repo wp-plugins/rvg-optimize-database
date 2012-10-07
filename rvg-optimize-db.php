@@ -1,16 +1,16 @@
 <?php
-$version = '1.3';
-$release_date = '10/06/2012';
+$version = '1.3.1';
+$release_date = '10/07/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.3
+ * @version 1.3.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.3
+Version: 1.3.1
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -166,6 +166,8 @@ function rvg_optimize_db()
 		DELETE REVISIONS
 	
 	******************************************************************************************/
+	
+	// GET OPTIONS AND SET DEFAULT VALUES
 	$max_revisions = get_option('rvg_odb_number');
 	if(!$max_revisions)
 	{	$max_revisions = 0;
@@ -226,12 +228,12 @@ if($_REQUEST['action'] != 'run')
 	$start_size = rvg_get_db_size();
 
 	$sql = "
-	SELECT `post_parent`, `post_title`, COUNT(*) cnt
-	FROM $wpdb->posts
-	WHERE `post_type` = 'revision'
-	GROUP BY `post_parent`
-	HAVING COUNT(*) > ".$max_revisions."
-	ORDER BY UCASE(`post_title`)	
+	SELECT	`post_parent`, `post_title`, COUNT(*) cnt
+	FROM	$wpdb->posts
+	WHERE	`post_type` = 'revision'
+	GROUP	BY `post_parent`
+	HAVING	COUNT(*) > ".$max_revisions."
+	ORDER	BY UCASE(`post_title`)	
 	";
 	$results = $wpdb -> get_results($sql);
 	
@@ -260,22 +262,26 @@ if($_REQUEST['action'] != 'run')
     <td valign="top" style="font-weight:bold;"><?php echo $results[$i]->post_title?></td>
     <td valign="top"><?php			
 			$sql_get_posts = "
-			SELECT `ID`, `post_modified`
-			FROM $wpdb->posts
-			WHERE `post_parent`=".$results[$i]->post_parent."
-			AND `post_type`='revision'
-			ORDER BY `post_modified` ASC		
+			SELECT	`ID`, `post_modified`
+			FROM	$wpdb->posts
+			WHERE	`post_parent`=".$results[$i]->post_parent."
+			AND		`post_type`='revision'
+			ORDER	BY `post_modified` ASC		
 			";
 			$results_get_posts = $wpdb -> get_results($sql_get_posts);
+			
 			for($j=0; $j<$nr_to_delete; $j++)
 			{
 				echo $results_get_posts[$j]->post_modified.'<br />';
+				
 				$sql_delete = "
 				DELETE FROM $wpdb->posts
 				WHERE `ID` = ".$results_get_posts[$j]->ID."
 				";
-				$results_delete = $wpdb -> get_results($sql_delete);
-			}
+				$wpdb -> get_results($sql_delete);
+				
+			} // for($j=0; $j<$nr_to_delete; $j++)
+			
 			$nr++;
 ?></td>
     <td align="right" valign="top" style="font-weight:bold;"><?php echo $nr_to_delete?></td>
@@ -311,11 +317,16 @@ if($_REQUEST['action'] != 'run')
 <?php
 	if($clear_trash == 'Y')
 	{
+		// GET TRASHED POSTS / PAGES AND COMMENTS
 		$sql = "
-		SELECT	`post_title`, `post_modified`
+		SELECT	`ID` AS id, 'post' AS post_type, `post_title` AS title, `post_modified` AS modified
 		FROM	$wpdb->posts
 		WHERE	`post_status` = 'trash'
-		ORDER BY UCASE(`post_title`)
+		UNION ALL
+		SELECT	`comment_ID` AS id, 'comment' AS post_type, `comment_author_IP` AS title, `comment_date` AS modified
+		FROM	$wpdb->comments
+		WHERE	`comment_approved` = 'trash'
+		ORDER	BY post_type, UCASE(title)		
 		";
 		$results = $wpdb -> get_results($sql);
 		
@@ -329,8 +340,9 @@ if($_REQUEST['action'] != 'run')
   </tr>
   <tr>
     <th align="right" style="border-bottom:solid 1px #999;">#</th>
-    <th align="left" style="border-bottom:solid 1px #999;">post / page</th>
-    <th align="left" style="border-bottom:solid 1px #999;">last modified</th>
+    <th align="left" style="border-bottom:solid 1px #999;">type</th>
+    <th align="left" style="border-bottom:solid 1px #999;">IP address / title</th>
+    <th align="left" style="border-bottom:solid 1px #999;">date</th>
   </tr>
   <?php	
 			$nr = 1;
@@ -340,16 +352,33 @@ if($_REQUEST['action'] != 'run')
 ?>
   <tr>
     <td align="right"><?php echo $nr; ?></td>
-    <td><?php echo $results[$i]->post_title; ?></td>
-    <td><?php echo $results[$i]->post_modified; ?></td>
+    <td><?php echo $results[$i]->post_type; ?></td>
+    <td><?php echo $results[$i]->title; ?></td>
+    <td><?php echo $results[$i]->modified; ?></td>
   </tr>
   <?php	
+  				if($results[$i]->post_type == 'comment')
+				{	// DELETE META DATA (IF ANY...)
+					$sql_delete = "
+					DELETE FROM $wpdb->commentmeta WHERE `comment_id` = ".$results[$i]->id."
+					";
+					$wpdb -> get_results($sql_delete);  
+				}
+				
 				$nr++;
-			}
+			} // for($i=0; $i<count($results); $i++)
+			
+			// DELETE TRASHED POSTS / PAGES
 			$sql_delete = "
 			DELETE FROM $wpdb->posts WHERE `post_status` = 'trash'			
 			";
 			$wpdb -> get_results($sql_delete);
+			
+			// DELETE TRASHED COMMENTS
+			$sql_delete = "
+			DELETE FROM $wpdb->comments WHERE `comment_approved` = 'trash'
+			";
+			$wpdb -> get_results($sql_delete);			
 ?>
 </table>
 <?php			
@@ -382,7 +411,7 @@ if($_REQUEST['action'] != 'run')
 		SELECT	`comment_ID`, `comment_author`, `comment_author_email`, `comment_date`
 		FROM	$wpdb->comments
 		WHERE	`comment_approved` = 'spam'
-		ORDER BY UCASE(`comment_author`)
+		ORDER	BY UCASE(`comment_author`)
 		";
 		$results = $wpdb -> get_results($sql);
 		
@@ -418,7 +447,8 @@ if($_REQUEST['action'] != 'run')
 				";
 				$wpdb -> get_results($sql_delete);
 				$nr++;				
-			}
+			} // for($i=0; $i<count($results); $i++)
+			
 			$sql_delete = "
 			DELETE FROM $wpdb->comments WHERE `comment_approved` = 'spam'
 			";
@@ -508,7 +538,7 @@ $end_size = rvg_get_db_size();
 <br />
 <span style="font-weight:bold;color:#00F;padding-left:8px;">D O N E !</span>
 <?php	
-}
+} // rvg_optimize_db()
 ?>
 <?php
 /********************************************************************************************

@@ -9,8 +9,8 @@ Author URI: http://cagewebdev.com
 Author: Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.4.2
-Stable tag: 1.3
-Version: 1.3
+Stable tag: 1.3.1
+Version: 1.3.1
 
 == Description ==
 
@@ -54,11 +54,12 @@ No Screenshots available.
 <p><b>1.1.9</b> 09/27/2012 Using a different method for retrieving database table names</p>
 <p><b>1.2</b>   10/03/2012 Major update: new options 'delete trash', 'delete spam', 'only optimize WordPress tables'</p>
 <p><b>1.3</b>   10/06/2012 Extra button for starting optimization, shows savings (in bytes) now</p>
+<p><b>1.3.1</b> 10/07/2012 Minor changes</p>
 
 == Frequently Asked Questions ==
 
 <p><b>Q:</b> <em>How can I change the settings of this plugin?</em></p>
-<p><b>A:</b> In the WordPress Dashboard go to '<b>Settings / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page.</p>
+<p><b>A:</b> In the WordPress Dashboard go to '<b>Settings / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and some more options.</p>
 <p><b>Q:</b> <em>How do I run this plugin?</em></p>
 <p><b>A:</b> In the WordPress Dashboard go to '<b>Tools</b>'. Click on '<b>Optimize Database</b>'. Then click the 'Start Optimization'-button. Et voila!</p>
 <p><b>Q:</b> <em>Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database?</em></p>
