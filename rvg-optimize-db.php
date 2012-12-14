@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '1.3.3';
-$odb_release_date = '12/01/2012';
+$odb_version      = '1.3.4';
+$odb_release_date = '12/14/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.3.3
+ * @version 1.3.4
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.3.3
+Version: 1.3.4
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -144,7 +144,7 @@ if($rvg_wp_only == 'Y')     $rvg_wp_only_checked     = ' checked="checked"'; els
       </fieldset>
     </blockquote>
     <p class="submit">
-      <input type='submit' name='info_update' value='Save Options' style="font-weight:bold;" />
+      <input class="button-primary button-large" type='submit' name='info_update' value='Save Options' style="font-weight:bold;" />
     </p>
   </div>
 </form>
@@ -208,9 +208,9 @@ if($_REQUEST['action'] != 'run')
 {
 ?>
   <p class="submit">
-    <input type='button' name='change_options' value='Change Options' onclick="self.location='options-general.php?page=rvg_odb_admin'" style="font-weight:normal;" />
+    <input class="button" type="button" name="change_options" value="Change Options" onclick="self.location='options-general.php?page=rvg_odb_admin'" style="font-weight:normal;" />
     &nbsp;
-    <input class="button-primary" type='button' name='start_optimization' value='Start Optimization' onclick="self.location='tools.php?page=rvg-optimize-db.php&action=run'" style="font-weight:bold;" />
+    <input class="button-primary button-large" type="button" name="start_optimization" value="Start Optimization" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=run'" style="font-weight:bold;" />
   </p>
   <?php
 }
