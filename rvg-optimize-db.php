@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '1.3.4';
-$odb_release_date = '12/14/2012';
+$odb_version      = '2.0';
+$odb_release_date = '12/18/2012';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 1.3.4
+ * @version 2.0
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
-Description: Optimizes the Wordpress Database after Deleting Revisions - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
+Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 1.3.4
+Version: 2.0
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -43,11 +43,54 @@ add_action( 'admin_menu', 'rvg_odb_admin_menu' );
 
 /********************************************************************************************
 
+	ACTIONS FOR THE SCHEDULER
+
+*********************************************************************************************/
+add_filter('cron_schedules', 'rvg_extra_schedules');
+function rvg_extra_schedules(){
+	return array(
+/*		'once_per_5_minutes' => array(
+			'interval' => 60 * 5,
+			'display' => 'Every five minutes'
+		)
+		,*/
+		'weekly' => array(
+			'interval' => 604800,
+			'display' => 'Once weekly'
+		)		
+	);
+}
+add_action( 'rvg_optimize_database', 'rvg_optimize_db_cron' );
+
+// REMOVE SCHEDULED TASK WHEN DEACTIVATED
+register_deactivation_hook( __FILE__, 'rvg_deactivate_plugin' );
+function rvg_deactivate_plugin()
+{	// CLEAR CURRENT SCHEDULE (IF ANY)
+	wp_clear_scheduled_hook('rvg_optimize_database');	
+}
+
+// RE-SCHEDULE TASK WHEN RE-ACTIVATED (OR AFTER UPDATE)
+register_activation_hook( __FILE__, 'rvg_activate_plugin' );
+function rvg_activate_plugin()
+{	$rvg_odb_schedule = get_option('rvg_odb_schedule');
+	if($rvg_odb_schedule)
+	{	// PLUGIN RE-ACTIVATED: START SCHEDULER
+		if( !wp_next_scheduled( 'rvg_optimize_database' ))
+			wp_schedule_event( time(), $rvg_odb_schedule, 'rvg_optimize_database' );
+	}
+}
+
+
+/********************************************************************************************
+
 	CREATE THE OPTIONS PAGE
 
 *********************************************************************************************/
 function rvg_odb_options_page() {
 	global $odb_version, $odb_release_date;
+	
+	if($_REQUEST['delete_log'] == "Y")
+		@unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
 	
 	// SAVE THE OPTIONS
  	if ( isset( $_POST['info_update'] ) ) {
@@ -66,11 +109,30 @@ function rvg_odb_options_page() {
 		
 		$rvg_wp_only = 'N';
 		if($_POST['rvg_wp_only'] == 'Y') $rvg_wp_only = 'Y';
-		update_option('rvg_wp_only', $rvg_wp_only);			
+		update_option('rvg_wp_only', $rvg_wp_only);
 
+		$rvg_odb_logging_on = 'N';
+		if($_POST['rvg_odb_logging_on'] == 'Y') $rvg_odb_logging_on = 'Y';
+		update_option('rvg_odb_logging_on', $rvg_odb_logging_on);
+
+		$rvg_odb_schedule = '';
+		if($_POST['rvg_odb_schedule']) $rvg_odb_schedule = $_POST['rvg_odb_schedule'];
+		update_option('rvg_odb_schedule', $rvg_odb_schedule);
+
+		// CLEAR CURRENT SCHEDULE (IF ANY)
+		wp_clear_scheduled_hook('rvg_optimize_database');
+
+		if($rvg_odb_schedule != '')
+		{	// HAS TO BE SCHEDULED
+			if( !wp_next_scheduled( 'rvg_optimize_database' )){
+				wp_schedule_event( time(), $rvg_odb_schedule, 'rvg_optimize_database' );
+			}		
+		}
+		
 		// UPDATED MESSAGE
-		echo "<div class='updated'><p><strong>Optimize Database after Deleting Revisions options updated</strong> - Click <a href='tools.php?page=rvg-optimize-db.php&action=run' style='font-weight:bold'>HERE</a> to run the optimization</p></div>";
+		echo "<div class='updated'><p><strong>Optimize Database after Deleting Revisions OPTIONS UPDATED</strong> - Click <a href='tools.php?page=rvg-optimize-db.php' style='font-weight:bold'>HERE</a> to run the optimization</p></div>";
 	}
+	
 	$rvg_odb_number = get_option('rvg_odb_number');
 	if(!$rvg_odb_number) $rvg_odb_number = '0';
 	
@@ -81,32 +143,30 @@ function rvg_odb_options_page() {
 	if(!$rvg_clear_spam) $rvg_clear_spam = 'N';
 	
 	$rvg_wp_only = get_option('rvg_wp_only');
-	if(!$rvg_wp_only) $rvg_wp_only = 'N';		
-
-	// CREATE THE OPTIONS PAGE
+	if(!$rvg_wp_only) $rvg_wp_only = 'N';
+	
+	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
+	if(!$rvg_odb_logging_on) $rvg_odb_logging_on = 'N';
+	
+	$rvg_odb_schedule = get_option('rvg_odb_schedule');
+	if(!$rvg_odb_schedule) $rvg_odb_schedule = '';	
 	?>
 
-<form method="post" action="">
+<form name="options" method="post" action="">
   <div class="wrap">
     <h2>Using Optimize Database after Deleting Revisions</h2>
     <blockquote>
-      <p><strong>'<em>Optimize Database after Deleting Revisions</em>' is an one-click plugin to optimize your WordPress database.<br />
-        It deletes redundant revisions of posts and pages, trashed and/or spammed items and, after that, optimizes all database tables.</strong></p>
-      <p>Below you can define the <u>maximum number</u> of - most recent - revisions you want to <u>keep</u> per post or page.<br />
-        If you set the maximum number to '<strong>0</strong>' it means <strong>ALL REVISIONS</strong> will be deleted for all posts and pages.</p>
-      <p>You also can choose if you want to <u>delete</u> all <u>trashed items</u> and/or <u>spammed items</u> during the optimization.</p>
+      <p><strong>'<em>Optimize Database after Deleting Revisions</em>' is an one-click plugin to clean and optimize your WordPress database.</strong></p>
       <p>To start the optimization:<br />
-        In the WordPress Dashboard go to &lsquo;<strong>Tools</strong>&lsquo;.<br />
-        Click on &lsquo;<strong>Optimize Database</strong>&lsquo;, then click on the '<strong>Start Optimization</strong>'-button. Et voila! </p>
+        <strong>WP Admin Panel</strong> &raquo; <strong>Tools</strong> &raquo; <strong>Optimize Database</strong>. Then click the '<strong>Start Optimization</strong>'-button. Et voila!<br />
+        Note: if you use the Scheduler the Optimization will run automatically!
       <p>Plugin version:<br />
         <strong>v<?php echo $odb_version ?> (<?php echo $odb_release_date?>)</strong> </p>
-      <p>Author:<br />
-        <strong><a href="http://cage.nl/" target="_blank">Rolf van Gelder</a>, <a href="http://cagewebdev.com/" target="_blank">CAGE Web Design</a></strong>, Eindhoven, The Netherlands<br />
-        <br />
-        Plugin URL:<br />
-        <a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank"><strong>http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/</strong></a><strong><br />
-        </strong><br />
-        Download URL:<br />
+      <p><strong>Author:</strong><br />
+        <strong><a href="http://cagewebdev.com/" target="_blank">CAGE Web Design</a> | <a href="http://cage.nl/" target="_blank">Rolf van Gelder</a></strong>, Eindhoven, The Netherlands<br />
+        <strong>Plugin URL:</strong><br />
+        <a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank"><strong>http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/</strong></a><br />
+        <strong>Download URL:</strong><br />
         <strong><a href="http://wordpress.org/extend/plugins/rvg-optimize-database/" target="_blank">http://wordpress.org/extend/plugins/rvg-optimize-database/</a></strong></p>
       <p>&nbsp;</p>
     </blockquote>
@@ -115,30 +175,50 @@ function rvg_odb_options_page() {
       <fieldset class='options'>
         <table class="editform" cellspacing="2" cellpadding="5">
           <tr>
-            <td align="right"><label for="<?php echo rvg_odb_number; ?>" style="font-weight:bold;">Maximum number of - most recent - revisions to keep per post / page<br />
-                ('0' means: delete ALL revisions) </label></td>
-            <td><input type="text" size="5" name="rvg_odb_number" id="rvg_odb_number" value="<?php echo $rvg_odb_number?>" style="font-weight:bold;color:#00F;" /></td>
+            <td align="right" valign="top"><label for="<?php echo rvg_odb_number; ?>" style="font-weight:bold;">Maximum number of - most recent - revisions to keep per post / page<br />
+                ('0' means: delete <u>ALL</u> revisions) </label></td>
+            <td valign="top"><input type="text" size="5" name="rvg_odb_number" id="rvg_odb_number" value="<?php echo $rvg_odb_number?>" style="font-weight:bold;color:#00F;" /></td>
           </tr>
           <?php
 if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
 if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
 if($rvg_wp_only == 'Y')     $rvg_wp_only_checked     = ' checked="checked"'; else $rvg_wp_only_checked = '';
+if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checked"'; else $rvg_odb_logging_on = '';
 ?>
           <tr>
-            <td align="right"><label for="rvg_clear_trash" style="font-weight:bold;">Delete all trashed items<br />
+            <td align="right" valign="top"><label for="rvg_clear_trash" style="font-weight:bold;">Delete all trashed items<br />
               </label></td>
-            <td><input name="rvg_clear_trash" type="checkbox" value="Y" <?php echo $rvg_clear_trash_checked?> /></td>
+            <td valign="top"><input name="rvg_clear_trash" type="checkbox" value="Y" <?php echo $rvg_clear_trash_checked?> /></td>
           </tr>
           <tr>
-            <td align="right"><label for="rvg_clear_spam" style="font-weight:bold;">Delete all spammed items<br />
+            <td align="right" valign="top"><label for="rvg_clear_spam" style="font-weight:bold;">Delete all spammed items<br />
               </label></td>
-            <td><input name="rvg_clear_spam" type="checkbox" value="Y" <?php echo $rvg_clear_spam_checked?> /></td>
+            <td valign="top"><input name="rvg_clear_spam" type="checkbox" value="Y" <?php echo $rvg_clear_spam_checked?> /></td>
           </tr>
           <tr>
-            <td align="right"><label for="rvg_wp_only" style="font-weight:bold;">Only optimize WordPress tables<br />
-                (if not checked ALL tables in the database will be optimized)<br />
+            <td align="right" valign="top"><label for="rvg_wp_only" style="font-weight:bold;">Only optimize WordPress tables<br />
+                (if not checked <u>ALL</u> tables in the database will be optimized)<br />
               </label></td>
-            <td><input name="rvg_wp_only" type="checkbox" value="Y" <?php echo $rvg_wp_only_checked?> /></td>
+            <td valign="top"><input name="rvg_wp_only" type="checkbox" value="Y" <?php echo $rvg_wp_only_checked?> /></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><label for="rvg_odb_logging_on" style="font-weight:bold;">Logging on</label></td>
+            <td valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" <?php echo $rvg_odb_logging_on_checked?> /></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><label for="rvg_odb_schedule" style="font-weight:bold;">Scheduler</label></td>
+            <td valign="top"><select name="rvg_odb_schedule" id="rvg_odb_schedule">
+                <option selected="selected" value="">NOT SCHEDULED</option>
+                <option value="hourly">run optimization HOURLY</option>
+                <option value="twicedaily">run optimization TWICE A DAY</option>
+                <option value="daily">run optimization DAILY</option>
+                <option value="weekly">run optimization WEEKLY</option>
+<?php /*?>                <option value="once_per_5_minutes">run optimization EVERY 5 MINUTES</option>
+<?php */?>              
+              </select>
+              <script type="text/javascript">
+			document.options.rvg_odb_schedule.value = '<?php echo $rvg_odb_schedule; ?>';
+			</script></td>
           </tr>
         </table>
       </fieldset>
@@ -160,6 +240,9 @@ if($rvg_wp_only == 'Y')     $rvg_wp_only_checked     = ' checked="checked"'; els
 function rvg_optimize_db()
 {
 	global $wpdb, $odb_version, $table_prefix;
+
+	if($_REQUEST['action'] == "delete_log")
+		@unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
 
 	/****************************************************************************************
 	
@@ -193,50 +276,117 @@ function rvg_optimize_db()
 	{	$wp_only = 'N';
 		update_option('rvg_wp_only', $wp_only);
 	}
-	$wp_only_yn = ($wp_only == 'N') ? 'NO' : 'YES';	
+	$wp_only_yn = ($wp_only == 'N') ? 'NO' : 'YES';
+
+	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
+	if(!$rvg_odb_logging_on)
+	{	$rvg_odb_logging_on = 'N';
+		update_option('rvg_odb_logging_on', $rvg_odb_logging_on);
+	}
+	$rvg_odb_logging_on_yn = ($rvg_odb_logging_on == 'N') ? 'NO' : 'YES';
+	
+	$rvg_odb_schedule = get_option('rvg_odb_schedule');
+	if(!$rvg_odb_schedule)
+	{	$rvg_odb_schedule = '';
+		update_option('rvg_odb_schedule', $rvg_odb_schedule);
+	}
+
+	if($rvg_odb_schedule == 'hourly')
+		$rvg_odb_schedule_txt = 'ONCE HOURLY';
+	else if($rvg_odb_schedule == 'twicedaily')
+		$rvg_odb_schedule_txt = 'TWICE DAILY';
+	else if($rvg_odb_schedule == 'daily')
+		$rvg_odb_schedule_txt = 'ONCE DAILY';
+	else if($rvg_odb_schedule == 'weekly')
+		$rvg_odb_schedule_txt = 'ONCE WEEKLY';			
+	else if($rvg_odb_schedule == 'once_per_5_minutes')
+		$rvg_odb_schedule_txt = 'EVERY FIVE MINUTES';
+
+	$nextrun = '';			
+	if(!$rvg_odb_schedule_txt)
+	{	$rvg_odb_schedule_txt = 'NOT SCHEDULED';
+	}
+	else
+	{	$timestamp = wp_next_scheduled('rvg_optimize_database');
+		$nextrun = date_i18n('M j, Y @ G:i', $timestamp);
+	}
+	
+	$total_savings = get_option('rvg_odb_total_savings');
+
+	$log_url = plugins_url().'/rvg-optimize-database/rvg-optimize-db-log.html';
 ?>
 <div style="padding-left:8px;">
   <h2>Optimize your WordPress Database</h2>
+  <?php
+	if($_REQUEST['action'] == "delete_log")
+	{	echo '<div class="updated" style="position:relative;left:-15px;"><p><strong>Optimize Database after Deleting Revisions - LOG FILE DELETED</strong></p></div>';
+	}
+?>
   <p><span style="font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $odb_version?></a> - A WordPress Plugin by <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, The Netherlands</span></p>
   <p>Current options:<br />
     <strong>Maximum number of - most recent - revisions to keep per post / page:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span><br />
     <strong>Delete trashed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
     <strong>Delete spammed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_spam_yn?></span><br />
-    <strong>Only optimize WordPress tables:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $wp_only_yn?></span>
+    <strong>Only optimize WordPress tables:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $wp_only_yn?></span><br />
+    <strong>Logging on:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_logging_on_yn?></span><br />
+    <strong>Scheduler:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_schedule_txt?></span>
     <?php
-if($_REQUEST['action'] != 'run')
-{
+	if($nextrun)
+	{
 ?>
+    <br />
+    <strong>Next scheduled run:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $nextrun?></span>
+    <?php		
+	}
+	if($total_savings)
+	{
+?>
+    <br />
+    <strong>Total savings so far:</strong> <span style="font-weight:bold;color:#00F;"><?php echo rvg_format_size($total_savings); ?></span>
+    <?php
+	}
+    ?>
   <p class="submit">
     <input class="button" type="button" name="change_options" value="Change Options" onclick="self.location='options-general.php?page=rvg_odb_admin'" style="font-weight:normal;" />
+    <?php
+	if(file_exists(dirname(__FILE__).'/rvg-optimize-db-log.html'))
+	{
+?>
+    &nbsp;
+    <input class="button" type="button" name="view_log" value="View Log File" onclick="window.open('<?php echo $log_url?>','log','width=800,height=800,scrollbars=1')" style="font-weight:normal;" />
+    &nbsp;
+    <input class="button" type="button" name="delete_log" value="Delete Log File" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=delete_log'" style="font-weight:normal;" />
+    <?php	
+	}
+?>
+    <?php
+	if($_REQUEST['action'] != 'run')
+	{
+?>
     &nbsp;
     <input class="button-primary button-large" type="button" name="start_optimization" value="Start Optimization" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=run'" style="font-weight:bold;" />
-  </p>
-  <?php
-}
+    <?php
+	}
 ?>
+  </p>
 </div>
 <?php
-if($_REQUEST['action'] != 'run')
-{	return;
-}
+	if($_REQUEST['action'] != 'run')
+	{	return;
+	}
 ?>
-<br />
 <h2 style="padding-left:8px;">Starting Optimization...</h2>
 <?php
 	// GET THE SIZE OF THE DATABASE BEFORE OPTIMIZATION
 	$start_size = rvg_get_db_size();
 
-	$sql = "
-	SELECT	`post_parent`, `post_title`, COUNT(*) cnt
-	FROM	$wpdb->posts
-	WHERE	`post_type` = 'revision'
-	GROUP	BY `post_parent`
-	HAVING	COUNT(*) > ".$max_revisions."
-	ORDER	BY UCASE(`post_title`)	
-	";
-	$results = $wpdb -> get_results($sql);
-	
+	// TIMESTAMP FOR LOG FILE
+	$log_arr = array("time" => date("m/d/Y").'<br />'.date("H:i:s"));
+
+	// FIND REVISIONS
+	$results = rvg_get_revisions($max_revisions);
+
+	$total_deleted = 0;	
 	if(count($results)>0)
 	{	// WE HAVE REVISIONS TO DELETE!
 ?>
@@ -250,45 +400,10 @@ if($_REQUEST['action'] != 'run')
     <th align="left" style="border-bottom:solid 1px #999;">revision date</th>
     <th align="right" style="border-bottom:solid 1px #999;">revisions deleted</th>
   </tr>
-  <?php	
-		$nr = 1;
-		$total_deleted = 0;
-		for($i=0; $i<count($results); $i++)
-		{	$nr_to_delete = $results[$i]->cnt - $max_revisions;
-			$total_deleted += $nr_to_delete;
-?>
-  <tr>
-    <td align="right" valign="top"><?php echo $nr?>.</td>
-    <td valign="top" style="font-weight:bold;"><?php echo $results[$i]->post_title?></td>
-    <td valign="top"><?php			
-			$sql_get_posts = "
-			SELECT	`ID`, `post_modified`
-			FROM	$wpdb->posts
-			WHERE	`post_parent`=".$results[$i]->post_parent."
-			AND		`post_type`='revision'
-			ORDER	BY `post_modified` ASC		
-			";
-			$results_get_posts = $wpdb -> get_results($sql_get_posts);
-			
-			for($j=0; $j<$nr_to_delete; $j++)
-			{
-				echo $results_get_posts[$j]->post_modified.'<br />';
-				
-				$sql_delete = "
-				DELETE FROM $wpdb->posts
-				WHERE `ID` = ".$results_get_posts[$j]->ID."
-				";
-				$wpdb -> get_results($sql_delete);
-				
-			} // for($j=0; $j<$nr_to_delete; $j++)
-			
-			$nr++;
-?></td>
-    <td align="right" valign="top" style="font-weight:bold;"><?php echo $nr_to_delete?></td>
-  </tr>
-  <?php			
-		}
-?>
+  <?php
+		// LOOP THROUGH THE REVISIONS AND DELETE THEM
+  		$total_deleted = rvg_delete_revisions($results, true);
+	?>
   <tr>
     <td colspan="3" align="right" style="border-top:solid 1px #999;font-weight:bold;">total number of revisions deleted</td>
     <td align="right" style="border-top:solid 1px #999;font-weight:bold;"><?php echo $total_deleted?></td>
@@ -306,6 +421,9 @@ if($_REQUEST['action'] != 'run')
 </table>
 <?php		
 	} // if(count($results)>0)
+	
+	// NUMBER OF DELETED REVISIONS FOR LOG FILE
+	$log_arr["revisions"] = $total_deleted;
 ?>
 <?php
 	/****************************************************************************************
@@ -318,18 +436,9 @@ if($_REQUEST['action'] != 'run')
 	if($clear_trash == 'Y')
 	{
 		// GET TRASHED POSTS / PAGES AND COMMENTS
-		$sql = "
-		SELECT	`ID` AS id, 'post' AS post_type, `post_title` AS title, `post_modified` AS modified
-		FROM	$wpdb->posts
-		WHERE	`post_status` = 'trash'
-		UNION ALL
-		SELECT	`comment_ID` AS id, 'comment' AS post_type, `comment_author_IP` AS title, `comment_date` AS modified
-		FROM	$wpdb->comments
-		WHERE	`comment_approved` = 'trash'
-		ORDER	BY post_type, UCASE(title)		
-		";
-		$results = $wpdb -> get_results($sql);
-		
+		$results = rvg_get_trash();
+
+		$total_deleted = 0;		
 		if(count($results)>0)
 		{	// WE HAVE TRASH TO DELETE!
 ?>
@@ -344,41 +453,9 @@ if($_REQUEST['action'] != 'run')
     <th align="left" style="border-bottom:solid 1px #999;">IP address / title</th>
     <th align="left" nowrap="nowrap" style="border-bottom:solid 1px #999;">date</th>
   </tr>
-  <?php	
-			$nr = 1;
-			$total_deleted = count($results);
-			for($i=0; $i<count($results); $i++)
-			{
-?>
-  <tr>
-    <td align="right" valign="top"><?php echo $nr; ?></td>
-    <td valign="top"><?php echo $results[$i]->post_type; ?></td>
-    <td valign="top"><?php echo $results[$i]->title; ?></td>
-    <td valign="top" nowrap="nowrap"><?php echo $results[$i]->modified; ?></td>
-  </tr>
-  <?php	
-  				if($results[$i]->post_type == 'comment')
-				{	// DELETE META DATA (IF ANY...)
-					$sql_delete = "
-					DELETE FROM $wpdb->commentmeta WHERE `comment_id` = ".$results[$i]->id."
-					";
-					$wpdb -> get_results($sql_delete);  
-				}
-				
-				$nr++;
-			} // for($i=0; $i<count($results); $i++)
-			
-			// DELETE TRASHED POSTS / PAGES
-			$sql_delete = "
-			DELETE FROM $wpdb->posts WHERE `post_status` = 'trash'			
-			";
-			$wpdb -> get_results($sql_delete);
-			
-			// DELETE TRASHED COMMENTS
-			$sql_delete = "
-			DELETE FROM $wpdb->comments WHERE `comment_approved` = 'trash'
-			";
-			$wpdb -> get_results($sql_delete);			
+  <?php
+  			// LOOP THROUGH THE TRASHED ITEMS AND DELETE THEM
+  			$total_deleted = rvg_delete_trash($results, true);
 ?>
 </table>
 <?php			
@@ -395,6 +472,9 @@ if($_REQUEST['action'] != 'run')
 <?php		
 		} // if(count($results)>0)
 		
+		// NUMBER OF DELETED TRASH FOR LOG FILE
+		$log_arr["trash"] = $total_deleted;
+
 	} // if($clear_trash == 'Y')
 ?>
 <?php
@@ -407,14 +487,10 @@ if($_REQUEST['action'] != 'run')
 <?php
 	if($clear_spam == 'Y')
 	{
-		$sql = "
-		SELECT	`comment_ID`, `comment_author`, `comment_author_email`, `comment_date`
-		FROM	$wpdb->comments
-		WHERE	`comment_approved` = 'spam'
-		ORDER	BY UCASE(`comment_author`)
-		";
-		$results = $wpdb -> get_results($sql);
-		
+		// GET SPAMMED COMMENTS
+		$results = rvg_get_spam();
+
+		$total_deleted = 0;		
 		if(count($results)>0)
 		{	// WE HAVE SPAM TO DELETE!
 ?>
@@ -429,30 +505,9 @@ if($_REQUEST['action'] != 'run')
     <th align="left" style="border-bottom:solid 1px #999;">comment author email</th>
     <th align="left" nowrap="nowrap" style="border-bottom:solid 1px #999;">comment date</th>
   </tr>
-  <?php	
-			$nr = 1;
-			$total_deleted = count($results);
-			for($i=0; $i<count($results); $i++)
-			{
-?>
-  <tr>
-    <td align="right" valign="top"><?php echo $nr; ?></td>
-    <td valign="top"><?php echo $results[$i]->comment_author; ?></td>
-    <td valign="top"><?php echo $results[$i]->comment_author_email; ?></td>
-    <td valign="top" nowrap="nowrap"><?php echo $results[$i]->comment_date; ?></td>
-  </tr>
   <?php
-				$sql_delete = "
-				DELETE FROM $wpdb->commentmeta WHERE `comment_id` = ".$results[$i]->comment_ID."
-				";
-				$wpdb -> get_results($sql_delete);
-				$nr++;				
-			} // for($i=0; $i<count($results); $i++)
-			
-			$sql_delete = "
-			DELETE FROM $wpdb->comments WHERE `comment_approved` = 'spam'
-			";
-			$wpdb -> get_results($sql_delete);			
+			// LOOP THROUGH SPAMMED ITEMS AND DELETE THEM
+  			$total_deleted = rvg_delete_spam($results, true);	
 ?>
 </table>
 <?php			
@@ -470,6 +525,9 @@ if($_REQUEST['action'] != 'run')
 		} // if(count($results)>0)
 		
 	} // if($clear_spam == 'Y')
+	
+	// NUMBER OF SPAM DELETED FOR LOG FILE
+	$log_arr["spam"] = $total_deleted;
 ?>
 <?php
 	/****************************************************************************************
@@ -492,41 +550,26 @@ if($_REQUEST['action'] != 'run')
     <th style="border-bottom:solid 1px #999;" align="right">table size</th>
   </tr>
   <?php
-	# GET TABLE NAMES
-	$names = mysql_list_tables(DB_NAME);
-	$cnt   = 0;
-	while($row = mysql_fetch_row($names))
-	{
-		if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
-		{	# ALL TABLES OR THIS IS A WORDPRESS TABLE
-			$cnt++;
-			$query  = "OPTIMIZE TABLE ".$row[0];
-			$result = $wpdb -> get_results($query);
-			
-			$sql = "
-			SELECT	engine, SUM(data_length + index_length) AS size, table_rows
-			FROM	information_schema.TABLES
-			WHERE	table_schema = '".strtolower(DB_NAME)."'
-			AND		table_name   = '".$row[0]."'
-			";
-
-			$table_info = $wpdb -> get_results($sql);
-?>
-  <tr>
-    <td align="right" valign="top"><?php echo $cnt?>.</td>
-    <td valign="top" style="font-weight:bold;"><?php echo $row[0] ?></td>
-    <td valign="top"><?php echo $result[0]->Msg_text ?></td>
-    <td valign="top"><?php echo $table_info[0]->engine ?></td>
-    <td align="right" valign="top"><?php echo $table_info[0]->table_rows ?></td>
-    <td align="right" valign="top"><?php echo rvg_format_size($table_info[0]->size) ?></td>
-  </tr>
-  <?php
-		} // if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
-	} // while($row = mysql_fetch_row($names))
+	# OPTIMIZE THE DATABASE TABLES
+	$cnt = rvg_optimize_tables(true);
 ?>
 </table>
 <?php
-$end_size = rvg_get_db_size();
+	// NUMBER OF TABLES
+	$log_arr["tables"] = $cnt;
+	// DATABASE SIZE BEFORE OPTIMIZATION
+	$log_arr["before"] = rvg_format_size($start_size,3);
+	// DATABASE SIZE AFTER OPTIMIZATION
+	$end_size = rvg_get_db_size();
+	$log_arr["after"] = rvg_format_size($end_size,3);
+	// TOTAL SAVING
+	$log_arr["savings"] = rvg_format_size(($start_size - $end_size),3);
+	// WRITE RESULTS TO LOG FILE
+	rvg_write_log($log_arr);
+
+	$total_savings = get_option('rvg_odb_total_savings');
+	$total_savings += ($start_size - $end_size);
+	update_option('rvg_odb_total_savings',$total_savings);
 ?>
 <span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
 <table border="0" cellspacing="8" cellpadding="2">
@@ -546,14 +589,494 @@ $end_size = rvg_get_db_size();
     <td align="right" style="font-weight:bold;"><?php echo rvg_format_size($end_size,3); ?></td>
   </tr>
   <tr>
-    <td align="right" style="font-weight:bold;">TOTAL SAVINGS</td>
+    <td align="right" style="font-weight:bold;">SAVINGS THIS TIME</td>
     <td align="right" style="font-weight:bold;border-top:solid 1px #999;"><?php echo rvg_format_size(($start_size - $end_size),3); ?></td>
   </tr>
+  <tr>
+    <td align="right" style="font-weight:bold;">TOTAL SAVINGS SO FAR</td>
+    <td align="right" style="font-weight:bold;border-top:solid 1px #999;"><?php echo rvg_format_size($total_savings,3); ?></td>
+  </tr>
 </table>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span><br />
 <br />
-<span style="font-weight:bold;color:#00F;padding-left:8px;">D O N E !</span>
+<span style="font-weight:bold;color:#00F;padding-left:8px;">DONE!</span><br />
+<br />
+<?php
+	if(file_exists(dirname(__FILE__).'/rvg-optimize-db-log.html'))
+	{
+?>
+&nbsp;
+<input class="button" type="button" name="view_log" value="View Log File" onclick="window.open('<?php echo $log_url?>','log','width=800,height=800,scrollbars=1')" style="font-weight:normal;" />
+&nbsp;
+<input class="button" type="button" name="delete_log" value="Delete Log File" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=delete_log'" style="font-weight:normal;" />
+<?php	
+	}
+?>
 <?php	
 } // rvg_optimize_db()
+?>
+<?php
+/********************************************************************************************
+
+	EXECUTE OPTIMIZATION VIA CRON JOB
+
+*********************************************************************************************/
+function rvg_optimize_db_cron()
+{
+	global $wpdb, $odb_version, $table_prefix;
+
+	// GET OPTIONS AND SET DEFAULT VALUES
+	$max_revisions = get_option('rvg_odb_number');
+	if(!$max_revisions)
+	{	$max_revisions = 0;
+		update_option('rvg_odb_number', $max_revisions);
+	}
+
+	$clear_trash = get_option('rvg_clear_trash');
+	if(!$clear_trash)
+	{	$clear_trash = 'N';
+		update_option('rvg_clear_trash', $clear_trash);
+	}
+
+	$clear_spam = get_option('rvg_clear_spam');
+	if(!$clear_spam)
+	{	$clear_spam = 'N';
+		update_option('rvg_clear_spam', $clear_spam);
+	}
+	
+	// GET THE SIZE OF THE DATABASE BEFORE OPTIMIZATION
+	$start_size = rvg_get_db_size();
+	
+	// TIMESTAMP FOR LOG FILE
+	$log_arr = array("time" => date("m/d/Y").'<br />'.date("H:i:s"));
+
+	// FIND THE REVISIONS
+	$results = rvg_get_revisions($max_revisions);
+	
+	$total_deleted = 0;
+	if(count($results)>0)
+		// WE HAVE REVISIONS TO DELETE!
+		$total_deleted = rvg_delete_revisions($results, false);
+
+	// NUMBER OF DELETED REVISIONS FOR LOG FILE
+	$log_arr["revisions"] = $total_deleted;
+
+	$total_deleted = 0;	
+	if($clear_trash == 'Y')
+	{	
+		// GET TRASHED POSTS / PAGES AND COMMENTS
+		$results = rvg_get_trash();
+		
+		if(count($results)>0)
+			// WE HAVE TRASH TO DELETE!
+			$total_deleted = rvg_delete_trash($results, false);
+			
+	} // if($clear_trash == 'Y')
+
+	// NUMBER OF DELETED TRASH FOR LOG FILE
+	$log_arr["trash"] = $total_deleted;
+
+	$total_deleted = 0;
+	if($clear_spam == 'Y')
+	{
+		// GET SPAMMED COMMENTS
+		$results = rvg_get_spam();
+		
+		if(count($results)>0)
+			// WE HAVE SPAM TO DELETE!
+			$total_deleted = rvg_delete_spam($results, false);
+			
+	} // if($clear_spam == 'Y')
+	
+	// NUMBER OF SPAM DELETED FOR LOG FILE
+	$log_arr["spam"] = $total_deleted;
+
+	// OPTIMIZE DATABASE TABLES	
+	$cnt = rvg_optimize_tables(false);
+	
+	// NUMBER OF TABLES
+	$log_arr["tables"] = $cnt;
+	// DATABASE SIZE BEFORE OPTIMIZATION
+	$log_arr["before"] = rvg_format_size($start_size,3);
+	// DATABASE SIZE AFTER OPTIMIZATION
+	$end_size = rvg_get_db_size();
+	$log_arr["after"] = rvg_format_size($end_size,3);
+	// TOTAL SAVING
+	$log_arr["savings"] = rvg_format_size(($start_size - $end_size),3);
+	// WRITE RESULTS TO LOG FILE
+	rvg_write_log($log_arr);
+	
+	$total_savings = get_option('rvg_odb_total_savings');
+	$total_savings += ($start_size - $end_size);
+	update_option('rvg_odb_total_savings',$total_savings);	
+	
+} // rvg_optimize_db_cron()
+?>
+<?php
+/********************************************************************************************
+
+	DELETE THE REVISIONS
+
+*********************************************************************************************/
+function rvg_delete_revisions($results, $display)
+{
+	global $wpdb;
+	
+	$nr = 1;
+	$total_deleted = 0;
+	for($i=0; $i<count($results); $i++)
+	{	$nr_to_delete = $results[$i]->cnt - $max_revisions;
+		$total_deleted += $nr_to_delete;
+		if($display)
+		{
+	?>
+<tr>
+  <td align="right" valign="top"><?php echo $nr?>.</td>
+  <td valign="top" style="font-weight:bold;"><?php echo $results[$i]->post_title?></td>
+  <td valign="top"><?php
+		} // if($display)
+		
+		$sql_get_posts = "
+		SELECT	`ID`, `post_modified`
+		FROM	$wpdb->posts
+		WHERE	`post_parent`=".$results[$i]->post_parent."
+		AND		`post_type`='revision'
+		ORDER	BY `post_modified` ASC		
+		";
+		$results_get_posts = $wpdb -> get_results($sql_get_posts);
+		
+		for($j=0; $j<$nr_to_delete; $j++)
+		{
+			if($display) echo $results_get_posts[$j]->post_modified.'<br />';
+			
+			$sql_delete = "
+			DELETE FROM $wpdb->posts
+			WHERE `ID` = ".$results_get_posts[$j]->ID."
+			";
+			$wpdb -> get_results($sql_delete);
+			
+		} // for($j=0; $j<$nr_to_delete; $j++)
+		
+		$nr++;
+		if($display)
+		{
+?></td>
+  <td align="right" valign="top" style="font-weight:bold;"><?php echo $nr_to_delete?></td>
+</tr>
+<?php
+		} // if($display)
+	} // for($i=0; $i<count($results); $i++)
+	return $total_deleted;
+} // rvg_delete_revisions()
+?>
+<?php
+/********************************************************************************************
+
+	DELETE TRASHED POSTS AND PAGES
+
+*********************************************************************************************/
+function rvg_delete_trash($results, $display)
+{
+	global $wpdb;
+
+	$nr = 1;
+	$total_deleted = count($results);
+	for($i=0; $i<count($results); $i++)
+	{	if($display)
+		{
+?>
+<tr>
+  <td align="right" valign="top"><?php echo $nr; ?></td>
+  <td valign="top"><?php echo $results[$i]->post_type; ?></td>
+  <td valign="top"><?php echo $results[$i]->title; ?></td>
+  <td valign="top" nowrap="nowrap"><?php echo $results[$i]->modified; ?></td>
+</tr>
+<?php
+		}
+		if($results[$i]->post_type == 'comment')
+		{	// DELETE META DATA (IF ANY...)
+			$sql_delete = "
+			DELETE FROM $wpdb->commentmeta WHERE `comment_id` = ".$results[$i]->id."
+			";
+			$wpdb -> get_results($sql_delete);  
+		}
+		
+		$nr++;
+	} // for($i=0; $i<count($results); $i++)
+	
+	// DELETE TRASHED POSTS / PAGES
+	$sql_delete = "
+	DELETE FROM $wpdb->posts WHERE `post_status` = 'trash'			
+	";
+	$wpdb -> get_results($sql_delete);
+	
+	// DELETE TRASHED COMMENTS
+	$sql_delete = "
+	DELETE FROM $wpdb->comments WHERE `comment_approved` = 'trash'
+	";
+	$wpdb -> get_results($sql_delete);				
+
+	return $total_deleted;
+	
+} // rvg_delete_trash()
+?>
+<?php
+/********************************************************************************************
+
+	DELETE SPAMMED ITEMS
+
+*********************************************************************************************/
+function rvg_delete_spam($results, $display)
+{
+	global $wpdb;
+
+	$nr = 1;
+	$total_deleted = count($results);
+	for($i=0; $i<count($results); $i++)
+	{	if($display)
+		{
+?>
+<tr>
+  <td align="right" valign="top"><?php echo $nr; ?></td>
+  <td valign="top"><?php echo $results[$i]->comment_author; ?></td>
+  <td valign="top"><?php echo $results[$i]->comment_author_email; ?></td>
+  <td valign="top" nowrap="nowrap"><?php echo $results[$i]->comment_date; ?></td>
+</tr>
+<?php
+		} // if($display)
+		$sql_delete = "
+		DELETE FROM $wpdb->commentmeta WHERE `comment_id` = ".$results[$i]->comment_ID."
+		";
+		$wpdb -> get_results($sql_delete);
+		$nr++;				
+	} // for($i=0; $i<count($results); $i++)
+	
+	$sql_delete = "
+	DELETE FROM $wpdb->comments WHERE `comment_approved` = 'spam'
+	";
+	$wpdb -> get_results($sql_delete);
+	
+	return $total_deleted;
+	
+} // rvg_delete_spam()
+?>
+<?php
+/********************************************************************************************
+
+	OPTIMIZE DATABASE TABLES
+
+*********************************************************************************************/
+function rvg_optimize_tables($display)
+{
+	global $wpdb, $table_prefix;
+
+	$wp_only = get_option('rvg_wp_only');
+	if(!$wp_only)
+	{	$wp_only = 'N';
+		update_option('rvg_wp_only', $wp_only);
+	}
+
+	$names = mysql_list_tables(DB_NAME);
+	$cnt   = 0;
+	while($row = mysql_fetch_row($names))
+	{
+		if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
+		{	# ALL TABLES OR THIS IS A WORDPRESS TABLE
+			$cnt++;
+			$query  = "OPTIMIZE TABLE ".$row[0];
+			$result = $wpdb -> get_results($query);
+			
+			$sql = "
+			SELECT	engine, SUM(data_length + index_length) AS size, table_rows
+			FROM	information_schema.TABLES
+			WHERE	table_schema = '".strtolower(DB_NAME)."'
+			AND		table_name   = '".$row[0]."'
+			";
+
+			$table_info = $wpdb -> get_results($sql);
+			
+			if($display)
+			{
+?>
+<tr>
+  <td align="right" valign="top"><?php echo $cnt?>.</td>
+  <td valign="top" style="font-weight:bold;"><?php echo $row[0] ?></td>
+  <td valign="top"><?php echo $result[0]->Msg_text ?></td>
+  <td valign="top"><?php echo $table_info[0]->engine ?></td>
+  <td align="right" valign="top"><?php echo $table_info[0]->table_rows ?></td>
+  <td align="right" valign="top"><?php echo rvg_format_size($table_info[0]->size) ?></td>
+</tr>
+<?php
+			} // if($display)
+		} // if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
+	} // while($row = mysql_fetch_row($names))
+	
+	return $cnt;
+	
+} // rvg_optimize_tables()
+?>
+<?php
+/********************************************************************************************
+
+	WRITE LINE TO LOG FILE
+
+*********************************************************************************************/
+function rvg_write_log($log_arr)
+{
+	global $odb_version;
+	
+	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
+	if(!$rvg_odb_logging_on)
+	{	$rvg_odb_logging_on = 'N';
+		update_option('rvg_odb_logging_on', $rvg_odb_logging_on);
+	}
+		
+	if($rvg_odb_logging_on == "Y")
+	{	$file = dirname(__FILE__).'/rvg-optimize-db-log.html';
+		if(!file_exists($file))
+		{
+			// NEW LOG FILE
+			$html = '
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<style type="text/css">
+body, td, th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+th {
+	border-top:solid 1px #000;
+	border-bottom:solid 1px #000;
+}
+td {
+	padding-bottom:4px;
+	border-bottom:dotted 1px #CCC;
+}
+#header {
+	margin-left:6px;
+	margin-bottom:8px;
+}
+#header a {
+	text-decoration:none;
+	font-weight:bold;
+}
+</style>
+</head>
+<body>
+<div id="header">
+<h2><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank">Optimize Database after Deleting Revisions v2.0</a></h2>
+  A WordPress Plugin by <a href="http://cagewebdev.com" target="_blank"><strong>CAGE Web Design | Rolf van Gelder</strong></a>, Eindhoven, The Netherlands</strong>
+</div>
+<table width="100%" border="0" cellspacing="6" cellpadding="1">
+  <tr>
+    <th width="12%" align="left" valign="top">time</th>
+    <th width="12%" align="right" valign="top">deleted<br />
+      revisions</th>
+    <th width="12%" align="right" valign="top">deleted<br />
+      trash</th>
+    <th width="12%" align="right" valign="top">deleted<br />
+      spam</th>
+    <th width="12%" align="right" valign="top">nr of optimized tables</th>
+    <th width="12%" align="right" valign="top">database size BEFORE</th>
+    <th width="12%" align="right" valign="top">database size AFTER</th>
+    <th width="12%" align="right" valign="top">SAVINGS</th>
+  </tr>
+</table>
+			';
+
+			// file_put_contents($file,'<strong><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;text-decoration:none;">Optimize Database after Deleting Revisions v'.$odb_version.'</a><br />A WordPress Plugin by <a href="http://cagewebdev.com" target="_blank" style="text-decoration:none;">CAGE Web Design | Rolf van Gelder</a>, Eindhoven, The Netherlands</strong><hr noshade="noshade" size="1">');
+			file_put_contents($file,$html,FILE_APPEND);
+		}
+
+		$html = '
+<table width="100%" border="0" cellspacing="6" cellpadding="0">  
+  <tr>
+    <td width="12%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
+    <td width="12%" align="right" valign="top">'.$log_arr["revisions"].'</td>
+    <td width="12%" align="right" valign="top">'.$log_arr["trash"].'</td>
+    <td width="12%" align="right" valign="top">'.$log_arr["spam"].'</td>
+    <td width="12%" align="right" valign="top">'.$log_arr["tables"].'</td>
+    <td width="12%" align="right" valign="top">'.$log_arr["before"].'</td>
+    <td width="12%" align="right" valign="top">'.$log_arr["after"].'</td>
+    <td width="12%" align="right" valign="top">'.$log_arr["savings"].'</td>
+  </tr>
+</table>		
+		';
+					
+		// print_r($log_arr);
+		file_put_contents($file,$html,FILE_APPEND);
+	}
+	
+} // rvg_write_log
+?>
+<?php
+/********************************************************************************************
+
+	GET REVISIONS
+
+*********************************************************************************************/
+function rvg_get_revisions($max_revisions)
+{
+		global $wpdb;
+
+		$sql = "
+		SELECT	`post_parent`, `post_title`, COUNT(*) cnt
+		FROM	$wpdb->posts
+		WHERE	`post_type` = 'revision'
+		GROUP	BY `post_parent`
+		HAVING	COUNT(*) > ".$max_revisions."
+		ORDER	BY UCASE(`post_title`)	
+		";
+		return $wpdb -> get_results($sql);
+		
+} // rvg_get_revisions()
+?>
+<?php
+/********************************************************************************************
+
+	GET TRASHED POSTS / PAGES AND COMMENTS
+
+*********************************************************************************************/
+function rvg_get_trash()
+{
+		global $wpdb;
+
+		$sql = "
+		SELECT	`ID` AS id, 'post' AS post_type, `post_title` AS title, `post_modified` AS modified
+		FROM	$wpdb->posts
+		WHERE	`post_status` = 'trash'
+		UNION ALL
+		SELECT	`comment_ID` AS id, 'comment' AS post_type, `comment_author_IP` AS title, `comment_date` AS modified
+		FROM	$wpdb->comments
+		WHERE	`comment_approved` = 'trash'
+		ORDER	BY post_type, UCASE(title)		
+		";
+		return $wpdb -> get_results($sql);
+		
+} // rvg_get_trash()
+?>
+<?php
+/********************************************************************************************
+
+	GET SPAMMED COMMENTS
+
+*********************************************************************************************/
+function rvg_get_spam()
+{
+		global $wpdb;
+
+		$sql = "
+		SELECT	`comment_ID`, `comment_author`, `comment_author_email`, `comment_date`
+		FROM	$wpdb->comments
+		WHERE	`comment_approved` = 'spam'
+		ORDER	BY UCASE(`comment_author`)
+		";
+		return $wpdb -> get_results($sql);
+		
+} // rvg_get_trash()
 ?>
 <?php
 /********************************************************************************************
@@ -586,9 +1109,9 @@ function rvg_get_db_size()
 function rvg_format_size($size, $precision=1)
 {
 	if($size>1024*1024)
-		$table_size = (round($size / (1024*1024),$precision)).' MB';
+		$table_size = (round($size/(1024*1024),$precision)).' MB';
 	else
-		$table_size = (round($size / 1024,$precision)).' KB';
+		$table_size = (round($size/1024,$precision)).' KB';
 		
 	return $table_size;
 } // rvg_format_size()

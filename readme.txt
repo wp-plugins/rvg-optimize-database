@@ -1,69 +1,127 @@
-=== Plugin Name ===
-
-Contributors: Rolf van Gelder
+=== Optimize Database after Deleting Revisions ===
+Contributors: CAGE Web Design | Rolf van Gelder
 Donate link: http://cagewebdev.com
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
-Tags: database, delete, revisions, optimize, post, posts, page, pages, clean up, trash, spam, trashed, spammed
+Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size
 Author URI: http://cagewebdev.com
-Author: Rolf van Gelder, Eindhoven, The Netherlands
+Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.5
-Stable tag: 1.3.4
-Version: 1.3.4
+Stable tag: 2.0
+Version: 2.0
 
 == Description ==
 
-<p><b>This plugin is a 'one click' database optimizer.</b></p>
-<p>It deletes the redundant revisions of posts and pages, trashed items and/or spammed items and, after that, optimizes all database tables.</p>
-<p>http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin</p>
-<p>Author: Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com</p>
+This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
+
+= Main Features =
+* Deletes redundant revisions of posts and pages. (You optionally can keep an 'x'-amount of the most recent revisions)
+* Deletes trashed posts, pages and comments (optional)
+* Deletes spammed comments (optional)
+* Optimizes the database tables
+* Creates a log file of the optimizations (optional)
+* Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly (optional)
+
+= Settings =
+You can find the settings page in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
+
+= Starting the Optimization =
+You can start the Optimization in the WP Admin Panel &raquo; Tools &raquo; Optimize Database.
+Note: if you use the Scheduler the Optimization will run automatically!
+
+= Author =
+CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com
+
+= Plugin URL =
+http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
+
+= Download URL =
+http://wordpress.org/extend/plugins/rvg-optimize-database/
 
 == Installation ==
 
-<ol>
-<li>Upload `rvg-optimize-db.php` to the `/wp-content/plugins/` directory</li>
-<li>Activate the plugin through the 'Plugins' menu in the WordPress Dashboard</li>
-<li>Change the settings (if needed) through WordPress Dashboard, Settings, Optimize DB Options</li>
-</ol>
-
-== Upgrade Notice ==
-
-No Upgrade Notice available.
+* Upload the Plugin to the `/wp-content/plugins/` directory
+* Activate the plugin in the WP Admin Panel &raquo; Plugins
+* Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options
 
 == Screenshots ==
+1. Optimize Database after Deleting Revisions - Options
+2. Run the Optimizer
 
-No Screenshots available.
 
 == Changelog ==
 
-<p><b>1.0</b>   11/22/2011 Initial release</p>
-<p><b>1.0.1</b> 11/24/2011 A few updates for the readme.txt file</p>
-<p><b>1.0.2</b> 12/02/2011 Some minor updates</p>
-<p><b>1.0.3</b> 12/15/2011 Some minor layout updates</p>
-<p><b>1.0.4</b> 06/06/2012 Now also works with non short_open_tag's</p>
-<p><b>1.0.5</b> 08/21/2012 Depreciated item ('has_cap') replaced, abandoned line of code removed</p>
-<p><b>1.1</b>   08/29/2012 Added: a new option page, in de plugins section, where you can define the maximum number of - most recent - revisions you want to keep per post or page</p>
-<p><b>1.1.2</b> 08/30/2012 Minor bug fix for the new option page</p>
-<p><b>1.1.3</b> 09/01/2012 Moved the 'Optimize DB Options' item to Dashboard 'Settings' Menu and the 'Optimize Database' item to the Dashboard 'Tools' Menu. That makes more sense!</p>
-<p><b>1.1.4</b> 09/01/2012 Something went wrong deploying 1.1.3, so I deployed it again as 1.1.4</p>
-<p><b>1.1.5</b> 09/01/2012 Something went wrong deploying 1.1.4, so I deployed it again as 1.1.5. *sigh*</p>
-<p><b>1.1.6</b> 09/01/2012 Fixed the link to the options page</p>
-<p><b>1.1.7</b> 09/03/2012 Some textual and link fixes</p>
-<p><b>1.1.8</b> 09/08/2012 Another link fix</p>
-<p><b>1.1.9</b> 09/27/2012 Using a different method for retrieving database table names</p>
-<p><b>1.2</b>   10/03/2012 Major update: new options 'delete trash', 'delete spam', 'only optimize WordPress tables'</p>
-<p><b>1.3</b>   10/06/2012 Extra button for starting optimization, shows savings (in bytes) now</p>
-<p><b>1.3.1</b> 10/07/2012 Minor changes</p>
-<p><b>1.3.2</b> 11/14/2012 Shows more information about the optimized tables + other minor changes</p>
-<p><b>1.3.3</b> 12/01/2012 Some layout changes</p>
-<p><b>1.3.4</b> 12/14/2012 Changed the buttons for WP 3.5</p>
+= 2.0 [12/18/2012] =
+* NEW: Logging of the Optimizations (optional)
+* NEW: Scheduling Optimizations for Automatic Execution (optional)
+* Many other (technical and cosmetical) changes and improvements
+
+= 1.3.4 [12/14/2012] =
+* Changed the buttons for WP 3.5
+
+= 1.3.3 [12/01/2012] =
+* Some layout changes
+
+= 1.3.2 [11/14/2012] =
+* Shows more information about the optimized tables + other minor changes
+
+= 1.3.1 [10/07/2012] =
+* Minor changes
+
+= 1.3 [10/06/2012] =
+* Extra button for starting optimization, shows savings (in bytes) now
+
+= 1.2 [10/03/2012] = 
+* Major update: new options 'delete trash', 'delete spam', 'only optimize WordPress tables'
+
+= 1.1.9 [09/27/2012] =
+* Using a different method for retrieving database table names
+
+= 1.1.8 [09/08/2012] =
+* Another link fix
+
+= 1.1.7 [09/03/2012] =
+* Some textual and link fixes
+
+= 1.1.6 [09/01/2012] =
+* Fixed the link to the options page
+
+= 1.1.3 [09/01/2012] =
+* Moved the 'Optimize DB Options' item to Dashboard 'Settings' Menu and the 'Optimize Database' item to the Dashboard 'Tools' Menu. That makes more sense!
+
+= 1.1.2 [08/30/2012] =
+* Minor bug fix for the new option page
+
+= 1.1 [08/29/2012] =
+* Added: a new option page, in de plugins section, where you can define the maximum number of - most recent - revisions you want to keep per post or page
+
+= 1.0.5 [08/21/2012] =
+* Depreciated item ('has_cap') replaced, abandoned line of code removed
+
+= 1.0.4 [06/06/2012] =
+* Now also works with non short_open_tag's
+
+= 1.0.3 [12/15/2011] =
+* Some minor layout updates
+
+= 1.0.2 [12/02/2011] =
+* Some minor updates
+
+= 1.0.1 [11/24/2011] =
+* A few updates for the readme.txt file
+
+= 1.0 [11/22/2011] =
+* Initial release
 
 == Frequently Asked Questions ==
 
-<p><b>Q:</b> <em>How can I change the settings of this plugin?</em></p>
-<p><b>A:</b> In the WordPress Dashboard go to '<b>Settings / Optimize DB Options</b>'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and some more options.</p>
-<p><b>Q:</b> <em>How do I run this plugin?</em></p>
-<p><b>A:</b> In the WordPress Dashboard go to '<b>Tools</b>'. Click on '<b>Optimize Database</b>'. Then click the 'Start Optimization'-button. Et voila!</p>
-<p><b>Q:</b> <em>Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database?</em></p>
-<p><b>A:</b> That is because the table type of that table is not 'MyISAM'</p>
+= How can I change the settings of this plugin? =
+* WP Admin Panel &raquo; Settings &raquo; Optimize DB Options'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and more options.
+
+= How do I run this plugin? =
+* WP Admin Panel &raquo; Tools &raquo; Optimize Database. Then click the 'Start Optimization'-button. Et voila!
+
+= Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database? =
+* That is because the table type of that table is not 'MyISAM'
+
