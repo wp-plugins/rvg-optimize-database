@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.0';
-$odb_release_date = '12/18/2012';
+$odb_version      = '2.1';
+$odb_release_date = '01/04/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.0
+ * @version 2.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.0
+Version: 2.1
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -402,7 +402,7 @@ function rvg_optimize_db()
   </tr>
   <?php
 		// LOOP THROUGH THE REVISIONS AND DELETE THEM
-  		$total_deleted = rvg_delete_revisions($results, true);
+  		$total_deleted = rvg_delete_revisions($results, true, $max_revisions);
 	?>
   <tr>
     <td colspan="3" align="right" style="border-top:solid 1px #999;font-weight:bold;">total number of revisions deleted</td>
@@ -669,7 +669,7 @@ function rvg_optimize_db_cron()
 		
 		if(count($results)>0)
 			// WE HAVE TRASH TO DELETE!
-			$total_deleted = rvg_delete_trash($results, false);
+			$total_deleted = rvg_delete_trash($results, false, $max_revisions);
 			
 	} // if($clear_trash == 'Y')
 
@@ -718,12 +718,13 @@ function rvg_optimize_db_cron()
 	DELETE THE REVISIONS
 
 *********************************************************************************************/
-function rvg_delete_revisions($results, $display)
+function rvg_delete_revisions($results, $display, $max_revisions)
 {
 	global $wpdb;
 	
 	$nr = 1;
 	$total_deleted = 0;
+
 	for($i=0; $i<count($results); $i++)
 	{	$nr_to_delete = $results[$i]->cnt - $max_revisions;
 		$total_deleted += $nr_to_delete;
@@ -967,7 +968,7 @@ td {
 </head>
 <body>
 <div id="header">
-<h2><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank">Optimize Database after Deleting Revisions v2.0</a></h2>
+<h2><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank">Optimize Database after Deleting Revisions v2.1</a></h2>
   A WordPress Plugin by <a href="http://cagewebdev.com" target="_blank"><strong>CAGE Web Design | Rolf van Gelder</strong></a>, Eindhoven, The Netherlands</strong>
 </div>
 <table width="100%" border="0" cellspacing="6" cellpadding="1">
@@ -1030,6 +1031,7 @@ function rvg_get_revisions($max_revisions)
 		HAVING	COUNT(*) > ".$max_revisions."
 		ORDER	BY UCASE(`post_title`)	
 		";
+		// echo $sql.'<br />';		
 		return $wpdb -> get_results($sql);
 		
 } // rvg_get_revisions()
