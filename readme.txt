@@ -6,10 +6,10 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.0
+Requires at least: 2.1
 Tested up to: 3.5
-Stable tag: 2.0
-Version: 2.0
+Stable tag: 2.1
+Version: 2.1
 
 == Description ==
 
@@ -46,11 +46,14 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options
 
 == Screenshots ==
+
 1. Optimize Database after Deleting Revisions - Options
 2. Run the Optimizer
 
-
 == Changelog ==
+
+= 2.1 [01/04/2013] =
+* Bug fix: keeping a maximum number of revisions didn't work correctly
 
 = 2.0 [12/18/2012] =
 * NEW: Logging of the Optimizations (optional)
