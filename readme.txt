@@ -6,20 +6,21 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.1
+Requires at least: 2.2
 Tested up to: 3.5
-Stable tag: 2.1
-Version: 2.1
+Stable tag: 2.2
+Version: 2.2
 
 == Description ==
 
 This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 
 = Main Features =
-* Deletes redundant revisions of posts and pages. (You optionally can keep an 'x'-amount of the most recent revisions)
+* Deletes redundant revisions of posts and pages (you optionally can keep an 'x'-amount of the most recent revisions)
 * Deletes trashed posts, pages and comments (optional)
 * Deletes spammed comments (optional)
-* Optimizes the database tables
+* Deletes 'orphan postmeta items'
+* Optimizes the database tables (optionally you can exclude certain tables from optimization)
 * Creates a log file of the optimizations (optional)
 * Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly (optional)
 
@@ -31,7 +32,7 @@ You can start the Optimization in the WP Admin Panel &raquo; Tools &raquo; Optim
 Note: if you use the Scheduler the Optimization will run automatically!
 
 = Author =
-CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com
+CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com - http://cage.nl
 
 = Plugin URL =
 http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
@@ -43,14 +44,13 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 
 * Upload the Plugin to the `/wp-content/plugins/` directory
 * Activate the plugin in the WP Admin Panel &raquo; Plugins
-* Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options
-
-== Screenshots ==
-
-1. Optimize Database after Deleting Revisions - Options
-2. Run the Optimizer
+* Change the settings (if needed) in the WP Admin Panel &raquo; Tools &raquo; Optimize Database
 
 == Changelog ==
+
+= 2.2 [01/11/2013] =
+* NEW: 'Orphan Postmeta items' will be automatically deleted
+* NEW: the possibility to exclude tables from Optimization (for instance for 'heavy traffic' tables)
 
 = 2.1 [01/04/2013] =
 * Bug fix: keeping a maximum number of revisions didn't work correctly
@@ -120,11 +120,10 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 == Frequently Asked Questions ==
 
 = How can I change the settings of this plugin? =
-* WP Admin Panel &raquo; Settings &raquo; Optimize DB Options'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and more options.
+* WP Admin Panel &raquo; Settings &raquo; Optimize DB Options'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and some more options.
 
 = How do I run this plugin? =
 * WP Admin Panel &raquo; Tools &raquo; Optimize Database. Then click the 'Start Optimization'-button. Et voila!
 
 = Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database? =
 * That is because the table type of that table is not 'MyISAM'
-
