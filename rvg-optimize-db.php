@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2';
-$odb_release_date = '01/11/2013';
+$odb_version      = '2.2.1';
+$odb_release_date = '01/17/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2
+ * @version 2.2.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2
+Version: 2.2.1
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -91,7 +91,8 @@ function rvg_odb_options_page() {
 	# RVG_WP_ONLY IS DEPRECIATED FROM v2.2
 	rvg_fix_wp_only();
 	
-	if($_REQUEST['delete_log'] == "Y") @unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
+	if(isset($_REQUEST['delete_log']))
+		if($_REQUEST['delete_log'] == "Y") @unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
 	
 	// SAVE THE OPTIONS
  	if (isset($_POST['info_update']))
@@ -116,23 +117,29 @@ function rvg_odb_options_page() {
 			}
 		}
 
-		$rvg_odb_number = trim($_POST['rvg_odb_number']);
-		update_option('rvg_odb_number', $rvg_odb_number);
+		if(isset($_POST['rvg_odb_number']))
+		{	$rvg_odb_number = trim($_POST['rvg_odb_number']);
+			update_option('rvg_odb_number', $rvg_odb_number);
+		}
 		
 		$rvg_clear_trash = 'N';
-		if($_POST['rvg_clear_trash'] == 'Y') $rvg_clear_trash = 'Y';
+		if(isset($_POST['rvg_clear_trash']))
+			$rvg_clear_trash = $_POST['rvg_clear_trash'];
 		update_option('rvg_clear_trash', $rvg_clear_trash);
 		
 		$rvg_clear_spam = 'N';
-		if($_POST['rvg_clear_spam'] == 'Y') $rvg_clear_spam = 'Y';
+		if(isset($_POST['rvg_clear_spam']))
+			$rvg_clear_spam = $_POST['rvg_clear_spam'];
 		update_option('rvg_clear_spam', $rvg_clear_spam);
 		
 		$rvg_odb_logging_on = 'N';
-		if($_POST['rvg_odb_logging_on'] == 'Y') $rvg_odb_logging_on = 'Y';
+		if(isset($_POST['rvg_odb_logging_on']))
+			$rvg_odb_logging_on = $_POST['rvg_odb_logging_on'];
 		update_option('rvg_odb_logging_on', $rvg_odb_logging_on);
 
 		$rvg_odb_schedule = '';
-		if($_POST['rvg_odb_schedule']) $rvg_odb_schedule = $_POST['rvg_odb_schedule'];
+		if(isset($_POST['rvg_odb_schedule']))
+			$rvg_odb_schedule = $_POST['rvg_odb_schedule'];
 		update_option('rvg_odb_schedule', $rvg_odb_schedule);
 
 		// CLEAR CURRENT SCHEDULE (IF ANY)
@@ -185,7 +192,7 @@ function rvg_odb_options_page() {
     <?php
 if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
 if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
-if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checked"'; else $rvg_odb_logging_on = '';
+if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checked"'; else $rvg_odb_logging_on_checked = '';
 ?>
     <blockquote>
       <fieldset class='options'>
@@ -255,8 +262,9 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 		FROM	$wpdb->options
 		WHERE	`option_name` = 'rvg_ex_".$row[0]."'
 		";
-		$results = $wpdb -> get_results($sql);		
-		if($results[0]->option_value == 'excluded') $cb_checked = ' checked';		
+		$results = $wpdb -> get_results($sql);
+		if(isset($results[0]->option_value))
+			if($results[0]->option_value == 'excluded') $cb_checked = ' checked';		
 		echo '<td width="25%" style="font-weight:'.$style.'"><input id="cb_'.$row[0].'" name="cb_'.$row[0].'" type="checkbox" value="1" '.$cb_checked.'  /> '.$row[0].'</td>'."\n";
 	} # while($row = mysql_fetch_row($names))
 ?>
@@ -284,8 +292,9 @@ function rvg_optimize_db()
 {
 	global $wpdb, $odb_version, $table_prefix;
 
-	if($_REQUEST['action'] == "delete_log")
-		@unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
+	if(isset($_REQUEST['action']))
+		if($_REQUEST['action'] == "delete_log")
+			@unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
 
 	/****************************************************************************************
 	
@@ -339,7 +348,7 @@ function rvg_optimize_db()
 		$rvg_odb_schedule_txt = 'EVERY FIVE MINUTES';
 
 	$nextrun = '';			
-	if(!$rvg_odb_schedule_txt)
+	if(!isset($rvg_odb_schedule_txt))
 	{	$rvg_odb_schedule_txt = 'NOT SCHEDULED';
 	}
 	else
@@ -362,9 +371,9 @@ function rvg_optimize_db()
 <div style="padding-left:8px;">
   <h2>Optimize your WordPress Database</h2>
   <?php
-	if($_REQUEST['action'] == "delete_log")
-	{	echo '<div class="updated" style="position:relative;left:-15px;"><p><strong>Optimize Database after Deleting Revisions - LOG FILE DELETED</strong></p></div>';
-	}
+	if(isset($_REQUEST['action']))
+		if($_REQUEST['action'] == "delete_log")
+			echo '<div class="updated" style="position:relative;left:-15px;"><p><strong>Optimize Database after Deleting Revisions - LOG FILE DELETED</strong></p></div>';
 ?>
   <p><span style="font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $odb_version?></a> - A WordPress Plugin by <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">CAGE Web Design</a> | <a href="http://cage.nl/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, The Netherlands</span></p>
   <p>Current options:<br />
@@ -404,20 +413,22 @@ function rvg_optimize_db()
 	}
 ?>
     <?php
-	if($_REQUEST['action'] != 'run')
+	$action = '';
+	if(isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+	if($action != 'run')
 	{
 ?>
     &nbsp;
     <input class="button-primary button-large" type="button" name="start_optimization" value="Start Optimization" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=run'" style="font-weight:bold;" />
-    <?php
+<?php		
 	}
 ?>
   </p>
 </div>
 <?php
-	if($_REQUEST['action'] != 'run')
-	{	return;
-	}
+	$action = '';
+	if(isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+	if($action != 'run') return;
 ?>
 <h2 style="padding-left:8px;">Starting Optimization...</h2>
 <?php
@@ -943,7 +954,7 @@ function rvg_delete_orphans($display)
 	$sql_delete = "
 	SELECT COUNT(*) cnt
 	FROM $wpdb->postmeta pm
-	WHERE pm.post_id NOT IN (SELECT p.ID FROM $wpdb->posts)
+	WHERE pm.post_id NOT IN (SELECT ID FROM $wpdb->posts)
 	";
 	$results = $wpdb -> get_results($sql_delete);
 	
@@ -952,7 +963,7 @@ function rvg_delete_orphans($display)
 	if($total_deleted > 0)
 	{	$sql_delete = "
 		DELETE FROM $wpdb->postmeta pm
-		WHERE pm.post_id NOT IN (SELECT p.ID FROM $wpdb->posts)
+		WHERE pm.post_id NOT IN (SELECT ID FROM $wpdb->posts)
 		";
 		$wpdb -> get_results($sql_delete);		
 	}
