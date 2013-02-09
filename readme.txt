@@ -48,7 +48,7 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 
 == Changelog ==
 
-= 2.2.3 [08/02/2013]
+= 2.2.3 [09/02/2013] =
 * Bug fix: fixed an (innocent) PHP warning (in error.log)
 
 = 2.2.2 [01/20/2013] =
