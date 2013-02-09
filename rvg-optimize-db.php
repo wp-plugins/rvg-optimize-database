@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2.2';
-$odb_release_date = '01/20/2013';
+$odb_version      = '2.2.3';
+$odb_release_date = '02/08/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2.2
+ * @version 2.2.3
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
-Author: Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2.2
+Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
+Version: 2.2.3
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -420,7 +420,7 @@ function rvg_optimize_db()
 ?>
     &nbsp;
     <input class="button-primary button-large" type="button" name="start_optimization" value="Start Optimization" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=run'" style="font-weight:bold;" />
-<?php		
+    <?php		
 	}
 ?>
   </p>
@@ -736,7 +736,7 @@ function rvg_optimize_db_cron()
 	$total_deleted = 0;
 	if(count($results)>0)
 		// WE HAVE REVISIONS TO DELETE!
-		$total_deleted = rvg_delete_revisions($results, false);
+		$total_deleted = rvg_delete_revisions($results, false, $max_revisions);
 
 	// NUMBER OF DELETED REVISIONS FOR LOG FILE
 	$log_arr["revisions"] = $total_deleted;
