@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2.4';
-$odb_release_date = '02/12/2013';
+$odb_version      = '2.2.5';
+$odb_release_date = '02/20/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2.4
+ * @version 2.2.5
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2.4
+Version: 2.2.5
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -999,7 +999,7 @@ function rvg_optimize_tables($display)
 			$result = $wpdb -> get_results($query);
 			
 			$sql = "
-			SELECT	engine, SUM(data_length + index_length) AS size, table_rows
+			SELECT	engine, (data_length + index_length) as size, table_rows
 			FROM	information_schema.TABLES
 			WHERE	table_schema = '".strtolower(DB_NAME)."'
 			AND		table_name   = '".$row[0]."'
@@ -1022,7 +1022,6 @@ function rvg_optimize_tables($display)
 			} // if($display)
 		} // if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
 	} // while($row = mysql_fetch_row($names))
-	
 	return $cnt;
 	
 } // rvg_optimize_tables()
@@ -1235,9 +1234,10 @@ function rvg_get_db_size()
 	global $wpdb;
 	
 	$sql = "
-	SELECT	SUM(data_length + index_length) AS size
-	FROM	information_schema.TABLES
-	WHERE	table_schema = '".strtolower(DB_NAME)."'
+	SELECT SUM(data_length + index_length) size
+	FROM information_schema.TABLES
+	WHERE table_schema = '".strtolower(DB_NAME)."'
+	GROUP BY table_schema
 	";
 	
 	$res = $wpdb -> get_results($sql);
