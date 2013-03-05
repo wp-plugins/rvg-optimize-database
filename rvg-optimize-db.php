@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2.5';
-$odb_release_date = '02/20/2013';
+$odb_version      = '2.2.6';
+$odb_release_date = '03/05/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2.5
+ * @version 2.2.6
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2.5
+Version: 2.2.6
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -213,7 +213,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                   <td width="50%" valign="top"><input name="rvg_clear_spam" type="checkbox" value="Y" <?php echo $rvg_clear_spam_checked?> /></td>
                 </tr>
                 <tr>
-                  <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Logging on</span></td>
+                  <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Keep a log</span></td>
                   <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" <?php echo $rvg_odb_logging_on_checked?> /></td>
                 </tr>
                 <tr>
@@ -276,16 +276,18 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
     </blockquote>
     <p class="submit">
       <input class="button-primary button-large" type='submit' name='info_update' value='Save Options' style="font-weight:bold;" />
+      &nbsp;
+      <input class="button" type="button" name="delete_log" value="Go To Optimizer" onclick="self.location='tools.php?page=rvg-optimize-db.php'" style="font-weight:normal;" />
     </p>
   </div>
 </form>
 <?php
-}
+} // rvg_odb_options_page
 
 
 /********************************************************************************************
 
-	MAIN FUNCTION FOR DELETING REVISIONS, TRASH, SPAM AND OPTIMIZING DATABASE TABLES
+	MAIN FUNCTION FOR DELETING REVISIONS, TRASH, SPAM, ORPHANS AND OPTIMIZING DATABASE TABLES
 
 *********************************************************************************************/
 function rvg_optimize_db()
@@ -380,7 +382,7 @@ function rvg_optimize_db()
     <strong>Maximum number of - most recent - revisions to keep per post / page:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span><br />
     <strong>Delete trashed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
     <strong>Delete spammed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_spam_yn?></span><br />
-    <strong>Logging on:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_logging_on_yn?></span><br />
+    <strong>Keep a log:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_logging_on_yn?></span><br />
     <strong>Number of excluded tables:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $number_excluded?></span><br />
     <strong>Scheduler:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_schedule_txt?></span>
     <?php
@@ -395,7 +397,7 @@ function rvg_optimize_db()
 	{
 ?>
     <br />
-    <strong>Total savings so far:</strong> <span style="font-weight:bold;color:#00F;"><?php echo rvg_format_size($total_savings); ?></span>
+    <strong>Total savings since the first run:</strong> <span style="font-weight:bold;color:#00F;"><?php echo rvg_format_size($total_savings); ?></span>
     <?php
 	}
     ?>
@@ -585,6 +587,13 @@ function rvg_optimize_db()
 	$log_arr["spam"] = $total_deleted;
 ?>
 <?php
+	/****************************************************************************************
+	
+		DELETE ORPHANS
+	
+	******************************************************************************************/
+?>
+<?php
 	$total_deleted = rvg_delete_orphans(true);
 	if($total_deleted)
 	{
@@ -608,6 +617,8 @@ function rvg_optimize_db()
 </table>
 <?php		
 	}
+	// FOR LOG FILE
+	$log_arr["orphans"] = $total_deleted;
 ?>
 <?php
 	/****************************************************************************************
@@ -673,7 +684,7 @@ function rvg_optimize_db()
     <td align="right" style="font-weight:bold;border-top:solid 1px #999;"><?php echo rvg_format_size(($start_size - $end_size),3); ?></td>
   </tr>
   <tr>
-    <td align="right" style="font-weight:bold;">TOTAL SAVINGS SO FAR</td>
+    <td align="right" style="font-weight:bold;">TOTAL SAVINGS SINCE THE FIRST RUN</td>
     <td align="right" style="font-weight:bold;border-top:solid 1px #999;"><?php echo rvg_format_size($total_savings,3); ?></td>
   </tr>
 </table>
@@ -770,6 +781,11 @@ function rvg_optimize_db_cron()
 	
 	// NUMBER OF SPAM DELETED FOR LOG FILE
 	$log_arr["spam"] = $total_deleted;
+	
+	// DELETE ORPHANS
+	$total_deleted = rvg_delete_orphans(false);
+	// NUMBER OF ORPHANS DELETED (FOR LOG FILE)
+	$log_arr["orphans"] = $total_deleted;
 
 	// OPTIMIZE DATABASE TABLES	
 	$cnt = rvg_optimize_tables(false);
@@ -788,7 +804,7 @@ function rvg_optimize_db_cron()
 	
 	$total_savings = get_option('rvg_odb_total_savings');
 	$total_savings += ($start_size - $end_size);
-	update_option('rvg_odb_total_savings',$total_savings);	
+	update_option('rvg_odb_total_savings',$total_savings);
 	
 } // rvg_optimize_db_cron()
 ?>
@@ -1085,7 +1101,7 @@ function rvg_write_log($log_arr)
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
+<title>Optimize Database after Deleting Revisions v'.$odb_version.' - LOG</title>
 <style type="text/css">
 body, td, th {
 	font-family: Arial, Helvetica, sans-serif;
@@ -1111,22 +1127,24 @@ td {
 </head>
 <body>
 <div id="header">
-<h2><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank">Optimize Database after Deleting Revisions v'.$odb_version.'</a></h2>
-  A WordPress Plugin by <a href="http://cagewebdev.com" target="_blank"><strong>CAGE Web Design | Rolf van Gelder</strong></a>, Eindhoven, The Netherlands</strong>
+<h2><a href="http://wordpress.org/extend/plugins/rvg-optimize-database/" target="_blank">Optimize Database after Deleting Revisions v'.$odb_version.'</a></h2>
+  A WordPress Plugin by <a href="http://cagewebdev.com" target="_blank"><strong>CAGE Web Design</strong></a> | <a href="http://cage.nl/rg_biography.php" target="_blank"><strong>Rolf van Gelder</strong></a>, Eindhoven, The Netherlands</strong>
 </div>
 <table width="100%" border="0" cellspacing="6" cellpadding="1">
   <tr>
-    <th width="12%" align="left" valign="top">time</th>
-    <th width="12%" align="right" valign="top">deleted<br />
+    <th width="11%" align="left" valign="top">time</th>
+    <th width="11%" align="right" valign="top">deleted<br />
       revisions</th>
-    <th width="12%" align="right" valign="top">deleted<br />
+    <th width="11%" align="right" valign="top">deleted<br />
       trash</th>
-    <th width="12%" align="right" valign="top">deleted<br />
+    <th width="11%" align="right" valign="top">deleted<br />
       spam</th>
-    <th width="12%" align="right" valign="top">nr of optimized tables</th>
-    <th width="12%" align="right" valign="top">database size BEFORE</th>
-    <th width="12%" align="right" valign="top">database size AFTER</th>
-    <th width="12%" align="right" valign="top">SAVINGS</th>
+    <th width="11%" align="right" valign="top">deleted<br />
+      orphans</th>	  
+    <th width="11%" align="right" valign="top">nr of optimized tables</th>
+    <th width="11%" align="right" valign="top">database size BEFORE</th>
+    <th width="11%" align="right" valign="top">database size AFTER</th>
+    <th width="11%" align="right" valign="top">SAVINGS</th>
   </tr>
 </table>
 			';
@@ -1138,14 +1156,15 @@ td {
 		$html = '
 <table width="100%" border="0" cellspacing="6" cellpadding="0">  
   <tr>
-    <td width="12%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
-    <td width="12%" align="right" valign="top">'.$log_arr["revisions"].'</td>
-    <td width="12%" align="right" valign="top">'.$log_arr["trash"].'</td>
-    <td width="12%" align="right" valign="top">'.$log_arr["spam"].'</td>
-    <td width="12%" align="right" valign="top">'.$log_arr["tables"].'</td>
-    <td width="12%" align="right" valign="top">'.$log_arr["before"].'</td>
-    <td width="12%" align="right" valign="top">'.$log_arr["after"].'</td>
-    <td width="12%" align="right" valign="top">'.$log_arr["savings"].'</td>
+    <td width="11%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
+    <td width="11%" align="right" valign="top">'.$log_arr["revisions"].'</td>
+    <td width="11%" align="right" valign="top">'.$log_arr["trash"].'</td>
+    <td width="11%" align="right" valign="top">'.$log_arr["spam"].'</td>
+    <td width="11%" align="right" valign="top">'.$log_arr["orphans"].'</td>	
+    <td width="11%" align="right" valign="top">'.$log_arr["tables"].'</td>
+    <td width="11%" align="right" valign="top">'.$log_arr["before"].'</td>
+    <td width="11%" align="right" valign="top">'.$log_arr["after"].'</td>
+    <td width="11%" align="right" valign="top">'.$log_arr["savings"].'</td>
   </tr>
 </table>		
 		';
@@ -1174,10 +1193,10 @@ function rvg_get_revisions($max_revisions)
 		HAVING	COUNT(*) > ".$max_revisions."
 		ORDER	BY UCASE(`post_title`)	
 		";
-		// echo $sql.'<br />';		
+	
 		return $wpdb -> get_results($sql);
 		
-} // rvg_get_revisions()
+} // rvg_get_revisions
 ?>
 <?php
 /********************************************************************************************
@@ -1199,9 +1218,10 @@ function rvg_get_trash()
 		WHERE	`comment_approved` = 'trash'
 		ORDER	BY post_type, UCASE(title)		
 		";
+		
 		return $wpdb -> get_results($sql);
 		
-} // rvg_get_trash()
+} // rvg_get_trash
 ?>
 <?php
 /********************************************************************************************
@@ -1219,9 +1239,10 @@ function rvg_get_spam()
 		WHERE	`comment_approved` = 'spam'
 		ORDER	BY UCASE(`comment_author`)
 		";
+		
 		return $wpdb -> get_results($sql);
 		
-} // rvg_get_trash()
+} // rvg_get_trash
 ?>
 <?php
 /********************************************************************************************
@@ -1244,7 +1265,7 @@ function rvg_get_db_size()
 	
 	return $res[0]->size;
 	
-} // rvg_get_db_size()
+} // rvg_get_db_size
 ?>
 <?php
 /********************************************************************************************
@@ -1260,5 +1281,5 @@ function rvg_format_size($size, $precision=1)
 		$table_size = (round($size/1024,$precision)).' KB';
 		
 	return $table_size;
-} // rvg_format_size()
+} // rvg_format_size
 ?>
