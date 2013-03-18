@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2.6';
-$odb_release_date = '03/05/2013';
+$odb_version      = '2.2.7';
+$odb_release_date = '03/18/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2.6
+ * @version 2.2.7
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2.6
+Version: 2.2.7
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -967,6 +967,30 @@ function rvg_delete_orphans($display)
 {
 	global $wpdb;
 	
+	$meta_orphans = 0;
+	$post_orphans = 0;
+
+	
+	// DELETE POST ORPHANS
+	$sql_delete = "
+	SELECT COUNT(*) cnt
+	FROM $wpdb->posts
+	WHERE ID NOT IN (SELECT post_id FROM $wpdb->postmeta)
+	";
+
+	$results = $wpdb -> get_results($sql_delete);
+	
+	$post_orphans = $results[0] -> cnt;
+	
+	if($post_orphans > 0)
+	{	$sql_delete = "
+		DELETE FROM $wpdb->posts
+		WHERE ID NOT IN (SELECT post_id FROM $wpdb->postmeta)
+		";
+		$wpdb -> get_results($sql_delete);		
+	}
+	
+	// DELETE POSTMETA ORPHANS
 	$sql_delete = "
 	SELECT COUNT(*) cnt
 	FROM $wpdb->postmeta
@@ -975,9 +999,9 @@ function rvg_delete_orphans($display)
 	
 	$results = $wpdb -> get_results($sql_delete);
 	
-	$total_deleted = $results[0] -> cnt;
+	$meta_orphans = $results[0] -> cnt;
 	
-	if($total_deleted > 0)
+	if($meta_orphans > 0)
 	{	$sql_delete = "
 		DELETE FROM $wpdb->postmeta
 		WHERE post_id NOT IN (SELECT ID FROM $wpdb->posts)
@@ -985,7 +1009,7 @@ function rvg_delete_orphans($display)
 		$wpdb -> get_results($sql_delete);		
 	}
 
-	return $total_deleted;
+	return ($meta_orphans + $post_orphans);
 	
 } // rvg_delete_orphans()
 ?>
