@@ -6,10 +6,10 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.2.7
+Requires at least: 2.2.8
 Tested up to: 3.5.1
-Stable tag: 2.2.7
-Version: 2.2.7
+Stable tag: 2.2.8
+Version: 2.2.8
 
 == Description ==
 
@@ -47,6 +47,9 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.2.8 [03/19/2013] =
+* BUG FIX: bug fix for deleting Post Orphans
 
 = 2.2.7 [03/18/2013] =
 * NEW: 'Orphan Post items' (like 'Auto Drafts') will be automatically deleted too now (thanks to: 0izys)

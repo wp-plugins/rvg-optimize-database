@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2.7';
-$odb_release_date = '03/18/2013';
+$odb_version      = '2.2.8';
+$odb_release_date = '03/19/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2.7
+ * @version 2.2.8
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2.7
+Version: 2.2.8
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -971,11 +971,12 @@ function rvg_delete_orphans($display)
 	$post_orphans = 0;
 
 	
-	// DELETE POST ORPHANS
+	// DELETE POST ORPHANS (AUTO DRAFTS)
 	$sql_delete = "
 	SELECT COUNT(*) cnt
 	FROM $wpdb->posts
 	WHERE ID NOT IN (SELECT post_id FROM $wpdb->postmeta)
+	AND post_status = 'auto-draft'
 	";
 
 	$results = $wpdb -> get_results($sql_delete);
@@ -986,6 +987,7 @@ function rvg_delete_orphans($display)
 	{	$sql_delete = "
 		DELETE FROM $wpdb->posts
 		WHERE ID NOT IN (SELECT post_id FROM $wpdb->postmeta)
+		AND post_status = 'auto-draft'
 		";
 		$wpdb -> get_results($sql_delete);		
 	}
