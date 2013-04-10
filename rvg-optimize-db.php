@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2.8';
-$odb_release_date = '03/19/2013';
+$odb_version      = '2.2.9';
+$odb_release_date = '04/10/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2.8
+ * @version 2.2.9
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2.8
+Version: 2.2.9
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -237,8 +237,8 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
                 <tr>
-                  <td colspan="4" align="center"><span style="font-weight:bold;">EXCLUDE DATABASE TABLES FROM OPTIMIZATION: CHECKED TABLES <u>WON'T</u> BE OPTIMIZED!</span><br />
-                    <a href="javascript:;" onclick="$('[id^=cb_]').attr('checked',true);">check all tables</a> | <a href="javascript:;" onclick="$('[id^=cb_]').attr('checked',false);">uncheck all tables</a> | <a href="javascript:;" onclick="$(':not([id^=cb_<?php echo $table_prefix; ?>])').attr('checked',true);">check all NON-WordPress tables</a></td>
+                  <td colspan="4" align="center"><span style="font-weight:bold;">EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span style="text-decoration:underline;color:#F00;">CHECKED</span> TABLES <span style="text-decoration:underline;color:#F00;">WON'T</span> BE OPTIMIZED!</span><br />
+                    <a href="javascript:;" onclick="$('[id^=cb_]').attr('checked',true);">check all tables</a> | <a href="javascript:;" onclick="$('[id^=cb_]').attr('checked',false);">uncheck all tables</a> | <a href="javascript:;" onclick="$(':not([id^=cb_<?php echo $table_prefix; ?>])').filter('[id^=cb_]').attr('checked',true);">check all NON-WordPress tables</a></td>
                 </tr>
                 <tr>
                   <?php
