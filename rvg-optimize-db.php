@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.2.9';
-$odb_release_date = '04/10/2013';
+$odb_version      = '2.3';
+$odb_release_date = '04/26/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.2.9
+ * @version 2.3
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.2.9
+Version: 2.3
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -45,17 +45,25 @@ add_action( 'admin_menu', 'rvg_odb_admin_menu' );
 /********************************************************************************************
 
 	ACTIONS FOR THE SCHEDULER
+	
+	http://codex.wordpress.org/Plugin_API/Filter_Reference/cron_schedules
 
 *********************************************************************************************/
-add_filter('cron_schedules', 'rvg_extra_schedules');
-function rvg_extra_schedules(){
-	return array(
-		'weekly' => array(
-			'interval' => 604800,
-			'display' => 'Once weekly'
-		)		
+function rvg_extra_schedules( $schedules ) {
+	// ADD A WEEKLY SCHEDULE
+	$schedules['weekly'] = array(
+		'interval' => 604800,
+		'display' => __('Once Weekly')
 	);
+	// 5 MINUTES FOR TESTING
+/*	$schedules['test'] = array(
+		'interval' => 300,
+		'display' => __('Test')
+	);	*/
+	return $schedules;
 }
+add_filter( 'cron_schedules', 'rvg_extra_schedules' ); 
+
 add_action( 'rvg_optimize_database', 'rvg_optimize_db_cron' );
 
 // REMOVE SCHEDULED TASK WHEN DEACTIVATED
@@ -224,9 +232,10 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                       <option value="twicedaily">run optimization TWICE A DAY</option>
                       <option value="daily">run optimization DAILY</option>
                       <option value="weekly">run optimization WEEKLY</option>
+<?php /*?>            <option value="test">run optimization TEST</option><?php */?>
                     </select>
                     <script type="text/javascript">
-			document.options.rvg_odb_schedule.value = '<?php echo $rvg_odb_schedule; ?>';
+			        document.options.rvg_odb_schedule.value = '<?php echo $rvg_odb_schedule; ?>';
 			        </script></td>
                 </tr>
               </table></td>
@@ -346,8 +355,8 @@ function rvg_optimize_db()
 		$rvg_odb_schedule_txt = 'ONCE DAILY';
 	else if($rvg_odb_schedule == 'weekly')
 		$rvg_odb_schedule_txt = 'ONCE WEEKLY';			
-	else if($rvg_odb_schedule == 'once_per_5_minutes')
-		$rvg_odb_schedule_txt = 'EVERY FIVE MINUTES';
+	else if($rvg_odb_schedule == 'test')
+		$rvg_odb_schedule_txt = 'TEST';
 
 	$nextrun = '';			
 	if(!isset($rvg_odb_schedule_txt))
