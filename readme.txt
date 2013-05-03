@@ -6,10 +6,10 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.3
+Requires at least: 2.3.1
 Tested up to: 3.5.1
-Stable tag: 2.3
-Version: 2.3
+Stable tag: 2.3.1
+Version: 2.3.1
 
 == Description ==
 
@@ -47,6 +47,9 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.3.1 [05/03/2013] =
+* BUG FIX: fixed a problem with 'invalid header' (during installation) 
 
 = 2.3 [04/26/2013] =
 * BUG FIX: fixed the 'Stealing Cron Schedules' issue 
