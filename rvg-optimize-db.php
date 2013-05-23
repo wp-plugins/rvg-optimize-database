@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.3.1';
-$odb_release_date = '`05/03/2013';
+$odb_version      = '2.4';
+$odb_release_date = '05/24/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.3.1
+ * @version 2.4
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.3.1
+Version: 2.4
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -40,6 +40,19 @@ function rvg_odb_admin_menu()
     }
 }
 add_action( 'admin_menu', 'rvg_odb_admin_menu' );
+
+
+/********************************************************************************************
+
+	ADD THE '1 CLICK OPTIMIZE DATABASE' ITEM TO THE ADMIN BAR
+
+*********************************************************************************************/
+function rvg_odb_admin_bar()
+{	global $wp_admin_bar;
+	if ( !is_super_admin() || !is_admin_bar_showing() ) return;
+	$wp_admin_bar->add_menu( array('id' => 'optimize','title' => __( 'Optimize DB (1 click)'),'href' => __('/wp-admin/tools.php?page=rvg-optimize-db.php&action=run'),) );
+}
+add_action( 'wp_before_admin_bar_render', 'rvg_odb_admin_bar' );
 
 
 /********************************************************************************************
@@ -92,6 +105,11 @@ function rvg_activate_plugin()
 *********************************************************************************************/
 function rvg_odb_options_page() {
 	global $odb_version, $odb_release_date, $wpdb, $table_prefix;
+
+	$timezone_format  = _x('YmdGis', 'timezone date format');
+	$current_datetime = date_i18n($timezone_format);
+	$current_date     = substr($current_datetime, 0, 8);
+	$current_hour     = substr($current_datetime, 8, 2);
 
 	# jQuery FRAMEWORK
 	echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
@@ -150,13 +168,36 @@ function rvg_odb_options_page() {
 			$rvg_odb_schedule = $_POST['rvg_odb_schedule'];
 		update_option('rvg_odb_schedule', $rvg_odb_schedule);
 
+		$rvg_odb_schedulehour = '';
+		if(isset($_POST['rvg_odb_schedulehour']))
+			$rvg_odb_schedulehour = $_POST['rvg_odb_schedulehour'];
+		update_option('rvg_odb_schedulehour', $rvg_odb_schedulehour);
+
 		// CLEAR CURRENT SCHEDULE (IF ANY)
 		wp_clear_scheduled_hook('rvg_optimize_database');
 
 		// HAS TO BE SCHEDULED
 		if($rvg_odb_schedule != '')		
 			if( !wp_next_scheduled( 'rvg_optimize_database' ))
-				wp_schedule_event( time(), $rvg_odb_schedule, 'rvg_optimize_database' );
+			{	
+				$time = 0;
+				if($rvg_odb_schedulehour == '')
+				{	$time = time();
+				}
+				else
+				{
+					if($rvg_odb_schedulehour <= $current_hour)
+					    // NEXT RUN TOMORROW
+						$newdatetime = date('YmdHis', strtotime($current_date.$rvg_odb_schedulehour.'0000'.' + 1 day'));
+					else
+						// NEXT RUN TODAY
+						$newdatetime = $current_date.$rvg_odb_schedulehour.'0000';
+					// DATE TO UNIX TIMESTAMP (EPOCH)
+					$time = strtotime($newdatetime);
+				}
+				// SCHEDULE THE EVENT
+				wp_schedule_event( $time, $rvg_odb_schedule, 'rvg_optimize_database' );
+			}
 		
 		// UPDATED MESSAGE
 		echo "<div class='updated'><p><strong>Optimize Database after Deleting Revisions OPTIONS UPDATED</strong> - Click <a href='tools.php?page=rvg-optimize-db.php' style='font-weight:bold'>HERE</a> to run the optimization</p></div>";
@@ -175,9 +216,20 @@ function rvg_odb_options_page() {
 	if(!$rvg_odb_logging_on) $rvg_odb_logging_on = 'N';
 	
 	$rvg_odb_schedule = get_option('rvg_odb_schedule');
-	if(!$rvg_odb_schedule) $rvg_odb_schedule = '';	
+	if(!$rvg_odb_schedule) $rvg_odb_schedule = '';
+	
+	$rvg_odb_schedulehour = get_option('rvg_odb_schedulehour');
 	?>
-
+<script type="text/javascript">
+function schedule_changed()
+{
+	document.options.rvg_odb_schedulehour.value = '<?php echo$current_hour?>';
+	if(document.options.rvg_odb_schedule.value == '' || document.options.rvg_odb_schedule.value == 'hourly')
+		document.options.rvg_odb_schedulehour.disabled = true;
+	else
+		document.options.rvg_odb_schedulehour.disabled = false;
+}
+</script>
 <form name="options" method="post" action="">
   <div class="wrap">
     <h2>Using Optimize Database after Deleting Revisions</h2>
@@ -225,17 +277,33 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                   <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" <?php echo $rvg_odb_logging_on_checked?> /></td>
                 </tr>
                 <tr>
-                  <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Scheduler</span></td>
-                  <td width="50%" valign="top"><select name="rvg_odb_schedule" id="rvg_odb_schedule">
+                  <td width="50%" align="right"><span style="font-weight:bold;">Scheduler</span></td>
+                  <td width="50%"><select name="rvg_odb_schedule" id="rvg_odb_schedule" onchange="schedule_changed();">
                       <option selected="selected" value="">NOT SCHEDULED</option>
                       <option value="hourly">run optimization HOURLY</option>
                       <option value="twicedaily">run optimization TWICE A DAY</option>
                       <option value="daily">run optimization DAILY</option>
                       <option value="weekly">run optimization WEEKLY</option>
-<?php /*?>            <option value="test">run optimization TEST</option><?php */?>
+                      <?php /*?>            <option value="test">run optimization TEST</option><?php */?>
                     </select>
                     <script type="text/javascript">
 			        document.options.rvg_odb_schedule.value = '<?php echo $rvg_odb_schedule; ?>';
+			        </script> 
+                    <span style="font-weight:bold;">Time</span>
+                    <select name="rvg_odb_schedulehour" id="rvg_odb_schedulehour">
+                      <?php
+                    for($i=0; $i<=23; $i++)
+                    {	if($i<10) $i = '0'.$i;
+                    ?>
+                      <option value="<?=$i?>">
+                      <?=$i.':00'.' hrs'?>
+                      </option>
+                      <?php	
+                    }
+                    ?>
+                    </select>
+                    <script type="text/javascript">
+			        document.options.rvg_odb_schedulehour.value = '<?php echo $rvg_odb_schedulehour; ?>';
 			        </script></td>
                 </tr>
               </table></td>
@@ -302,6 +370,9 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 function rvg_optimize_db()
 {
 	global $wpdb, $odb_version, $table_prefix;
+
+	$timezone_format  = _x('G:i', 'timezone date format');
+	$current_hour     = date_i18n($timezone_format);
 
 	if(isset($_REQUEST['action']))
 		if($_REQUEST['action'] == "delete_log")
@@ -399,7 +470,7 @@ function rvg_optimize_db()
 	{
 ?>
     <br />
-    <strong>Next scheduled run:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $nextrun?></span>
+    <strong>Next scheduled run:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $nextrun?> hrs (current server time: <?php echo $current_hour?>)</span>
     <?php		
 	}
 	if($total_savings)
@@ -447,7 +518,9 @@ function rvg_optimize_db()
 	$start_size = rvg_get_db_size();
 
 	// TIMESTAMP FOR LOG FILE
-	$log_arr = array("time" => date("m/d/Y").'<br />'.date("H:i:s"));
+	$timezone_format  = _x('m/d/YH:i:s', 'timezone date format');
+	$current_datetime = date_i18n($timezone_format);	
+	$log_arr = array("time" => substr($current_datetime, 0, 10).'<br />'.substr($current_datetime,10));
 
 	// FIND REVISIONS
 	$results = rvg_get_revisions($max_revisions);

@@ -6,10 +6,10 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.3.1
+Requires at least: 2.4
 Tested up to: 3.5.1
-Stable tag: 2.3.1
-Version: 2.3.1
+Stable tag: 2.4
+Version: 2.4
 
 == Description ==
 
@@ -22,7 +22,7 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Deletes 'orphan postmeta items'
 * Optimizes the database tables (optionally you can exclude certain tables from optimization)
 * Creates a log file of the optimizations (optional)
-* Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly (optional)
+* Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly at a specific time (optional)
 
 = Settings =
 You can find the settings page in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
@@ -47,6 +47,10 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.4 [05/24/2013] =
+* NEW: you can set a time (hour) for the scheduler to run (thanks to frekel)
+* NEW: '1-click run button' in the admin bar (thanks to JB ORSI)
 
 = 2.3.1 [05/03/2013] =
 * BUG FIX: fixed a problem with 'invalid header' (during installation) 
@@ -162,3 +166,6 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 
 = Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database? =
 * That is because the table type of that table is not 'MyISAM'
+
+= I scheduled the optimization for 8pm but it runs at 6pm (my local time) =
+* The scheduler uses the local time of the web server which can differ from your own local time
