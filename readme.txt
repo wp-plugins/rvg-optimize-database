@@ -6,10 +6,10 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.5
+Requires at least: 2.5.1
 Tested up to: 3.5.1
-Stable tag: 2.5
-Version: 2.5
+Stable tag: 2.5.1
+Version: 2.5.1
 
 == Description ==
 
@@ -23,6 +23,7 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Optimizes the database tables (optionally you can exclude certain tables from optimization)
 * Creates a log file of the optimizations (optional)
 * Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly at a specific time (optional)
+* 'Optimize DB (1 click)' link in the admin bar (optional)
 
 = Settings =
 You can find the settings page in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
@@ -47,6 +48,11 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.5.1 [05/24/2013] =
+* BUG FIX: some short tags removed
+* CHANGE: schedule time is only relevant and therefore only shown for 'daily' and 'weekly' schedules
+* NEW: option to turn the '1-click' button in the admin bar on/off
 
 = 2.5 [05/24/2013] =
 * NEW: you can set a time (hour) for the scheduler to run (thanks to frekel)
@@ -162,7 +168,8 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 * WP Admin Panel &raquo; Settings &raquo; Optimize DB Options'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and some more options.
 
 = How do I run this plugin? =
-* WP Admin Panel &raquo; Tools &raquo; Optimize Database. Then click the 'Start Optimization'-button. Et voila!
+* WP Admin Panel &raquo; Tools &raquo; Optimize Database. Then click the 'Start Optimization'-button.
+* Click the 'Optimize DB (1 click)' link in the Admin Bar (if enabled)
 
 = Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database? =
 * That is because the table type of that table is not 'MyISAM'
