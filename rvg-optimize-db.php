@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.5';
+$odb_version      = '2.5.1';
 $odb_release_date = '05/24/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.5
+ * @version 2.5.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.5
+Version: 2.5.1
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -44,7 +44,7 @@ add_action( 'admin_menu', 'rvg_odb_admin_menu' );
 
 /********************************************************************************************
 
-	ADD THE '1 CLICK OPTIMIZE DATABASE' ITEM TO THE ADMIN BAR
+	ADD THE '1 CLICK OPTIMIZE DATABASE' ITEM TO THE ADMIN BAR (IF ACTIVATED)
 
 *********************************************************************************************/
 function rvg_odb_admin_bar()
@@ -53,7 +53,8 @@ function rvg_odb_admin_bar()
 	$siteurl = site_url('/');
 	$wp_admin_bar->add_menu( array('id' => 'optimize','title' => __( 'Optimize DB (1 click)'),'href' => __($siteurl.'wp-admin/tools.php?page=rvg-optimize-db.php&action=run') ) );
 }
-add_action( 'wp_before_admin_bar_render', 'rvg_odb_admin_bar' );
+$rvg_odb_adminbar = get_option('rvg_odb_adminbar');
+if($rvg_odb_adminbar == "Y") add_action( 'wp_before_admin_bar_render', 'rvg_odb_admin_bar' );
 
 
 /********************************************************************************************
@@ -113,7 +114,7 @@ function rvg_odb_options_page() {
 	$current_hour     = substr($current_datetime, 8, 2);
 
 	# jQuery FRAMEWORK
-	echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
+	echo '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
 
 	# RVG_WP_ONLY IS DEPRECIATED FROM v2.2
 	rvg_fix_wp_only();
@@ -158,6 +159,11 @@ function rvg_odb_options_page() {
 		if(isset($_POST['rvg_clear_spam']))
 			$rvg_clear_spam = $_POST['rvg_clear_spam'];
 		update_option('rvg_clear_spam', $rvg_clear_spam);
+
+		$rvg_odb_adminbar = 'N';
+		if(isset($_POST['rvg_odb_adminbar']))
+			$rvg_odb_adminbar = $_POST['rvg_odb_adminbar'];
+		update_option('rvg_odb_adminbar', $rvg_odb_adminbar);
 		
 		$rvg_odb_logging_on = 'N';
 		if(isset($_POST['rvg_odb_logging_on']))
@@ -220,15 +226,16 @@ function rvg_odb_options_page() {
 	if(!$rvg_odb_schedule) $rvg_odb_schedule = '';
 	
 	$rvg_odb_schedulehour = get_option('rvg_odb_schedulehour');
+	
+	$rvg_odb_adminbar = get_option('rvg_odb_adminbar');
+	if(!$rvg_odb_adminbar) $rvg_odb_adminbar = 'N';
 	?>
 <script type="text/javascript">
 function schedule_changed()
-{
-	document.options.rvg_odb_schedulehour.value = '<?php echo$current_hour?>';
-	if(document.options.rvg_odb_schedule.value == '' || document.options.rvg_odb_schedule.value == 'hourly')
-		document.options.rvg_odb_schedulehour.disabled = true;
+{	if(document.options.rvg_odb_schedule.value == 'daily' || document.options.rvg_odb_schedule.value == 'weekly')
+		$("#schedulehour").show();
 	else
-		document.options.rvg_odb_schedulehour.disabled = false;
+		$("#schedulehour").hide();
 }
 </script>
 <form name="options" method="post" action="">
@@ -251,6 +258,7 @@ function schedule_changed()
     </blockquote>
     <h2>Optimize Database after Deleting Revisions - Options</h2>
     <?php
+if($rvg_odb_adminbar == 'Y')  $rvg_odb_adminbar_checked  = ' checked="checked"'; else $rvg_odb_adminbar_checked = '';	
 if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
 if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
 if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checked"'; else $rvg_odb_logging_on_checked = '';
@@ -285,27 +293,34 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                       <option value="twicedaily">run optimization TWICE A DAY</option>
                       <option value="daily">run optimization DAILY</option>
                       <option value="weekly">run optimization WEEKLY</option>
-                      <?php /*?>            <option value="test">run optimization TEST</option><?php */?>
+                      <?php /*?><option value="test">run optimization TEST</option><?php */?>
                     </select>
                     <script type="text/javascript">
-			        document.options.rvg_odb_schedule.value = '<?php echo $rvg_odb_schedule; ?>';
-			        </script> 
+			        document.options.rvg_odb_schedule.value = '<?php echo $rvg_odb_schedule; ?>';		
+			        </script>
+                    <span id="schedulehour" style="display:none;">
                     <span style="font-weight:bold;">Time</span>
                     <select name="rvg_odb_schedulehour" id="rvg_odb_schedulehour">
                       <?php
                     for($i=0; $i<=23; $i++)
                     {	if($i<10) $i = '0'.$i;
                     ?>
-                      <option value="<?=$i?>">
-                      <?=$i.':00'.' hrs'?>
-                      </option>
+                      <option value="<?php echo $i?>"><?php echo $i.':00'.' hrs'?></option>
                       <?php	
                     }
                     ?>
                     </select>
                     <script type="text/javascript">
 			        document.options.rvg_odb_schedulehour.value = '<?php echo $rvg_odb_schedulehour; ?>';
-			        </script></td>
+			        </script>
+                    </span>
+                    <script type="text/javascript">schedule_changed();</script>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right" valign="top"><span style="font-weight:bold;">Show '1-click' link in Admin Bar</span></td>
+                  <td valign="top"><input name="rvg_odb_adminbar" type="checkbox" value="Y" <?php echo $rvg_odb_adminbar_checked?> />
+                    (change will be visible after loading the next page)</td>
                 </tr>
               </table></td>
           </tr>
