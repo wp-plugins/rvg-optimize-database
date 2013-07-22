@@ -6,10 +6,10 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.5.1
-Tested up to: 3.5.1
-Stable tag: 2.5.1
-Version: 2.5.1
+Requires at least: 2.6
+Tested up to: 3.5.2
+Stable tag: 2.6
+Version: 2.6
 
 == Description ==
 
@@ -19,6 +19,7 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Deletes redundant revisions of posts and pages (you optionally can keep an 'x'-amount of the most recent revisions)
 * Deletes trashed posts, pages and comments (optional)
 * Deletes spammed comments (optional)
+* Deletes unused tags (optional)
 * Deletes 'orphan postmeta items'
 * Optimizes the database tables (optionally you can exclude certain tables from optimization)
 * Creates a log file of the optimizations (optional)
@@ -41,6 +42,9 @@ http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordp
 = Download URL =
 http://wordpress.org/extend/plugins/rvg-optimize-database/
 
+= Disclaimer =
+No warranty, use at own risk!
+
 == Installation ==
 
 * Upload the Plugin to the `/wp-content/plugins/` directory
@@ -48,6 +52,9 @@ http://wordpress.org/extend/plugins/rvg-optimize-database/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.6 [07/22/2013] =
+* NEW: deletion of unused tags (optional)
 
 = 2.5.1 [05/24/2013] =
 * BUG FIX: some short tags removed

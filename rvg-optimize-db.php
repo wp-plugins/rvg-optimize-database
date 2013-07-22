@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.5.1';
-$odb_release_date = '05/24/2013';
+$odb_version      = '2.6';
+$odb_release_date = '07/22/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.5.1
+ * @version 2.6
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.5.1
+Version: 2.6
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -51,7 +51,7 @@ function rvg_odb_admin_bar()
 {	global $wp_admin_bar;
 	if ( !is_super_admin() || !is_admin_bar_showing() ) return;
 	$siteurl = site_url('/');
-	$wp_admin_bar->add_menu( array('id' => 'optimize','title' => __( 'Optimize DB (1 click)'),'href' => __($siteurl.'wp-admin/tools.php?page=rvg-optimize-db.php&action=run') ) );
+	$wp_admin_bar->add_menu( array('id' => 'optimize','title' => __('Optimize DB (1 click)'),'href' => __($siteurl.'wp-admin/tools.php?page=rvg-optimize-db.php&action=run') ) );
 }
 $rvg_odb_adminbar = get_option('rvg_odb_adminbar');
 if($rvg_odb_adminbar == "Y") add_action( 'wp_before_admin_bar_render', 'rvg_odb_admin_bar' );
@@ -70,11 +70,6 @@ function rvg_extra_schedules( $schedules ) {
 		'interval' => 604800,
 		'display' => __('Once Weekly')
 	);
-	// 5 MINUTES FOR TESTING
-/*	$schedules['test'] = array(
-		'interval' => 300,
-		'display' => __('Test')
-	);	*/
 	return $schedules;
 }
 add_filter( 'cron_schedules', 'rvg_extra_schedules' ); 
@@ -105,14 +100,15 @@ function rvg_activate_plugin()
 	CREATE THE OPTIONS PAGE
 
 *********************************************************************************************/
-function rvg_odb_options_page() {
+function rvg_odb_options_page()
+{
 	global $odb_version, $odb_release_date, $wpdb, $table_prefix;
 
 	$timezone_format  = _x('YmdGis', 'timezone date format');
 	$current_datetime = date_i18n($timezone_format);
 	$current_date     = substr($current_datetime, 0, 8);
 	$current_hour     = substr($current_datetime, 8, 2);
-
+	
 	# jQuery FRAMEWORK
 	echo '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
 
@@ -159,6 +155,11 @@ function rvg_odb_options_page() {
 		if(isset($_POST['rvg_clear_spam']))
 			$rvg_clear_spam = $_POST['rvg_clear_spam'];
 		update_option('rvg_clear_spam', $rvg_clear_spam);
+
+		$rvg_clear_tags = 'N';
+		if(isset($_POST['rvg_clear_tags']))
+			$rvg_clear_tags = $_POST['rvg_clear_tags'];
+		update_option('rvg_clear_tags', $rvg_clear_tags);
 
 		$rvg_odb_adminbar = 'N';
 		if(isset($_POST['rvg_odb_adminbar']))
@@ -218,6 +219,9 @@ function rvg_odb_options_page() {
 	
 	$rvg_clear_spam = get_option('rvg_clear_spam');
 	if(!$rvg_clear_spam) $rvg_clear_spam = 'N';
+
+	$rvg_clear_tags = get_option('rvg_clear_tags');
+	if(!$rvg_clear_tags) $rvg_clear_tags = 'N';
 	
 	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
 	if(!$rvg_odb_logging_on) $rvg_odb_logging_on = 'N';
@@ -261,6 +265,7 @@ function schedule_changed()
 if($rvg_odb_adminbar == 'Y')  $rvg_odb_adminbar_checked  = ' checked="checked"'; else $rvg_odb_adminbar_checked = '';	
 if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
 if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
+if($rvg_clear_tags == 'Y')  $rvg_clear_tags_checked  = ' checked="checked"'; else $rvg_clear_tags_checked = '';
 if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checked"'; else $rvg_odb_logging_on_checked = '';
 ?>
     <blockquote>
@@ -281,6 +286,10 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Delete all spammed items</span></td>
                   <td width="50%" valign="top"><input name="rvg_clear_spam" type="checkbox" value="Y" <?php echo $rvg_clear_spam_checked?> /></td>
                 </tr>
+                <tr>
+                  <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Delete unused tags</span></td>
+                  <td width="50%" valign="top"><input name="rvg_clear_tags" type="checkbox" value="Y" <?php echo $rvg_clear_tags_checked?> /></td>
+                </tr>                
                 <tr>
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Keep a log</span></td>
                   <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" <?php echo $rvg_odb_logging_on_checked?> /></td>
@@ -380,7 +389,8 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 
 /********************************************************************************************
 
-	MAIN FUNCTION FOR DELETING REVISIONS, TRASH, SPAM, ORPHANS AND OPTIMIZING DATABASE TABLES
+	MAIN FUNCTION
+	FOR DELETING REVISIONS, TRASH, SPAM, TAGS ORPHANS AND OPTIMIZING DATABASE TABLES
 
 *********************************************************************************************/
 function rvg_optimize_db()
@@ -420,6 +430,13 @@ function rvg_optimize_db()
 		update_option('rvg_clear_spam', $clear_spam);
 	}
 	$clear_spam_yn = ($clear_spam == 'N') ? 'NO' : 'YES';
+
+	$clear_tags = get_option('rvg_clear_tags');
+	if(!$clear_tags)
+	{	$clear_tags = 'N';
+		update_option('rvg_clear_tags', $clear_tags);
+	}
+	$clear_tags_yn = ($clear_tags == 'N') ? 'NO' : 'YES';
 
 	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
 	if(!$rvg_odb_logging_on)
@@ -478,6 +495,7 @@ function rvg_optimize_db()
     <strong>Maximum number of - most recent - revisions to keep per post / page:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span><br />
     <strong>Delete trashed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
     <strong>Delete spammed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_spam_yn?></span><br />
+    <strong>Delete unused tags:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_tags_yn?></span><br />
     <strong>Keep a log:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_logging_on_yn?></span><br />
     <strong>Number of excluded tables:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $number_excluded?></span><br />
     <strong>Scheduler:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_schedule_txt?></span>
@@ -687,6 +705,47 @@ function rvg_optimize_db()
 <?php
 	/****************************************************************************************
 	
+		DELETE UNUSED TAGS
+	
+	******************************************************************************************/
+?>
+<?php
+	if($clear_tags == 'Y')
+	{
+		// DELETE UNUSED TAGS
+		$total_deleted = rvg_delete_tags();
+	
+		if($total_deleted>0)
+		{	// TAGS DELETED
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td><span style="font-weight:bold;color:#00F;">NUMBER OF UNUSED TAGS DELETED:</span> <span style="font-weight:bold;"><?php echo $total_deleted;?></span></td>
+  </tr>
+</table>
+<?php			
+		}
+		else
+		{
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td style="font-weight:bold;color:#21759b;">No UNUSED TAGS found to delete...</td>
+  </tr>
+</table>
+<?php		
+		} // if(count($results)>0)
+		
+	} // if($clear_tags == 'Y')
+	
+	// NUMBER OF tags DELETED FOR LOG FILE
+	$log_arr["tags"] = $total_deleted;
+?>
+<?php
+	/****************************************************************************************
+	
 		DELETE ORPHANS
 	
 	******************************************************************************************/
@@ -699,7 +758,7 @@ function rvg_optimize_db()
 <span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
 <table border="0" cellspacing="8" cellpadding="2">
   <tr>
-    <td colspan="4"><span style="font-weight:bold;color:#00F;">NUMBER POSTMETA ORPHANS DELETED:</span> <span style="font-weight:bold;"><?php echo $total_deleted;?></span></td>
+    <td colspan="4"><span style="font-weight:bold;color:#00F;">NUMBER OF POSTMETA ORPHANS DELETED:</span> <span style="font-weight:bold;"><?php echo $total_deleted;?></span></td>
   </tr>
 </table>
 <?php		
@@ -833,6 +892,12 @@ function rvg_optimize_db_cron()
 		update_option('rvg_clear_spam', $clear_spam);
 	}
 	
+	$clear_tags = get_option('rvg_clear_tags');
+	if(!$clear_tags)
+	{	$clear_tags = 'N';
+		update_option('rvg_clear_tags', $clear_tags);
+	}	
+	
 	// GET THE SIZE OF THE DATABASE BEFORE OPTIMIZATION
 	$start_size = rvg_get_db_size();
 	
@@ -876,10 +941,18 @@ function rvg_optimize_db_cron()
 			$total_deleted = rvg_delete_spam($results, false);
 			
 	} // if($clear_spam == 'Y')
-	
+
 	// NUMBER OF SPAM DELETED FOR LOG FILE
 	$log_arr["spam"] = $total_deleted;
 	
+	if($clear_tags == "Y")
+	{	// DELETE UNUSED TAGS
+		$total_deleted = rvg_delete_tags();
+	}
+	
+	// NUMBER OF DELETED TAGS FOR LOG FILE
+	$log_arr["tags"] = $total_deleted;
+		
 	// DELETE ORPHANS
 	$total_deleted = rvg_delete_orphans(false);
 	// NUMBER OF ORPHANS DELETED (FOR LOG FILE)
@@ -1054,6 +1127,27 @@ function rvg_delete_spam($results, $display)
 	return $total_deleted;
 	
 } // rvg_delete_spam()
+?>
+<?php
+/********************************************************************************************
+
+	DELETE UNUSED TAGS
+
+*********************************************************************************************/
+function rvg_delete_tags()
+{
+	$total_deleted = 0;
+
+	$tags = get_terms('post_tag', array('hide_empty' => 0));
+	for($i=0; $i<count($tags); $i++)
+		if($tags[$i]->count < 1)
+		{	$total_deleted++;
+			// echo $tags[$i]->term_id.' '.$tags[$i]->name.'<br />';
+			wp_delete_term($tags[$i]->term_id,'post_tag');
+		}
+
+	return $total_deleted;
+} // rvg_delete_tags()
 ?>
 <?php
 /********************************************************************************************
@@ -1256,19 +1350,21 @@ td {
 </div>
 <table width="100%" border="0" cellspacing="6" cellpadding="1">
   <tr>
-    <th width="11%" align="left" valign="top">time</th>
-    <th width="11%" align="right" valign="top">deleted<br />
+    <th width="10%" align="left" valign="top">time</th>
+    <th width="10%" align="right" valign="top">deleted<br />
       revisions</th>
-    <th width="11%" align="right" valign="top">deleted<br />
+    <th width="10%" align="right" valign="top">deleted<br />
       trash</th>
-    <th width="11%" align="right" valign="top">deleted<br />
+    <th width="10%" align="right" valign="top">deleted<br />
       spam</th>
-    <th width="11%" align="right" valign="top">deleted<br />
+    <th width="10%" align="right" valign="top">deleted<br />
+      tags</th>	  
+    <th width="10%" align="right" valign="top">deleted<br />
       orphans</th>	  
-    <th width="11%" align="right" valign="top">nr of optimized tables</th>
-    <th width="11%" align="right" valign="top">database size BEFORE</th>
-    <th width="11%" align="right" valign="top">database size AFTER</th>
-    <th width="11%" align="right" valign="top">SAVINGS</th>
+    <th width="10%" align="right" valign="top">nr of optimized tables</th>
+    <th width="10%" align="right" valign="top">database size BEFORE</th>
+    <th width="10%" align="right" valign="top">database size AFTER</th>
+    <th width="10%" align="right" valign="top">SAVINGS</th>
   </tr>
 </table>
 			';
@@ -1280,15 +1376,16 @@ td {
 		$html = '
 <table width="100%" border="0" cellspacing="6" cellpadding="0">  
   <tr>
-    <td width="11%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
-    <td width="11%" align="right" valign="top">'.$log_arr["revisions"].'</td>
-    <td width="11%" align="right" valign="top">'.$log_arr["trash"].'</td>
-    <td width="11%" align="right" valign="top">'.$log_arr["spam"].'</td>
-    <td width="11%" align="right" valign="top">'.$log_arr["orphans"].'</td>	
-    <td width="11%" align="right" valign="top">'.$log_arr["tables"].'</td>
-    <td width="11%" align="right" valign="top">'.$log_arr["before"].'</td>
-    <td width="11%" align="right" valign="top">'.$log_arr["after"].'</td>
-    <td width="11%" align="right" valign="top">'.$log_arr["savings"].'</td>
+    <td width="10%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
+    <td width="10%" align="right" valign="top">'.$log_arr["revisions"].'</td>
+    <td width="10%" align="right" valign="top">'.$log_arr["trash"].'</td>
+    <td width="10%" align="right" valign="top">'.$log_arr["spam"].'</td>
+    <td width="10%" align="right" valign="top">'.$log_arr["tags"].'</td>	
+    <td width="10%" align="right" valign="top">'.$log_arr["orphans"].'</td>	
+    <td width="10%" align="right" valign="top">'.$log_arr["tables"].'</td>
+    <td width="10%" align="right" valign="top">'.$log_arr["before"].'</td>
+    <td width="10%" align="right" valign="top">'.$log_arr["after"].'</td>
+    <td width="10%" align="right" valign="top">'.$log_arr["savings"].'</td>
   </tr>
 </table>		
 		';
