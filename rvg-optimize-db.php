@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.6';
-$odb_release_date = '07/22/2013';
+$odb_version      = '2.7';
+$odb_release_date = '12/06/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.6
+ * @version 2.7
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.6
+Version: 2.7
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -160,6 +160,11 @@ function rvg_odb_options_page()
 		if(isset($_POST['rvg_clear_tags']))
 			$rvg_clear_tags = $_POST['rvg_clear_tags'];
 		update_option('rvg_clear_tags', $rvg_clear_tags);
+		
+		$rvg_clear_transients = 'N';
+		if(isset($_POST['rvg_clear_transients']))
+			$rvg_clear_transients = $_POST['rvg_clear_transients'];
+		update_option('rvg_clear_transients', $rvg_clear_transients);
 
 		$rvg_odb_adminbar = 'N';
 		if(isset($_POST['rvg_odb_adminbar']))
@@ -222,6 +227,9 @@ function rvg_odb_options_page()
 
 	$rvg_clear_tags = get_option('rvg_clear_tags');
 	if(!$rvg_clear_tags) $rvg_clear_tags = 'N';
+
+	$rvg_clear_transients = get_option('rvg_clear_transients');
+	if(!$rvg_clear_transients) $rvg_clear_transients = 'N';
 	
 	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
 	if(!$rvg_odb_logging_on) $rvg_odb_logging_on = 'N';
@@ -266,6 +274,7 @@ if($rvg_odb_adminbar == 'Y')  $rvg_odb_adminbar_checked  = ' checked="checked"';
 if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
 if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
 if($rvg_clear_tags == 'Y')  $rvg_clear_tags_checked  = ' checked="checked"'; else $rvg_clear_tags_checked = '';
+if($rvg_clear_transients == 'Y')  $rvg_clear_transients_checked  = ' checked="checked"'; else $rvg_clear_transients_checked = '';
 if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checked"'; else $rvg_odb_logging_on_checked = '';
 ?>
     <blockquote>
@@ -289,7 +298,11 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                 <tr>
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Delete unused tags</span></td>
                   <td width="50%" valign="top"><input name="rvg_clear_tags" type="checkbox" value="Y" <?php echo $rvg_clear_tags_checked?> /></td>
-                </tr>                
+                </tr>
+                <tr>
+                  <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Delete expired transients</span></td>
+                  <td width="50%" valign="top"><input name="rvg_clear_transients" type="checkbox" value="Y" <?php echo $rvg_clear_transients_checked?> /></td>
+                </tr>                            
                 <tr>
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Keep a log</span></td>
                   <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" <?php echo $rvg_odb_logging_on_checked?> /></td>
@@ -438,6 +451,13 @@ function rvg_optimize_db()
 	}
 	$clear_tags_yn = ($clear_tags == 'N') ? 'NO' : 'YES';
 
+	$clear_transients = get_option('rvg_clear_transients');
+	if(!$clear_transients)
+	{	$clear_transients = 'N';
+		update_option('rvg_clear_transients', $clear_transients);
+	}
+	$clear_transients_yn = ($clear_transients == 'N') ? 'NO' : 'YES';
+
 	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
 	if(!$rvg_odb_logging_on)
 	{	$rvg_odb_logging_on = 'N';
@@ -496,6 +516,7 @@ function rvg_optimize_db()
     <strong>Delete trashed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
     <strong>Delete spammed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_spam_yn?></span><br />
     <strong>Delete unused tags:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_tags_yn?></span><br />
+    <strong>Delete expired transients:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_transients_yn?></span><br />    
     <strong>Keep a log:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_logging_on_yn?></span><br />
     <strong>Number of excluded tables:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $number_excluded?></span><br />
     <strong>Scheduler:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_schedule_txt?></span>
@@ -746,6 +767,47 @@ function rvg_optimize_db()
 <?php
 	/****************************************************************************************
 	
+		DELETE EXPIRED TRANSIENTS
+	
+	******************************************************************************************/
+?>
+<?php
+	if($clear_transients == 'Y')
+	{
+		// DELETE UNUSED TAGS
+		$total_deleted = rvg_delete_transients();
+	
+		if($total_deleted>0)
+		{	// TRANSIENTS DELETED
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td><span style="font-weight:bold;color:#00F;">NUMBER OF EXPIRED TRANSIENTS DELETED:</span> <span style="font-weight:bold;"><?php echo $total_deleted;?></span></td>
+  </tr>
+</table>
+<?php			
+		}
+		else
+		{
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td style="font-weight:bold;color:#21759b;">No EXPIRED TRANSIENTS found to delete...</td>
+  </tr>
+</table>
+<?php		
+		} // if(count($results)>0)
+		
+	} // if($clear_transients == 'Y')
+	
+	// NUMBER OF transients DELETED FOR LOG FILE
+	$log_arr["transients"] = $total_deleted;
+?>
+<?php
+	/****************************************************************************************
+	
 		DELETE ORPHANS
 	
 	******************************************************************************************/
@@ -896,7 +958,13 @@ function rvg_optimize_db_cron()
 	if(!$clear_tags)
 	{	$clear_tags = 'N';
 		update_option('rvg_clear_tags', $clear_tags);
-	}	
+	}
+	
+	$clear_transients = get_option('rvg_clear_transients');
+	if(!$clear_transients)
+	{	$clear_transients = 'N';
+		update_option('rvg_clear_transients', $clear_transients);
+	}
 	
 	// GET THE SIZE OF THE DATABASE BEFORE OPTIMIZATION
 	$start_size = rvg_get_db_size();
@@ -950,8 +1018,16 @@ function rvg_optimize_db_cron()
 		$total_deleted = rvg_delete_tags();
 	}
 	
-	// NUMBER OF DELETED TAGS FOR LOG FILE
+	// NUMBER OF DELETE TAGS FOR LOG FILE
 	$log_arr["tags"] = $total_deleted;
+
+	if($clear_transients == "Y")
+	{	// DELETE UNUSED TAGS
+		$total_deleted = rvg_delete_transients();
+	}
+	
+	// NUMBER OF DELETED TAGS FOR LOG FILE
+	$log_arr["transients"] = $total_deleted;
 		
 	// DELETE ORPHANS
 	$total_deleted = rvg_delete_orphans(false);
@@ -1148,6 +1224,69 @@ function rvg_delete_tags()
 
 	return $total_deleted;
 } // rvg_delete_tags()
+?>
+<?php
+/********************************************************************************************
+
+	DELETE EXPIRED TRANSIENTS
+
+*********************************************************************************************/
+function rvg_delete_transients()
+{
+	global $wpdb;
+	
+	$delay = time() - 60;	// one minute delay
+
+	$total_deleted = 0;
+	
+	$sql = "
+	SELECT *
+	FROM $wpdb->options
+	WHERE (
+		option_name LIKE '_transient_timeout_%'
+		OR option_name LIKE '_site_transient_timeout_%'
+		OR option_name LIKE 'displayed_galleries_%'
+	)
+	AND option_value < '$delay'
+	";
+
+	$results = $wpdb -> get_results($sql);
+	$total_deleted = count($results);
+
+	$sql = "
+	DELETE FROM $wpdb->options
+	WHERE (
+		option_name LIKE '_transient_timeout_%'
+		OR option_name LIKE '_site_transient_timeout_%'
+		OR option_name LIKE 'displayed_galleries_%'
+	)
+	AND option_value < '$delay'
+	";
+
+	$wpdb -> get_results($sql);
+	
+	$sql = "
+	SELECT *
+	FROM $wpdb->options a, $wpdb->options b
+	WHERE b.option_name = replace(a.option_name,'_timeout', '')
+	AND (a.option_name like '_transient_timeout_%' or a.option_name like '_site_transient_timeout_%')
+	AND a.option_value < '$delay'	
+	";
+	
+	$results = $wpdb -> get_results($sql);
+	$total_deleted += count($results);
+
+	$sql = "
+	DELETE FROM $wpdb->options a, $wpdb->options b
+	WHERE b.option_name = replace(a.option_name,'_timeout', '')
+	AND (a.option_name like '_transient_timeout_%' or a.option_name like '_site_transient_timeout_%')
+	AND a.option_value < '$delay'	
+	";
+	
+	$wpdb -> get_results($sql);
+
+	return $total_deleted;
+} // rvg_delete_transients()
 ?>
 <?php
 /********************************************************************************************
@@ -1350,21 +1489,23 @@ td {
 </div>
 <table width="100%" border="0" cellspacing="6" cellpadding="1">
   <tr>
-    <th width="10%" align="left" valign="top">time</th>
-    <th width="10%" align="right" valign="top">deleted<br />
+    <th width="9%" align="left" valign="top">time</th>
+    <th width="9%" align="right" valign="top">deleted<br />
       revisions</th>
-    <th width="10%" align="right" valign="top">deleted<br />
+    <th width="9%" align="right" valign="top">deleted<br />
       trash</th>
-    <th width="10%" align="right" valign="top">deleted<br />
+    <th width="9%" align="right" valign="top">deleted<br />
       spam</th>
-    <th width="10%" align="right" valign="top">deleted<br />
-      tags</th>	  
-    <th width="10%" align="right" valign="top">deleted<br />
+    <th width="9%" align="right" valign="top">deleted<br />
+      tags</th>
+    <th width="9%" align="right" valign="top">deleted<br />
+      transients</th>	  
+    <th width="9%" align="right" valign="top">deleted<br />
       orphans</th>	  
-    <th width="10%" align="right" valign="top">nr of optimized tables</th>
-    <th width="10%" align="right" valign="top">database size BEFORE</th>
-    <th width="10%" align="right" valign="top">database size AFTER</th>
-    <th width="10%" align="right" valign="top">SAVINGS</th>
+    <th width="9%" align="right" valign="top">nr of optimized tables</th>
+    <th width="9%" align="right" valign="top">database size BEFORE</th>
+    <th width="9%" align="right" valign="top">database size AFTER</th>
+    <th width="9%" align="right" valign="top">SAVINGS</th>
   </tr>
 </table>
 			';
@@ -1376,16 +1517,17 @@ td {
 		$html = '
 <table width="100%" border="0" cellspacing="6" cellpadding="0">  
   <tr>
-    <td width="10%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
-    <td width="10%" align="right" valign="top">'.$log_arr["revisions"].'</td>
-    <td width="10%" align="right" valign="top">'.$log_arr["trash"].'</td>
-    <td width="10%" align="right" valign="top">'.$log_arr["spam"].'</td>
-    <td width="10%" align="right" valign="top">'.$log_arr["tags"].'</td>	
-    <td width="10%" align="right" valign="top">'.$log_arr["orphans"].'</td>	
-    <td width="10%" align="right" valign="top">'.$log_arr["tables"].'</td>
-    <td width="10%" align="right" valign="top">'.$log_arr["before"].'</td>
-    <td width="10%" align="right" valign="top">'.$log_arr["after"].'</td>
-    <td width="10%" align="right" valign="top">'.$log_arr["savings"].'</td>
+    <td width="9%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
+    <td width="9%" align="right" valign="top">'.$log_arr["revisions"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["trash"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["spam"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["tags"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["transients"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["orphans"].'</td>	
+    <td width="9%" align="right" valign="top">'.$log_arr["tables"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["before"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["after"].'</td>
+    <td width="9%" align="right" valign="top">'.$log_arr["savings"].'</td>
   </tr>
 </table>		
 		';

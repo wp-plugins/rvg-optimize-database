@@ -3,13 +3,13 @@ Contributors: CAGE Web Design | Rolf van Gelder
 Donate link: http://cagewebdev.com
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
-Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler
+Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler, transients
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.6
-Tested up to: 3.5.2
-Stable tag: 2.6
-Version: 2.6
+Requires at least: 2.0
+Tested up to: 3.7.1
+Stable tag: 2.7
+Version: 2.7
 
 == Description ==
 
@@ -21,6 +21,7 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Deletes spammed comments (optional)
 * Deletes unused tags (optional)
 * Deletes 'orphan postmeta items'
+* Deletes 'expired transients'
 * Optimizes the database tables (optionally you can exclude certain tables from optimization)
 * Creates a log file of the optimizations (optional)
 * Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly at a specific time (optional)
@@ -52,6 +53,9 @@ No warranty, use at own risk!
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.7 [12/06/2013] =
+* NEW: deletion of expired transients (optional)
 
 = 2.6 [07/22/2013] =
 * NEW: deletion of unused tags (optional)
