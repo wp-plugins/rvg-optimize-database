@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.7.1
-Stable tag: 2.7.2
-Version: 2.7.2
+Stable tag: 2.7.3
+Version: 2.7.3
 
 == Description ==
 
@@ -53,6 +53,9 @@ No warranty, use at own risk!
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.7.3 [12/09/2013] =
+* BUG FIX: deleted some CR/LF's from the end of the plugin *sigh*
 
 = 2.7.2 [12/09/2013] =
 * BUG FIX: forgot to delete a debug item... oops! sorry!
