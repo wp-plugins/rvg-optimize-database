@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7';
-$odb_release_date = '12/06/2013';
+$odb_version      = '2.7.1';
+$odb_release_date = '12/09/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7
+ * @version 2.7.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7
+Version: 2.7.1
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -347,7 +347,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
               </table></td>
           </tr>
           <?php
-	$names = mysql_list_tables(DB_NAME);
+    $names = mysql_query("SHOW TABLES FROM ".DB_NAME);
 ?>
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
@@ -1267,20 +1267,24 @@ function rvg_delete_transients()
 	
 	$sql = "
 	SELECT *
-	FROM $wpdb->options a, $wpdb->options b
-	WHERE b.option_name = replace(a.option_name,'_timeout', '')
-	AND (a.option_name like '_transient_timeout_%' or a.option_name like '_site_transient_timeout_%')
-	AND a.option_value < '$delay'	
+	FROM cwwp_options
+	WHERE (
+		option_name LIKE '_transient_timeout_%'
+		OR option_name LIKE '_site_transient_timeout_%'
+	)
+	AND option_value < '$delay'
 	";
 	
 	$results = $wpdb -> get_results($sql);
 	$total_deleted += count($results);
 
 	$sql = "
-	DELETE FROM $wpdb->options a, $wpdb->options b
-	WHERE b.option_name = replace(a.option_name,'_timeout', '')
-	AND (a.option_name like '_transient_timeout_%' or a.option_name like '_site_transient_timeout_%')
-	AND a.option_value < '$delay'	
+	DELETE FROM cwwp_options
+	WHERE (
+		option_name LIKE '_transient_timeout_%'
+		OR option_name LIKE '_site_transient_timeout_%'
+	)
+	AND option_value < '$delay'	
 	";
 	
 	$wpdb -> get_results($sql);
@@ -1359,7 +1363,7 @@ function rvg_optimize_tables($display)
 	# WP_ONLY IS DEPRECIATED FROM v2.2
 	rvg_fix_wp_only();
 
-	$names = mysql_list_tables(DB_NAME);
+	$names = mysql_query("SHOW TABLES FROM ".DB_NAME);
 	$cnt   = 0;
 	while($row = mysql_fetch_row($names))
 	{
@@ -1412,7 +1416,7 @@ function rvg_fix_wp_only()
 	$wp_only = get_option('rvg_wp_only');
 	if($wp_only == 'Y')
 	{
-		$names = mysql_list_tables(DB_NAME);
+		$names = mysql_query("SHOW TABLES FROM ".DB_NAME);
 		while($row = mysql_fetch_row($names))
 		{	if(substr($row[0],0,strlen($table_prefix)) != $table_prefix)
 			{	// NOT A WORDPRESS TABLE: EXLUDE IT
@@ -1646,3 +1650,4 @@ function rvg_format_size($size, $precision=1)
 	return $table_size;
 } // rvg_format_size
 ?>
+
