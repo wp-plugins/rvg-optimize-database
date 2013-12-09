@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7.1';
+$odb_version      = '2.7.2';
 $odb_release_date = '12/09/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.1
+ * @version 2.7.2
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.1
+Version: 2.7.2
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -1267,7 +1267,7 @@ function rvg_delete_transients()
 	
 	$sql = "
 	SELECT *
-	FROM cwwp_options
+	FROM $wpdb->options
 	WHERE (
 		option_name LIKE '_transient_timeout_%'
 		OR option_name LIKE '_site_transient_timeout_%'
@@ -1279,7 +1279,7 @@ function rvg_delete_transients()
 	$total_deleted += count($results);
 
 	$sql = "
-	DELETE FROM cwwp_options
+	DELETE FROM $wpdb->options
 	WHERE (
 		option_name LIKE '_transient_timeout_%'
 		OR option_name LIKE '_site_transient_timeout_%'
