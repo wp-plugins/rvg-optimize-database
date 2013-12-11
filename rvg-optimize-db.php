@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7.3';
-$odb_release_date = '12/09/2013';
+$odb_version      = '2.7.4';
+$odb_release_date = '12/11/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.3
+ * @version 2.7.4
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.3
+Version: 2.7.4
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -347,7 +347,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
               </table></td>
           </tr>
           <?php
-    $names = mysql_query("SHOW TABLES FROM ".DB_NAME);
+    $names = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
 ?>
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
@@ -497,8 +497,8 @@ function rvg_optimize_db()
 
 	$sql = "
 	SELECT COUNT(*) cnt
-	FROM $wpdb->options op
-	WHERE op.option_name LIKE 'rvg_ex_%'
+	FROM $wpdb->options
+	WHERE option_name LIKE 'rvg_ex_%'
 	";
 	$results = $wpdb -> get_results($sql);
 	$number_excluded = $results[0] -> cnt;
@@ -1363,7 +1363,7 @@ function rvg_optimize_tables($display)
 	# WP_ONLY IS DEPRECIATED FROM v2.2
 	rvg_fix_wp_only();
 
-	$names = mysql_query("SHOW TABLES FROM ".DB_NAME);
+	$names = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
 	$cnt   = 0;
 	while($row = mysql_fetch_row($names))
 	{
@@ -1376,10 +1376,12 @@ function rvg_optimize_tables($display)
 			$result = $wpdb -> get_results($query);
 			
 			$sql = "
-			SELECT	engine, (data_length + index_length) as size, table_rows
-			FROM	information_schema.TABLES
-			WHERE	table_schema = '".strtolower(DB_NAME)."'
-			AND		table_name   = '".$row[0]."'
+			SELECT engine, (
+			data_length + index_length
+			) AS size, table_rows
+			FROM information_schema.TABLES
+			WHERE LCase( table_schema ) = LCase( '".DB_NAME."' )
+			AND table_name   = '".$row[0]."'
 			";
 
 			$table_info = $wpdb -> get_results($sql);
@@ -1416,7 +1418,7 @@ function rvg_fix_wp_only()
 	$wp_only = get_option('rvg_wp_only');
 	if($wp_only == 'Y')
 	{
-		$names = mysql_query("SHOW TABLES FROM ".DB_NAME);
+		$names = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
 		while($row = mysql_fetch_row($names))
 		{	if(substr($row[0],0,strlen($table_prefix)) != $table_prefix)
 			{	// NOT A WORDPRESS TABLE: EXLUDE IT
@@ -1622,9 +1624,9 @@ function rvg_get_db_size()
 	global $wpdb;
 	
 	$sql = "
-	SELECT SUM(data_length + index_length) size
+	SELECT SUM( data_length + index_length ) size
 	FROM information_schema.TABLES
-	WHERE table_schema = '".strtolower(DB_NAME)."'
+	WHERE LCase( table_schema ) = LCase( '".DB_NAME."' )
 	GROUP BY table_schema
 	";
 	
