@@ -7,9 +7,9 @@ Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, cl
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
-Tested up to: 3.7.1
-Stable tag: 2.7.4
-Version: 2.7.4
+Tested up to: 3.8
+Stable tag: 2.7.5
+Version: 2.7.5
 
 == Description ==
 
@@ -53,6 +53,9 @@ No warranty, use at own risk!
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.7.5 [12/13/2013] =
+* CHANGE: two queries optimized for better performance
 
 = 2.7.4 [12/11/2013] =
 * BUG FIX: added 'backticks' around the database name in a few queries

@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7.4';
-$odb_release_date = '12/11/2013';
+$odb_version      = '2.7.5';
+$odb_release_date = '12/13/2013';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.4
+ * @version 2.7.5
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.4
+Version: 2.7.5
 Author URI: http://cagewebdev.com
 */
 ?>
@@ -1375,13 +1375,14 @@ function rvg_optimize_tables($display)
 			$query  = "OPTIMIZE TABLE ".$row[0];
 			$result = $wpdb -> get_results($query);
 			
+			// v2.7.5
 			$sql = "
 			SELECT engine, (
 			data_length + index_length
 			) AS size, table_rows
 			FROM information_schema.TABLES
-			WHERE LCase( table_schema ) = LCase( '".DB_NAME."' )
-			AND table_name   = '".$row[0]."'
+			WHERE table_schema = '".strtolower(DB_NAME)."'
+			AND   table_name   = '".$row[0]."'
 			";
 
 			$table_info = $wpdb -> get_results($sql);
@@ -1623,10 +1624,11 @@ function rvg_get_db_size()
 {
 	global $wpdb;
 	
+	// v2.7.5
 	$sql = "
 	SELECT SUM( data_length + index_length ) size
 	FROM information_schema.TABLES
-	WHERE LCase( table_schema ) = LCase( '".DB_NAME."' )
+	WHERE table_schema = '".strtolower(DB_NAME)."'
 	GROUP BY table_schema
 	";
 	
