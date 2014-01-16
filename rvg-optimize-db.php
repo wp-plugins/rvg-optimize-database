@@ -1,20 +1,19 @@
 <?php
-$odb_version      = '2.7.5';
-$odb_release_date = '12/13/2013';
+$odb_version      = '2.7.6';
+$odb_release_date = '01/16/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.5
+ * @version 2.7.6
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.5
+Version: 2.7.6
 Author URI: http://cagewebdev.com
 */
-?>
-<?php
+
 /********************************************************************************************
 
 	ADD THE 'OPTIMIZE DATABASE' ITEM TO THE TOOLS MENU
@@ -26,7 +25,6 @@ function optimize_db_main()
     }
 }
 add_action('admin_menu', 'optimize_db_main');
-
 
 /********************************************************************************************
 
@@ -41,7 +39,6 @@ function rvg_odb_admin_menu()
 }
 add_action( 'admin_menu', 'rvg_odb_admin_menu' );
 
-
 /********************************************************************************************
 
 	ADD THE '1 CLICK OPTIMIZE DATABASE' ITEM TO THE ADMIN BAR (IF ACTIVATED)
@@ -55,7 +52,6 @@ function rvg_odb_admin_bar()
 }
 $rvg_odb_adminbar = get_option('rvg_odb_adminbar');
 if($rvg_odb_adminbar == "Y") add_action( 'wp_before_admin_bar_render', 'rvg_odb_admin_bar' );
-
 
 /********************************************************************************************
 
@@ -92,8 +88,7 @@ function rvg_activate_plugin()
 		if( !wp_next_scheduled( 'rvg_optimize_database' ))
 			wp_schedule_event( time(), $rvg_odb_schedule, 'rvg_optimize_database' );
 	}
-} # rvg_activate_plugin()
-
+} # rvg_activate_plugin ()
 
 /********************************************************************************************
 
@@ -250,6 +245,7 @@ function schedule_changed()
 		$("#schedulehour").hide();
 }
 </script>
+
 <form name="options" method="post" action="">
   <div class="wrap">
     <h2>Using Optimize Database after Deleting Revisions</h2>
@@ -302,7 +298,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                 <tr>
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Delete expired transients</span></td>
                   <td width="50%" valign="top"><input name="rvg_clear_transients" type="checkbox" value="Y" <?php echo $rvg_clear_transients_checked?> /></td>
-                </tr>                            
+                </tr>
                 <tr>
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;">Keep a log</span></td>
                   <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" <?php echo $rvg_odb_logging_on_checked?> /></td>
@@ -319,9 +315,8 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                     </select>
                     <script type="text/javascript">
 			        document.options.rvg_odb_schedule.value = '<?php echo $rvg_odb_schedule; ?>';		
-			        </script>
-                    <span id="schedulehour" style="display:none;">
-                    <span style="font-weight:bold;">Time</span>
+			        </script> 
+                    <span id="schedulehour" style="display:none;"> <span style="font-weight:bold;">Time</span>
                     <select name="rvg_odb_schedulehour" id="rvg_odb_schedulehour">
                       <?php
                     for($i=0; $i<=23; $i++)
@@ -334,10 +329,9 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                     </select>
                     <script type="text/javascript">
 			        document.options.rvg_odb_schedulehour.value = '<?php echo $rvg_odb_schedulehour; ?>';
-			        </script>
-                    </span>
-                    <script type="text/javascript">schedule_changed();</script>
-                  </td>
+			        </script> 
+                    </span> 
+                    <script type="text/javascript">schedule_changed();</script></td>
                 </tr>
                 <tr>
                   <td align="right" valign="top"><span style="font-weight:bold;">Show '1-click' link in Admin Bar</span></td>
@@ -397,8 +391,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
   </div>
 </form>
 <?php
-} // rvg_odb_options_page
-
+} // rvg_odb_options_page ()
 
 /********************************************************************************************
 
@@ -516,7 +509,7 @@ function rvg_optimize_db()
     <strong>Delete trashed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
     <strong>Delete spammed items:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_spam_yn?></span><br />
     <strong>Delete unused tags:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_tags_yn?></span><br />
-    <strong>Delete expired transients:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_transients_yn?></span><br />    
+    <strong>Delete expired transients:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_transients_yn?></span><br />
     <strong>Keep a log:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_logging_on_yn?></span><br />
     <strong>Number of excluded tables:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $number_excluded?></span><br />
     <strong>Scheduler:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_schedule_txt?></span>
@@ -548,8 +541,6 @@ function rvg_optimize_db()
     <input class="button" type="button" name="delete_log" value="Delete Log File" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=delete_log'" style="font-weight:normal;" />
     <?php	
 	}
-?>
-    <?php
 	$action = '';
 	if(isset($_REQUEST['action'])) $action = $_REQUEST['action'];
 	if($action != 'run')
@@ -618,15 +609,12 @@ function rvg_optimize_db()
 	
 	// NUMBER OF DELETED REVISIONS FOR LOG FILE
 	$log_arr["revisions"] = $total_deleted;
-?>
-<?php
+
 	/****************************************************************************************
 	
 		DELETE TRASHED ITEMS
 	
 	******************************************************************************************/
-?>
-<?php
 	if($clear_trash == 'Y')
 	{
 		// GET TRASHED POSTS / PAGES AND COMMENTS
@@ -670,15 +658,12 @@ function rvg_optimize_db()
 		$log_arr["trash"] = $total_deleted;
 
 	} // if($clear_trash == 'Y')
-?>
-<?php
+
 	/****************************************************************************************
 	
 		DELETE SPAMMED ITEMS
 	
 	******************************************************************************************/
-?>
-<?php
 	if($clear_spam == 'Y')
 	{
 		// GET SPAMMED COMMENTS
@@ -722,15 +707,12 @@ function rvg_optimize_db()
 	
 	// NUMBER OF SPAM DELETED FOR LOG FILE
 	$log_arr["spam"] = $total_deleted;
-?>
-<?php
+
 	/****************************************************************************************
 	
 		DELETE UNUSED TAGS
 	
 	******************************************************************************************/
-?>
-<?php
 	if($clear_tags == 'Y')
 	{
 		// DELETE UNUSED TAGS
@@ -763,15 +745,12 @@ function rvg_optimize_db()
 	
 	// NUMBER OF tags DELETED FOR LOG FILE
 	$log_arr["tags"] = $total_deleted;
-?>
-<?php
+
 	/****************************************************************************************
 	
 		DELETE EXPIRED TRANSIENTS
 	
 	******************************************************************************************/
-?>
-<?php
 	if($clear_transients == 'Y')
 	{
 		// DELETE UNUSED TAGS
@@ -804,15 +783,12 @@ function rvg_optimize_db()
 	
 	// NUMBER OF transients DELETED FOR LOG FILE
 	$log_arr["transients"] = $total_deleted;
-?>
-<?php
+
 	/****************************************************************************************
 	
 		DELETE ORPHANS
 	
 	******************************************************************************************/
-?>
-<?php
 	$total_deleted = rvg_delete_orphans(true);
 	if($total_deleted)
 	{
@@ -838,8 +814,7 @@ function rvg_optimize_db()
 	}
 	// FOR LOG FILE
 	$log_arr["orphans"] = $total_deleted;
-?>
-<?php
+
 	/****************************************************************************************
 	
 		OPTIMIZE DATABASE TABLES
@@ -921,11 +896,8 @@ function rvg_optimize_db()
 <input class="button" type="button" name="delete_log" value="Delete Log File" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=delete_log'" style="font-weight:normal;" />
 <?php	
 	}
-?>
-<?php	
-} // rvg_optimize_db()
-?>
-<?php
+} // rvg_optimize_db ()
+
 /********************************************************************************************
 
 	EXECUTE OPTIMIZATION VIA CRON JOB
@@ -1053,9 +1025,8 @@ function rvg_optimize_db_cron()
 	$total_savings += ($start_size - $end_size);
 	update_option('rvg_odb_total_savings',$total_savings);
 	
-} // rvg_optimize_db_cron()
-?>
-<?php
+} // rvg_optimize_db_cron ()
+
 /********************************************************************************************
 
 	DELETE THE REVISIONS
@@ -1111,9 +1082,8 @@ function rvg_delete_revisions($results, $display, $max_revisions)
 		} // if($display)
 	} // for($i=0; $i<count($results); $i++)
 	return $total_deleted;
-} // rvg_delete_revisions()
-?>
-<?php
+} // rvg_delete_revisions ()
+
 /********************************************************************************************
 
 	DELETE TRASHED POSTS AND PAGES
@@ -1162,9 +1132,8 @@ function rvg_delete_trash($results, $display)
 
 	return $total_deleted;
 	
-} // rvg_delete_trash()
-?>
-<?php
+} // rvg_delete_trash ()
+
 /********************************************************************************************
 
 	DELETE SPAMMED ITEMS
@@ -1202,9 +1171,8 @@ function rvg_delete_spam($results, $display)
 	
 	return $total_deleted;
 	
-} // rvg_delete_spam()
-?>
-<?php
+} // rvg_delete_spam ()
+
 /********************************************************************************************
 
 	DELETE UNUSED TAGS
@@ -1223,9 +1191,8 @@ function rvg_delete_tags()
 		}
 
 	return $total_deleted;
-} // rvg_delete_tags()
-?>
-<?php
+} // rvg_delete_tags ()
+
 /********************************************************************************************
 
 	DELETE EXPIRED TRANSIENTS
@@ -1290,9 +1257,8 @@ function rvg_delete_transients()
 	$wpdb -> get_results($sql);
 
 	return $total_deleted;
-} // rvg_delete_transients()
-?>
-<?php
+} // rvg_delete_transients ()
+
 /********************************************************************************************
 
 	DELETE ORPHAN POSTMETA RECORDS
@@ -1348,9 +1314,8 @@ function rvg_delete_orphans($display)
 
 	return ($meta_orphans + $post_orphans);
 	
-} // rvg_delete_orphans()
-?>
-<?php
+} // rvg_delete_orphans ()
+
 /********************************************************************************************
 
 	OPTIMIZE DATABASE TABLES
@@ -1404,9 +1369,8 @@ function rvg_optimize_tables($display)
 	} // while($row = mysql_fetch_row($names))
 	return $cnt;
 	
-} // rvg_optimize_tables()
-?>
-<?php
+} // rvg_optimize_tables ()
+
 /********************************************************************************************
 
 	FIX WP_ONLY (DEPRECIATED FROM v2.2)
@@ -1437,9 +1401,8 @@ function rvg_fix_wp_only()
 	";
 	$wpdb -> get_results($sql);			
 	
-} # function rvg_fix_wp_only()
-?>
-<?php
+} # function rvg_fix_wp_only ()
+
 /********************************************************************************************
 
 	WRITE LINE TO LOG FILE
@@ -1543,9 +1506,8 @@ td {
 		file_put_contents($file,$html,FILE_APPEND);
 	}
 	
-} // rvg_write_log
-?>
-<?php
+} // rvg_write_log ()
+
 /********************************************************************************************
 
 	GET REVISIONS
@@ -1566,9 +1528,8 @@ function rvg_get_revisions($max_revisions)
 	
 		return $wpdb -> get_results($sql);
 		
-} // rvg_get_revisions
-?>
-<?php
+} // rvg_get_revisions ()
+
 /********************************************************************************************
 
 	GET TRASHED POSTS / PAGES AND COMMENTS
@@ -1591,9 +1552,8 @@ function rvg_get_trash()
 		
 		return $wpdb -> get_results($sql);
 		
-} // rvg_get_trash
-?>
-<?php
+} // rvg_get_trash ()
+
 /********************************************************************************************
 
 	GET SPAMMED COMMENTS
@@ -1612,9 +1572,8 @@ function rvg_get_spam()
 		
 		return $wpdb -> get_results($sql);
 		
-} // rvg_get_trash
-?>
-<?php
+} // rvg_get_trash ()
+
 /********************************************************************************************
 
 	CALCULATE THE SIZE OF THE WORDPRESS DATABASE (IN BYTES)
@@ -1636,9 +1595,8 @@ function rvg_get_db_size()
 	
 	return $res[0]->size;
 	
-} // rvg_get_db_size
-?>
-<?php
+} // rvg_get_db_size ()
+
 /********************************************************************************************
 
 	FORMAT SIZES FROM BYTES TO KB OR MB
@@ -1652,5 +1610,5 @@ function rvg_format_size($size, $precision=1)
 		$table_size = (round($size/1024,$precision)).' KB';
 		
 	return $table_size;
-} // rvg_format_size
+} // rvg_format_size ()
 ?>
