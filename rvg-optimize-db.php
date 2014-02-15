@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7.6';
-$odb_release_date = '01/16/2014';
+$odb_version      = '2.7.7';
+$odb_release_date = '02/16/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.6
+ * @version 2.7.7
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.6
+Version: 2.7.7
 Author URI: http://cagewebdev.com
 */
 
@@ -105,7 +105,12 @@ function rvg_odb_options_page()
 	$current_hour     = substr($current_datetime, 8, 2);
 	
 	# jQuery FRAMEWORK
-	echo '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
+	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		echo '<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
+	}
+	else
+	{	echo '<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
+	}
 
 	# RVG_WP_ONLY IS DEPRECIATED FROM v2.2
 	rvg_fix_wp_only();
