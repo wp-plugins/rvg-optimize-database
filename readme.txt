@@ -7,9 +7,9 @@ Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, cl
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
-Tested up to: 3.8
-Stable tag: 2.7.6
-Version: 2.7.6
+Tested up to: 3.8.1
+Stable tag: 2.7.7
+Version: 2.7.7
 
 == Description ==
 
@@ -53,6 +53,9 @@ No warranty, use at own risk!
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.7.7 [02/16/2014] =
+* BUG FIX: made jQuery also https compatible
 
 = 2.7.6 [01/16/2014] =
 * BUG FIX: empty lines removed from output (gave problems with some RSS feeds)
