@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7.7';
-$odb_release_date = '02/16/2014';
+$odb_version      = '2.7.8';
+$odb_release_date = '05/01/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.7
+ * @version 2.7.8
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.7
+Version: 2.7.8
 Author URI: http://cagewebdev.com
 */
 
@@ -26,6 +26,7 @@ function optimize_db_main()
 }
 add_action('admin_menu', 'optimize_db_main');
 
+
 /********************************************************************************************
 
 	ADD THE 'OPTIMIZE DB OPTIONS' ITEM TO THE SETTINGS MENU
@@ -38,6 +39,7 @@ function rvg_odb_admin_menu()
     }
 }
 add_action( 'admin_menu', 'rvg_odb_admin_menu' );
+
 
 /********************************************************************************************
 
@@ -52,6 +54,7 @@ function rvg_odb_admin_bar()
 }
 $rvg_odb_adminbar = get_option('rvg_odb_adminbar');
 if($rvg_odb_adminbar == "Y") add_action( 'wp_before_admin_bar_render', 'rvg_odb_admin_bar' );
+
 
 /********************************************************************************************
 
@@ -89,6 +92,7 @@ function rvg_activate_plugin()
 			wp_schedule_event( time(), $rvg_odb_schedule, 'rvg_optimize_database' );
 	}
 } # rvg_activate_plugin ()
+
 
 /********************************************************************************************
 
@@ -346,7 +350,9 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
               </table></td>
           </tr>
           <?php
-    $names = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
+	# v2.7.8
+	$names = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
+	$dbname = 'Tables_in_'.DB_NAME;
 ?>
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
@@ -358,7 +364,8 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                   <?php
 	$c = 0;
 	$t = 0;
-	while($row = mysql_fetch_row($names))
+	# v2.7.8
+	for ($i=0; $i<count($names); $i++)
 	{	$t++;
 		$c++;
 		if($c>4)
@@ -368,19 +375,19 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 		}
 		$style = 'normal';
 		// WORDPRESS TABLE?
-		if(substr($row[0],0,strlen($table_prefix)) == $table_prefix) $style = 'bold;color:#00F;';
+		if(substr($names[$i]->$dbname,0,strlen($table_prefix)) == $table_prefix) $style = 'bold;color:#00F;';
 		
 		$cb_checked = '';
 		$sql = "
 		SELECT	`option_value`
 		FROM	$wpdb->options
-		WHERE	`option_name` = 'rvg_ex_".$row[0]."'
+		WHERE	`option_name` = 'rvg_ex_".$names[$i]->$dbname."'
 		";
 		$results = $wpdb -> get_results($sql);
 		if(isset($results[0]->option_value))
 			if($results[0]->option_value == 'excluded') $cb_checked = ' checked';		
-		echo '<td width="25%" style="font-weight:'.$style.'"><input id="cb_'.$row[0].'" name="cb_'.$row[0].'" type="checkbox" value="1" '.$cb_checked.'  /> '.$row[0].'</td>'."\n";
-	} # while($row = mysql_fetch_row($names))
+		echo '<td width="25%" style="font-weight:'.$style.'"><input id="cb_'.$names[$i]->$dbname.'" name="cb_'.$names[$i]->$dbname.'" type="checkbox" value="1" '.$cb_checked.'  /> '.$names[$i]->$dbname.'</td>'."\n";
+	} # for ($i=0; $i<count($names); $i++)
 ?>
                 </tr>
               </table></td>
@@ -397,6 +404,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 </form>
 <?php
 } // rvg_odb_options_page ()
+
 
 /********************************************************************************************
 
@@ -903,6 +911,7 @@ function rvg_optimize_db()
 	}
 } // rvg_optimize_db ()
 
+
 /********************************************************************************************
 
 	EXECUTE OPTIMIZATION VIA CRON JOB
@@ -1032,6 +1041,7 @@ function rvg_optimize_db_cron()
 	
 } // rvg_optimize_db_cron ()
 
+
 /********************************************************************************************
 
 	DELETE THE REVISIONS
@@ -1089,6 +1099,7 @@ function rvg_delete_revisions($results, $display, $max_revisions)
 	return $total_deleted;
 } // rvg_delete_revisions ()
 
+
 /********************************************************************************************
 
 	DELETE TRASHED POSTS AND PAGES
@@ -1139,6 +1150,7 @@ function rvg_delete_trash($results, $display)
 	
 } // rvg_delete_trash ()
 
+
 /********************************************************************************************
 
 	DELETE SPAMMED ITEMS
@@ -1178,6 +1190,7 @@ function rvg_delete_spam($results, $display)
 	
 } // rvg_delete_spam ()
 
+
 /********************************************************************************************
 
 	DELETE UNUSED TAGS
@@ -1197,6 +1210,7 @@ function rvg_delete_tags()
 
 	return $total_deleted;
 } // rvg_delete_tags ()
+
 
 /********************************************************************************************
 
@@ -1264,6 +1278,7 @@ function rvg_delete_transients()
 	return $total_deleted;
 } // rvg_delete_transients ()
 
+
 /********************************************************************************************
 
 	DELETE ORPHAN POSTMETA RECORDS
@@ -1321,6 +1336,7 @@ function rvg_delete_orphans($display)
 	
 } // rvg_delete_orphans ()
 
+
 /********************************************************************************************
 
 	OPTIMIZE DATABASE TABLES
@@ -1333,16 +1349,18 @@ function rvg_optimize_tables($display)
 	# WP_ONLY IS DEPRECIATED FROM v2.2
 	rvg_fix_wp_only();
 
-	$names = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
-	$cnt   = 0;
-	while($row = mysql_fetch_row($names))
+	# v2.7.8
+	$names  = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
+	$dbname = 'Tables_in_'.DB_NAME;
+	$cnt    = 0;
+	for ($i=0; $i<count($names); $i++)
 	{
-		$excluded = get_option('rvg_ex_'.$row[0]);
+		$excluded = get_option('rvg_ex_'.$names[$i]->$dbname);
 		
 		if(!$excluded)
 		{	# TABLE NOT EXCLUDED
 			$cnt++;
-			$query  = "OPTIMIZE TABLE ".$row[0];
+			$query  = "OPTIMIZE TABLE ".$names[$i]->$dbname;
 			$result = $wpdb -> get_results($query);
 			
 			// v2.7.5
@@ -1352,7 +1370,7 @@ function rvg_optimize_tables($display)
 			) AS size, table_rows
 			FROM information_schema.TABLES
 			WHERE table_schema = '".strtolower(DB_NAME)."'
-			AND   table_name   = '".$row[0]."'
+			AND   table_name   = '".$names[$i]->$dbname."'
 			";
 
 			$table_info = $wpdb -> get_results($sql);
@@ -1362,7 +1380,7 @@ function rvg_optimize_tables($display)
 ?>
 <tr>
   <td align="right" valign="top"><?php echo $cnt?>.</td>
-  <td valign="top" style="font-weight:bold;"><?php echo $row[0] ?></td>
+  <td valign="top" style="font-weight:bold;"><?php echo $names[$i]->$dbname ?></td>
   <td valign="top"><?php echo $result[0]->Msg_text ?></td>
   <td valign="top"><?php echo $table_info[0]->engine ?></td>
   <td align="right" valign="top"><?php echo $table_info[0]->table_rows ?></td>
@@ -1371,10 +1389,11 @@ function rvg_optimize_tables($display)
 <?php
 			} // if($display)
 		} // if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
-	} // while($row = mysql_fetch_row($names))
+	} // for ($i=0; $i<count($names); $i++)
 	return $cnt;
 	
 } // rvg_optimize_tables ()
+
 
 /********************************************************************************************
 
@@ -1388,9 +1407,11 @@ function rvg_fix_wp_only()
 	$wp_only = get_option('rvg_wp_only');
 	if($wp_only == 'Y')
 	{
-		$names = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
-		while($row = mysql_fetch_row($names))
-		{	if(substr($row[0],0,strlen($table_prefix)) != $table_prefix)
+		# v2.7.8
+		$names = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
+		$dbname = 'Tables_in_'.DB_NAME;
+		for ($i=0; $i<count($names); $i++)
+		{	if(substr($names[$i]->$dbname,0,strlen($table_prefix)) != $table_prefix)
 			{	// NOT A WORDPRESS TABLE: EXLUDE IT
 				$sql = "
 				INSERT INTO $wpdb->options (option_name, option_value, autoload)
@@ -1407,6 +1428,7 @@ function rvg_fix_wp_only()
 	$wpdb -> get_results($sql);			
 	
 } # function rvg_fix_wp_only ()
+
 
 /********************************************************************************************
 
@@ -1513,6 +1535,7 @@ td {
 	
 } // rvg_write_log ()
 
+
 /********************************************************************************************
 
 	GET REVISIONS
@@ -1534,6 +1557,7 @@ function rvg_get_revisions($max_revisions)
 		return $wpdb -> get_results($sql);
 		
 } // rvg_get_revisions ()
+
 
 /********************************************************************************************
 
@@ -1559,6 +1583,7 @@ function rvg_get_trash()
 		
 } // rvg_get_trash ()
 
+
 /********************************************************************************************
 
 	GET SPAMMED COMMENTS
@@ -1578,6 +1603,7 @@ function rvg_get_spam()
 		return $wpdb -> get_results($sql);
 		
 } // rvg_get_trash ()
+
 
 /********************************************************************************************
 
@@ -1601,6 +1627,7 @@ function rvg_get_db_size()
 	return $res[0]->size;
 	
 } // rvg_get_db_size ()
+
 
 /********************************************************************************************
 
