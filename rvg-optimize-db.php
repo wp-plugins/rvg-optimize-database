@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7.8';
-$odb_release_date = '05/01/2014';
+$odb_version      = '2.7.9';
+$odb_release_date = '05/02/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.8
+ * @version 2.7.9
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.8
+Version: 2.7.9
 Author URI: http://cagewebdev.com
 */
 
@@ -113,11 +113,9 @@ function rvg_odb_options_page()
 		echo '<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
 	}
 	else
-	{	echo '<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
+	{	# 2.7.9
+		echo '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
 	}
-
-	# RVG_WP_ONLY IS DEPRECIATED FROM v2.2
-	rvg_fix_wp_only();
 	
 	if(isset($_REQUEST['delete_log']))
 		if($_REQUEST['delete_log'] == "Y") @unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
@@ -1346,9 +1344,6 @@ function rvg_optimize_tables($display)
 {
 	global $wpdb, $table_prefix;
 
-	# WP_ONLY IS DEPRECIATED FROM v2.2
-	rvg_fix_wp_only();
-
 	# v2.7.8
 	$names  = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
 	$dbname = 'Tables_in_'.DB_NAME;
@@ -1388,46 +1383,11 @@ function rvg_optimize_tables($display)
 </tr>
 <?php
 			} // if($display)
-		} // if($wp_only == 'N' || ($wp_only == 'Y' && substr($row[0],0,strlen($table_prefix)) == $table_prefix))
+		} // if(!$excluded)
 	} // for ($i=0; $i<count($names); $i++)
 	return $cnt;
 	
 } // rvg_optimize_tables ()
-
-
-/********************************************************************************************
-
-	FIX WP_ONLY (DEPRECIATED FROM v2.2)
-
-*********************************************************************************************/
-function rvg_fix_wp_only()
-{
-	global $wpdb, $table_prefix;
-	
-	$wp_only = get_option('rvg_wp_only');
-	if($wp_only == 'Y')
-	{
-		# v2.7.8
-		$names = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
-		$dbname = 'Tables_in_'.DB_NAME;
-		for ($i=0; $i<count($names); $i++)
-		{	if(substr($names[$i]->$dbname,0,strlen($table_prefix)) != $table_prefix)
-			{	// NOT A WORDPRESS TABLE: EXLUDE IT
-				$sql = "
-				INSERT INTO $wpdb->options (option_name, option_value, autoload)
-				VALUES ('rvg_ex_".$row[0]."','excluded','yes')
-				";
-				$wpdb -> get_results($sql);
-			}
-		}
-	}
-	$sql = "
-	DELETE	FROM $wpdb->options
-	WHERE	`option_name` = 'rvg_wp_only'
-	";
-	$wpdb -> get_results($sql);			
-	
-} # function rvg_fix_wp_only ()
 
 
 /********************************************************************************************
