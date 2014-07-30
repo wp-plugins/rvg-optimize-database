@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.7.9';
-$odb_release_date = '05/02/2014';
+$odb_version      = '2.8';
+$odb_release_date = '07/30/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.7.9
+ * @version 2.8
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.7.9
+Version: 2.8
 Author URI: http://cagewebdev.com
 */
 
@@ -21,7 +21,9 @@ Author URI: http://cagewebdev.com
 *********************************************************************************************/
 function optimize_db_main()
 {	if (function_exists('add_management_page'))
-	{	add_management_page(__('Optimize Database'), __('Optimize Database'),'administrator' ,'rvg-optimize-db.php', 'rvg_optimize_db');
+	{	// add_management_page(__('Optimize Database'), __('Optimize Database'), 'administrator','rvg-optimize-db.php', 'rvg_optimize_db');
+		# v2.8: 'administrator' role changed to 'edit_themes' capability
+		add_management_page(__('Optimize Database'), __('Optimize Database'), 'edit_themes', 'rvg-optimize-db.php', 'rvg_optimize_db');
     }
 }
 add_action('admin_menu', 'optimize_db_main');
@@ -350,7 +352,8 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
           <?php
 	# v2.7.8
 	$names = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
-	$dbname = 'Tables_in_'.DB_NAME;
+	# v2.8
+	$dbname = 'Tables_in_'.strtolower(DB_NAME);
 ?>
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
@@ -1346,7 +1349,8 @@ function rvg_optimize_tables($display)
 
 	# v2.7.8
 	$names  = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
-	$dbname = 'Tables_in_'.DB_NAME;
+	# v2.8
+	$dbname = 'Tables_in_'.strtolower(DB_NAME);
 	$cnt    = 0;
 	for ($i=0; $i<count($names); $i++)
 	{
