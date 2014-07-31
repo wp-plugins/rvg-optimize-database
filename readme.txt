@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 3.9.1
-Stable tag: 2.8
-Version: 2.8
+Stable tag: 2.8.1
+Version: 2.8.1
 License: GPLv2 or later
 
 == Description ==
@@ -45,12 +45,11 @@ http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordp
 http://wordpress.org/extend/plugins/rvg-optimize-database/
 
 = Disclaimer =
-No warranty, use at own risk!
+NO WARRANTY, USE IT AT YOUR OWN RISK!
 
 = Other plugins by Rolf van Gelder =
 Rocket Reader (Speed reader)
 http://wordpress.org/plugins/rocket-reader-speed-reader/
-
 Order your Posts Manually
 http://wordpress.org/plugins/order-your-posts-manually/
 
@@ -61,6 +60,10 @@ http://wordpress.org/plugins/order-your-posts-manually/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.8.1 [07/31/2014] =
+* CHANGE: changed the 'edit_themes' capability back to 'administrator'-role
+* BUG FIX: no table names beside checkboxes (rewrote it, so it should work for every site now)
 
 = 2.8 [07/30/2014] =
 * CHANGE: 'administrator'-role changed to 'edit_themes'-capability

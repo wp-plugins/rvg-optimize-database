@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.8';
-$odb_release_date = '07/30/2014';
+$odb_version      = '2.8.1';
+$odb_release_date = '07/31/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.8
+ * @version 2.8.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.8
+Version: 2.8.1
 Author URI: http://cagewebdev.com
 */
 
@@ -21,9 +21,10 @@ Author URI: http://cagewebdev.com
 *********************************************************************************************/
 function optimize_db_main()
 {	if (function_exists('add_management_page'))
-	{	// add_management_page(__('Optimize Database'), __('Optimize Database'), 'administrator','rvg-optimize-db.php', 'rvg_optimize_db');
-		# v2.8: 'administrator' role changed to 'edit_themes' capability
-		add_management_page(__('Optimize Database'), __('Optimize Database'), 'edit_themes', 'rvg-optimize-db.php', 'rvg_optimize_db');
+	{	# v2.8: 'administrator' role changed to 'edit_themes' capability
+		// add_management_page(__('Optimize Database'), __('Optimize Database'), 'edit_themes', 'rvg-optimize-db.php', 'rvg_optimize_db');
+		# v2.8.1: changed capability back to 'administrator'
+		add_management_page(__('Optimize Database'), __('Optimize Database'), 'administrator','rvg-optimize-db.php', 'rvg_optimize_db');
     }
 }
 add_action('admin_menu', 'optimize_db_main');
@@ -350,10 +351,10 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
               </table></td>
           </tr>
           <?php
-	# v2.7.8
-	$names = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
-	# v2.8
-	$dbname = 'Tables_in_'.strtolower(DB_NAME);
+	# v2.8.1
+	$res = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
+	$tables = array();
+	while($row = mysql_fetch_array($res, MYSQL_NUM)) $tables[] = "$row[0]";
 ?>
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
@@ -365,8 +366,8 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                   <?php
 	$c = 0;
 	$t = 0;
-	# v2.7.8
-	for ($i=0; $i<count($names); $i++)
+	# v2.8.1
+	for ($i=0; $i<count($tables); $i++)
 	{	$t++;
 		$c++;
 		if($c>4)
@@ -376,19 +377,19 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 		}
 		$style = 'normal';
 		// WORDPRESS TABLE?
-		if(substr($names[$i]->$dbname,0,strlen($table_prefix)) == $table_prefix) $style = 'bold;color:#00F;';
+		if(substr($tables[$i], 0, strlen($table_prefix)) == $table_prefix) $style = 'bold;color:#00F;';
 		
 		$cb_checked = '';
 		$sql = "
 		SELECT	`option_value`
 		FROM	$wpdb->options
-		WHERE	`option_name` = 'rvg_ex_".$names[$i]->$dbname."'
+		WHERE	`option_name` = 'rvg_ex_".$tables[$i]."'
 		";
 		$results = $wpdb -> get_results($sql);
 		if(isset($results[0]->option_value))
 			if($results[0]->option_value == 'excluded') $cb_checked = ' checked';		
-		echo '<td width="25%" style="font-weight:'.$style.'"><input id="cb_'.$names[$i]->$dbname.'" name="cb_'.$names[$i]->$dbname.'" type="checkbox" value="1" '.$cb_checked.'  /> '.$names[$i]->$dbname.'</td>'."\n";
-	} # for ($i=0; $i<count($names); $i++)
+		echo '<td width="25%" style="font-weight:'.$style.'"><input id="cb_'.$tables[$i].'" name="cb_'.$tables[$i].'" type="checkbox" value="1" '.$cb_checked.'  /> '.$tables[$i].'</td>'."\n";
+	} # for ($i=0; $i<count($tables); $i++)
 ?>
                 </tr>
               </table></td>
@@ -1347,19 +1348,20 @@ function rvg_optimize_tables($display)
 {
 	global $wpdb, $table_prefix;
 
-	# v2.7.8
-	$names  = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`");
-	# v2.8
-	$dbname = 'Tables_in_'.strtolower(DB_NAME);
+	# v2.8.1
+	$res = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
+	$tables = array();
+	while($row = mysql_fetch_array($res, MYSQL_NUM)) $tables[] = "$row[0]";
+
 	$cnt    = 0;
-	for ($i=0; $i<count($names); $i++)
+	for ($i=0; $i<count($tables); $i++)
 	{
-		$excluded = get_option('rvg_ex_'.$names[$i]->$dbname);
+		$excluded = get_option('rvg_ex_'.$tables[$i]);
 		
 		if(!$excluded)
 		{	# TABLE NOT EXCLUDED
 			$cnt++;
-			$query  = "OPTIMIZE TABLE ".$names[$i]->$dbname;
+			$query  = "OPTIMIZE TABLE ".$tables[$i];
 			$result = $wpdb -> get_results($query);
 			
 			// v2.7.5
@@ -1369,7 +1371,7 @@ function rvg_optimize_tables($display)
 			) AS size, table_rows
 			FROM information_schema.TABLES
 			WHERE table_schema = '".strtolower(DB_NAME)."'
-			AND   table_name   = '".$names[$i]->$dbname."'
+			AND   table_name   = '".$tables[$i]."'
 			";
 
 			$table_info = $wpdb -> get_results($sql);
@@ -1379,7 +1381,7 @@ function rvg_optimize_tables($display)
 ?>
 <tr>
   <td align="right" valign="top"><?php echo $cnt?>.</td>
-  <td valign="top" style="font-weight:bold;"><?php echo $names[$i]->$dbname ?></td>
+  <td valign="top" style="font-weight:bold;"><?php echo $tables[$i] ?></td>
   <td valign="top"><?php echo $result[0]->Msg_text ?></td>
   <td valign="top"><?php echo $table_info[0]->engine ?></td>
   <td align="right" valign="top"><?php echo $table_info[0]->table_rows ?></td>
@@ -1388,7 +1390,7 @@ function rvg_optimize_tables($display)
 <?php
 			} // if($display)
 		} // if(!$excluded)
-	} // for ($i=0; $i<count($names); $i++)
+	} // for ($i=0; $i<count($tables); $i++)
 	return $cnt;
 	
 } // rvg_optimize_tables ()
