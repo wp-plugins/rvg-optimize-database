@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.8.1';
+$odb_version      = '2.8.2';
 $odb_release_date = '07/31/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.8.1
+ * @version 2.8.2
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.8.1
+Version: 2.8.2
 Author URI: http://cagewebdev.com
 */
 
@@ -351,10 +351,9 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
               </table></td>
           </tr>
           <?php
-	# v2.8.1
-	$res = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
-	$tables = array();
-	while($row = mysql_fetch_array($res, MYSQL_NUM)) $tables[] = "$row[0]";
+	# v2.8.2
+	$tables = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`",ARRAY_N);
+	// print_r($tables);
 ?>
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
@@ -366,7 +365,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                   <?php
 	$c = 0;
 	$t = 0;
-	# v2.8.1
+	# v2.8.2
 	for ($i=0; $i<count($tables); $i++)
 	{	$t++;
 		$c++;
@@ -377,18 +376,18 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 		}
 		$style = 'normal';
 		// WORDPRESS TABLE?
-		if(substr($tables[$i], 0, strlen($table_prefix)) == $table_prefix) $style = 'bold;color:#00F;';
+		if(substr($tables[$i][0], 0, strlen($table_prefix)) == $table_prefix) $style = 'bold;color:#00F;';
 		
 		$cb_checked = '';
 		$sql = "
 		SELECT	`option_value`
 		FROM	$wpdb->options
-		WHERE	`option_name` = 'rvg_ex_".$tables[$i]."'
+		WHERE	`option_name` = 'rvg_ex_".$tables[$i][0]."'
 		";
 		$results = $wpdb -> get_results($sql);
 		if(isset($results[0]->option_value))
 			if($results[0]->option_value == 'excluded') $cb_checked = ' checked';		
-		echo '<td width="25%" style="font-weight:'.$style.'"><input id="cb_'.$tables[$i].'" name="cb_'.$tables[$i].'" type="checkbox" value="1" '.$cb_checked.'  /> '.$tables[$i].'</td>'."\n";
+		echo '<td width="25%" style="font-weight:'.$style.'"><input id="cb_'.$tables[$i][0].'" name="cb_'.$tables[$i][0].'" type="checkbox" value="1" '.$cb_checked.'  /> '.$tables[$i][0].'</td>'."\n";
 	} # for ($i=0; $i<count($tables); $i++)
 ?>
                 </tr>
@@ -1348,20 +1347,19 @@ function rvg_optimize_tables($display)
 {
 	global $wpdb, $table_prefix;
 
-	# v2.8.1
-	$res = mysql_query("SHOW TABLES FROM `".DB_NAME."`");
-	$tables = array();
-	while($row = mysql_fetch_array($res, MYSQL_NUM)) $tables[] = "$row[0]";
+	# v2.8.2
+	$tables = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`",ARRAY_N);
+	// print_r($tables);	
 
 	$cnt    = 0;
 	for ($i=0; $i<count($tables); $i++)
 	{
-		$excluded = get_option('rvg_ex_'.$tables[$i]);
+		$excluded = get_option('rvg_ex_'.$tables[$i][0]);
 		
 		if(!$excluded)
 		{	# TABLE NOT EXCLUDED
 			$cnt++;
-			$query  = "OPTIMIZE TABLE ".$tables[$i];
+			$query  = "OPTIMIZE TABLE ".$tables[$i][0];
 			$result = $wpdb -> get_results($query);
 			
 			// v2.7.5
@@ -1371,7 +1369,7 @@ function rvg_optimize_tables($display)
 			) AS size, table_rows
 			FROM information_schema.TABLES
 			WHERE table_schema = '".strtolower(DB_NAME)."'
-			AND   table_name   = '".$tables[$i]."'
+			AND   table_name   = '".$tables[$i][0]."'
 			";
 
 			$table_info = $wpdb -> get_results($sql);
@@ -1381,7 +1379,7 @@ function rvg_optimize_tables($display)
 ?>
 <tr>
   <td align="right" valign="top"><?php echo $cnt?>.</td>
-  <td valign="top" style="font-weight:bold;"><?php echo $tables[$i] ?></td>
+  <td valign="top" style="font-weight:bold;"><?php echo $tables[$i][0] ?></td>
   <td valign="top"><?php echo $result[0]->Msg_text ?></td>
   <td valign="top"><?php echo $table_info[0]->engine ?></td>
   <td align="right" valign="top"><?php echo $table_info[0]->table_rows ?></td>
