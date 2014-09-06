@@ -7,7 +7,7 @@ Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, cl
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
-Tested up to: 3.9.1
+Tested up to: 4.0
 Stable tag: 2.8.2
 Version: 2.8.2
 License: GPLv2 or later
