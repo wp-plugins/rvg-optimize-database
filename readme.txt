@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.0
 Tested up to: 4.0
-Stable tag: 2.8.2
-Version: 2.8.2
+Stable tag: 2.8.3
+Version: 2.8.3
 License: GPLv2 or later
 
 == Description ==
@@ -60,6 +60,10 @@ http://wordpress.org/plugins/order-your-posts-manually/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.8.3 [09/10/2014] =
+* CHANGE: using the WP jQuery libs now (not from googleapis anymore)
+* BUG FIX: check_admin_referer() fixed (gave a debug warning)
 
 = 2.8.2 [08/01/2014] =
 * BUG FIX: all problems with getting the table names should be fixed now!

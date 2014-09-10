@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.8.2';
-$odb_release_date = '07/31/2014';
+$odb_version      = '2.8.3';
+$odb_release_date = '09/10/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.8.2
+ * @version 2.8.3
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.8.2
+Version: 2.8.3
 Author URI: http://cagewebdev.com
 */
 
@@ -111,22 +111,14 @@ function rvg_odb_options_page()
 	$current_date     = substr($current_datetime, 0, 8);
 	$current_hour     = substr($current_datetime, 8, 2);
 	
-	# jQuery FRAMEWORK
-	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-		echo '<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
-	}
-	else
-	{	# 2.7.9
-		echo '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>';
-	}
-	
 	if(isset($_REQUEST['delete_log']))
 		if($_REQUEST['delete_log'] == "Y") @unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
 	
 	// SAVE THE OPTIONS
  	if (isset($_POST['info_update']))
 	{
-		check_admin_referer();
+		// v2.8.3
+		check_admin_referer('odb_action', 'odb_nonce');
 
 		# DELETE ALL EXCLUDED TABLES
 		$sql = "
@@ -249,14 +241,17 @@ function rvg_odb_options_page()
 	?>
 <script type="text/javascript">
 function schedule_changed()
-{	if(document.options.rvg_odb_schedule.value == 'daily' || document.options.rvg_odb_schedule.value == 'weekly')
-		$("#schedulehour").show();
+{	// v2.8.3
+	if(document.options.rvg_odb_schedule.value == 'daily' || document.options.rvg_odb_schedule.value == 'weekly')
+		jQuery("#schedulehour").show();
 	else
-		$("#schedulehour").hide();
+		jQuery("#schedulehour").hide();
 }
 </script>
 
 <form name="options" method="post" action="">
+  <?php // v2.8.3 ?>
+  <?php wp_nonce_field( 'odb_action','odb_nonce' ); ?>
   <div class="wrap">
     <h2>Using Optimize Database after Deleting Revisions</h2>
     <blockquote>
@@ -353,13 +348,13 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
           <?php
 	# v2.8.2
 	$tables = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`",ARRAY_N);
-	// print_r($tables);
+	# v2.8.3 $ replaced by jQuery
 ?>
           <tr>
             <td colspan="4" valign="top"><table id="table_list" width="100%" border="0" cellspacing="0" cellpadding="4" style="display:block;">
                 <tr>
                   <td colspan="4" align="center"><span style="font-weight:bold;">EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span style="text-decoration:underline;color:#F00;">CHECKED</span> TABLES <span style="text-decoration:underline;color:#F00;">WON'T</span> BE OPTIMIZED!</span><br />
-                    <a href="javascript:;" onclick="$('[id^=cb_]').attr('checked',true);">check all tables</a> | <a href="javascript:;" onclick="$('[id^=cb_]').attr('checked',false);">uncheck all tables</a> | <a href="javascript:;" onclick="$(':not([id^=cb_<?php echo $table_prefix; ?>])').filter('[id^=cb_]').attr('checked',true);">check all NON-WordPress tables</a></td>
+                    <a href="javascript:;" onclick="jQuery('[id^=cb_]').attr('checked',true);">check all tables</a> | <a href="javascript:;" onclick="jQuery('[id^=cb_]').attr('checked',false);">uncheck all tables</a> | <a href="javascript:;" onclick="jQuery(':not([id^=cb_<?php echo $table_prefix; ?>])').filter('[id^=cb_]').attr('checked',true);">check all NON-WordPress tables</a></td>
                 </tr>
                 <tr>
                   <?php
