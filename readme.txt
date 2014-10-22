@@ -36,9 +36,9 @@ You can start the Optimization in the WP Admin Panel &raquo; Tools &raquo; Optim
 Note: if you use the Scheduler the Optimization will run automatically!
 
 = Supported languages =
-* English [en_US] (translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com)
-* Dutch   [nl_NL] (translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com)
-* Serbian [sr_RS] (translated by Ogi Djuraskovic, FirstSiteGuide  - http://firstsiteguide.com)
+* English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
+* Dutch   [nl_NL] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
+* Serbian [sr_RS] - translated by Ogi Djuraskovic, FirstSiteGuide  - http://firstsiteguide.com
 
 = Author =
 CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com - http://rvg.cage.nl
