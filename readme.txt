@@ -6,10 +6,10 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler, transients, unused tags
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Requires at least: 2.0
+Requires at least: 2.8
 Tested up to: 4.0
-Stable tag: 2.8.3
-Version: 2.8.3
+Stable tag: 2.9
+Version: 2.9
 License: GPLv2 or later
 
 == Description ==
@@ -35,22 +35,27 @@ You can find the settings page in the WP Admin Panel &raquo; Settings &raquo; Op
 You can start the Optimization in the WP Admin Panel &raquo; Tools &raquo; Optimize Database.
 Note: if you use the Scheduler the Optimization will run automatically!
 
+= Supported languages =
+* English [en_US] (translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com)
+* Dutch   [nl_NL] (translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com)
+* Serbian [sr_RS] (translated by Ogi Djuraskovic, FirstSiteGuide  - http://firstsiteguide.com)
+
 = Author =
-CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com - http://cage.nl
+CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com - http://rvg.cage.nl
 
 = Plugin URL =
 http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
 
 = Download URL =
-http://wordpress.org/extend/plugins/rvg-optimize-database/
+http://wordpress.org/plugins/rvg-optimize-database/
 
 = Disclaimer =
 NO WARRANTY, USE IT AT YOUR OWN RISK!
 
 = Other plugins by Rolf van Gelder =
-Rocket Reader (Speed reader)
-http://wordpress.org/plugins/rocket-reader-speed-reader/
-Order your Posts Manually
+Rocket Reader (Speed reader)<br />
+http://wordpress.org/plugins/rocket-reader-speed-reader/<br />
+Order your Posts Manually<br />
 http://wordpress.org/plugins/order-your-posts-manually/
 
 == Installation ==
@@ -60,6 +65,11 @@ http://wordpress.org/plugins/order-your-posts-manually/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 2.9 [10/22/2014] =
+* NEW: plugin has been fully localized
+* NEW: dutch language support [nl_NL] added
+* NEW: serbian language support [sr_RS] added
 
 = 2.8.3 [09/10/2014] =
 * CHANGE: using the WP jQuery libs now (not from googleapis anymore)
