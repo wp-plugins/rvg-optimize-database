@@ -281,7 +281,7 @@ function schedule_changed()
       <p><?php echo __('Plugin version:','rvg-optimize-database');?><br />
         <strong>v<?php echo $odb_version ?> (<?php echo $odb_release_date?>)</strong> </p>
       <p><strong><?php echo __('Author','rvg-optimize-database');?>:</strong><br />
-        <strong><a href="http://cagewebdev.com/" target="_blank">CAGE Web Design</a> | <a href="http://cage.nl/" target="_blank">Rolf van Gelder</a></strong>, Eindhoven, <?php echo __('The Netherlands','rvg-optimize-database');?><br />
+        <strong><a href="http://cagewebdev.com/" target="_blank">CAGE Web Design</a> | <a href="http://rvg.cage.nl/" target="_blank">Rolf van Gelder</a></strong>, Eindhoven, <?php echo __('The Netherlands','rvg-optimize-database');?><br />
         <strong><?php echo __('Plugin URL:','rvg-optimize-database');?></strong><br />
         <a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank"><strong>http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/</strong></a><br />
         <strong><?php echo __('Download URL:','rvg-optimize-database');?></strong><br />
@@ -531,7 +531,7 @@ function rvg_optimize_db()
 		if($_REQUEST['action'] == "delete_log")
 			echo '<div class="updated" style="position:relative;left:-15px;"><p><strong>Optimize Database after Deleting Revisions - LOG FILE DELETED</strong></p></div>';
 ?>
-  <p><span style="font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $odb_version?></a> - <?php echo __('A WordPress Plugin by','rvg-optimize-database');?> <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">CAGE Web Design</a> | <a href="http://cage.nl/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, <?php echo __('The Netherlands','rvg-optimize-database');?></span></p>
+  <p><span style="font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $odb_version?></a> - <?php echo __('A WordPress Plugin by','rvg-optimize-database');?> <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">CAGE Web Design</a> | <a href="http://rvg.cage.nl/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, <?php echo __('The Netherlands','rvg-optimize-database');?></span></p>
   <p><?php echo __('Current options','rvg-optimize-database');?>:<br />
     <strong><?php echo __('Maximum number of - most recent - revisions to keep per post / page','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span><br />
     <strong><?php echo __('Delete all trashed items','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
@@ -1460,7 +1460,7 @@ td {
 <body>
 <div id="header">
 <h2><a href="http://wordpress.org/extend/plugins/rvg-optimize-database/" target="_blank">Optimize Database after Deleting Revisions v'.$odb_version.'</a></h2>
-  '.__('A WordPress Plugin by','rvg-optimize-database').' <a href="http://cagewebdev.com" target="_blank"><strong>CAGE Web Design</strong></a> | <a href="http://cage.nl/rg_biography.php" target="_blank"><strong>Rolf van Gelder</strong></a>, Eindhoven, '.__('The Netherlands','rvg-optimize-database').'</strong>
+  '.__('A WordPress Plugin by','rvg-optimize-database').' <a href="http://cagewebdev.com" target="_blank"><strong>CAGE Web Design</strong></a> | <a href="http://rvg.cage.nl" target="_blank"><strong>Rolf van Gelder</strong></a>, Eindhoven, '.__('The Netherlands','rvg-optimize-database').'</strong>
 </div>
 <table width="100%" border="0" cellspacing="6" cellpadding="1">
   <tr>
