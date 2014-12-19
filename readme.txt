@@ -52,11 +52,15 @@ http://wordpress.org/plugins/rvg-optimize-database/
 = Disclaimer =
 NO WARRANTY, USE IT AT YOUR OWN RISK!
 
-= Other plugins by Rolf van Gelder =
+= Plugins by Rolf van Gelder =
+Optimize Database after Deleting Revisions<br />
+http://wordpress.org/plugins/rvg-optimize-database/<br />
 Rocket Reader (Speed reader)<br />
 http://wordpress.org/plugins/rocket-reader-speed-reader/<br />
 Order your Posts Manually<br />
-http://wordpress.org/plugins/order-your-posts-manually/
+http://wordpress.org/plugins/order-your-posts-manually/<br />
+Float to Top Button<br />
+http://wordpress.org/plugins/float-to-top-button/
 
 == Installation ==
 
