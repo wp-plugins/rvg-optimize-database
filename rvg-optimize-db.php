@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '2.9';
-$odb_release_date = '10/22/2014';
+$odb_version      = '3.0';
+$odb_release_date = '12/28/2014';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 2.9
+ * @version 3.0
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
 Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 2.9
+Version: 3.0
 Author URI: http://cagewebdev.com
 */
 
@@ -1216,15 +1216,44 @@ function rvg_delete_tags()
 	$total_deleted = 0;
 
 	$tags = get_terms('post_tag', array('hide_empty' => 0));
+
 	for($i=0; $i<count($tags); $i++)
 		if($tags[$i]->count < 1)
-		{	$total_deleted++;
-			// echo $tags[$i]->term_id.' '.$tags[$i]->name.'<br />';
-			wp_delete_term($tags[$i]->term_id,'post_tag');
+		{	if(!rvg_delete_tags_is_scheduled($tags[$i]->term_id))
+			{	// v3.0: TAG NOT USED IN SCHEDULED POSTS: CAN BE DELETED
+				$total_deleted++;
+				// echo $tags[$i]->term_id.' '.$tags[$i]->name.'<br />';
+				wp_delete_term($tags[$i]->term_id,'post_tag');
+			}
 		}
 
 	return $total_deleted;
 } // rvg_delete_tags ()
+
+
+/********************************************************************************************
+
+	v3.0: IS THE UNUSED TAG USED IN ONE OR MORE SCHEDULED POSTS?
+
+*********************************************************************************************/
+function rvg_delete_tags_is_scheduled($term_id)
+{
+	global $wpdb;
+	
+	$sql_get_posts = "
+	SELECT	p.post_status
+	FROM	$wpdb->term_relationships t, $wpdb->posts p
+	WHERE	t.term_taxonomy_id = '".$term_id."'
+	AND 	t.object_id        = p.ID
+	";
+
+	$results_get_posts = $wpdb -> get_results($sql_get_posts);
+	for($i=0; $i<count($results_get_posts); $i++)
+		if($results_get_posts[$i]->post_status == 'future') return true;
+
+	return false;	
+	
+} // rvg_delete_tags_is_scheduled()
 
 
 /********************************************************************************************

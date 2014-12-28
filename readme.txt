@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.1
-Stable tag: 2.9
-Version: 2.9
+Stable tag: 3.0
+Version: 3.0
 License: GPLv2 or later
 
 == Description ==
@@ -53,13 +53,13 @@ http://wordpress.org/plugins/rvg-optimize-database/
 NO WARRANTY, USE IT AT YOUR OWN RISK!
 
 = Plugins by Rolf van Gelder =
-Optimize Database after Deleting Revisions<br />
+<em>Optimize Database after Deleting Revisions</em><br />
 http://wordpress.org/plugins/rvg-optimize-database/<br />
-Rocket Reader (Speed reader)<br />
+<em>Rocket Reader (Speed reader)</em><br />
 http://wordpress.org/plugins/rocket-reader-speed-reader/<br />
-Order your Posts Manually<br />
+<em>Order your Posts Manually</em><br />
 http://wordpress.org/plugins/order-your-posts-manually/<br />
-Float to Top Button<br />
+<em>Float to Top Button</em><br />
 http://wordpress.org/plugins/float-to-top-button/
 
 == Installation ==
@@ -69,6 +69,9 @@ http://wordpress.org/plugins/float-to-top-button/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
 
 == Changelog ==
+
+= 3.0 [12/28/2014] =
+* BUG FIX: tags only used in scheduled posts won't be deleted anymore (thanks Michael!)
 
 = 2.9 [10/22/2014] =
 * NEW: plugin has been fully localized
