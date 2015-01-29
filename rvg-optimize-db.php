@@ -1,16 +1,16 @@
 <?php
-$odb_version      = '3.0';
-$odb_release_date = '12/28/2014';
+$odb_version      = '3.1';
+$odb_release_date = '01/29/2015';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 3.0
+ * @version 3.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
-Description: Optimizes the Wordpress Database after Cleaning it out - <a href="options-general.php?page=rvg_odb_admin"><strong>plug in options</strong></a>
+Description: Optimizes the Wordpress Database after Cleaning it out
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Version: 3.0
+Version: 3.1
 Author URI: http://cagewebdev.com
 */
 
@@ -47,16 +47,29 @@ add_action('admin_menu', 'optimize_db_main');
 
 /********************************************************************************************
 
-	ADD THE 'OPTIMIZE DB OPTIONS' ITEM TO THE SETTINGS MENU
+	ADD THE 'OPTIMIZE DB SETTINGS' ITEM TO THE SETTINGS MENU
 
 *********************************************************************************************/
 function rvg_odb_admin_menu()
 {	
 	if (function_exists('add_options_page'))
-	{	add_options_page(__('Optimize DB Options'), __('Optimize DB Options','rvg-optimize-database'), 'manage_options', 'rvg_odb_admin', 'rvg_odb_options_page');
+	{	add_options_page(__('Optimize DB Settings'), __('Optimize DB Settings','rvg-optimize-database'), 'manage_options', 'rvg_odb_admin', 'rvg_odb_settings_page');
     }
 }
 add_action( 'admin_menu', 'rvg_odb_admin_menu' );
+
+
+/********************************************************************************************
+ *
+ *	SHOW A LINK TO THE PLUGIN SETTINGS ON THE MAIN PLUGINS PAGE (v3.1)
+ *
+*********************************************************************************************/
+function odb_settings_link($links)
+{ 
+  array_unshift($links, '<a href="options-general.php?page=rvg_odb_admin">Settings</a>'); 
+  return $links;
+} // gae_settings_link()
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'odb_settings_link' );
 
 
 /********************************************************************************************
@@ -72,6 +85,24 @@ function rvg_odb_admin_bar()
 }
 $rvg_odb_adminbar = get_option('rvg_odb_adminbar');
 if($rvg_odb_adminbar == "Y") add_action( 'wp_before_admin_bar_render', 'rvg_odb_admin_bar' );
+
+
+/********************************************************************************************
+ *
+ *	PUT CREDITS TO THE HEADER
+ *
+*********************************************************************************************/
+function rvg_odb_credits()
+{
+	global $odb_version;
+	
+	echo '
+<!-- Using "Optimize Database after Deleting Revisions" v'.$odb_version.' - http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin -->
+<!-- Download from: http://wordpress.org/plugins/rvg-optimize-database/ -->
+
+';
+}
+add_action('wp_head', 'rvg_odb_credits');
 
 
 /********************************************************************************************
@@ -114,10 +145,10 @@ function rvg_activate_plugin()
 
 /********************************************************************************************
 
-	CREATE THE OPTIONS PAGE
+	CREATE THE SETTINGS PAGE
 
 *********************************************************************************************/
-function rvg_odb_options_page()
+function rvg_odb_settings_page()
 {
 	global $odb_version, $odb_release_date, $wpdb, $table_prefix;
 
@@ -129,7 +160,7 @@ function rvg_odb_options_page()
 	if(isset($_REQUEST['delete_log']))
 		if($_REQUEST['delete_log'] == "Y") @unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
 	
-	// SAVE THE OPTIONS
+	// SAVE THE SETTINGS
  	if (isset($_POST['info_update']))
 	{
 		// v2.8.3
@@ -177,6 +208,12 @@ function rvg_odb_options_page()
 		if(isset($_POST['rvg_clear_transients']))
 			$rvg_clear_transients = $_POST['rvg_clear_transients'];
 		update_option('rvg_clear_transients', $rvg_clear_transients);
+
+		// v3.1
+		$rvg_clear_pingbacks = 'N';
+		if(isset($_POST['rvg_clear_pingbacks']))
+			$rvg_clear_pingbacks = $_POST['rvg_clear_pingbacks'];
+		update_option('rvg_clear_pingbacks', $rvg_clear_pingbacks);
 
 		$rvg_odb_adminbar = 'N';
 		if(isset($_POST['rvg_odb_adminbar']))
@@ -226,7 +263,7 @@ function rvg_odb_options_page()
 		
 		// UPDATED MESSAGE
 		echo "<div class='updated'><p><strong>".
-			__('Optimize Database after Deleting Revisions OPTIONS UPDATED','rvg-optimize-database').
+			__('Optimize Database after Deleting Revisions SETTINGS UPDATED','rvg-optimize-database').
 			"</strong> - ";
 		echo __('Click <a href="tools.php?page=rvg-optimize-db.php" style="font-weight:bold">HERE</a> to run the optimization','rvg-optimize-database');
 		echo "</p></div>";
@@ -246,6 +283,10 @@ function rvg_odb_options_page()
 
 	$rvg_clear_transients = get_option('rvg_clear_transients');
 	if(!$rvg_clear_transients) $rvg_clear_transients = 'N';
+
+	// v3.1
+	$rvg_clear_pingbacks = get_option('rvg_clear_pingbacks');
+	if(!$rvg_clear_pingbacks) $rvg_clear_pingbacks = 'N';
 	
 	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
 	if(!$rvg_odb_logging_on) $rvg_odb_logging_on = 'N';
@@ -288,13 +329,15 @@ function schedule_changed()
         <strong><a href="http://wordpress.org/extend/plugins/rvg-optimize-database/" target="_blank">http://wordpress.org/extend/plugins/rvg-optimize-database/</a></strong></p>
       <p>&nbsp;</p>
     </blockquote>
-    <h2><?php echo __('Optimize Database after Deleting Revisions - Options','rvg-optimize-database');?></h2>
+    <h2><?php echo __('Optimize Database after Deleting Revisions - Settings','rvg-optimize-database');?></h2>
     <?php
 if($rvg_odb_adminbar == 'Y')  $rvg_odb_adminbar_checked  = ' checked="checked"'; else $rvg_odb_adminbar_checked = '';	
 if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
 if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
 if($rvg_clear_tags == 'Y')  $rvg_clear_tags_checked  = ' checked="checked"'; else $rvg_clear_tags_checked = '';
 if($rvg_clear_transients == 'Y')  $rvg_clear_transients_checked  = ' checked="checked"'; else $rvg_clear_transients_checked = '';
+// v3.1
+if($rvg_clear_pingbacks == 'Y')  $rvg_clear_pingbacks_checked  = ' checked="checked"'; else $rvg_clear_pingbacks_checked = '';
 if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checked"'; else $rvg_odb_logging_on_checked = '';
 ?>
     <blockquote>
@@ -323,6 +366,10 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;"><?php echo __('Delete expired transients','rvg-optimize-database');?></span></td>
                   <td width="50%" valign="top"><input name="rvg_clear_transients" type="checkbox" value="Y" <?php echo $rvg_clear_transients_checked?> /></td>
                 </tr>
+                <tr>
+                  <td width="50%" align="right" valign="top"><span style="font-weight:bold;"><?php echo __('Delete pingbacks and trackbacks','rvg-optimize-database');?></span></td>
+                  <td width="50%" valign="top"><input name="rvg_clear_pingbacks" type="checkbox" value="Y" <?php echo $rvg_clear_pingbacks_checked?> /></td>
+                </tr>                
                 <tr>
                   <td width="50%" align="right" valign="top"><span style="font-weight:bold;"><?php echo __('Keep a log','rvg-optimize-database');?></span></td>
                   <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" <?php echo $rvg_odb_logging_on_checked?> /></td>
@@ -411,20 +458,20 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
       </fieldset>
     </blockquote>
     <p class="submit">
-      <input class="button-primary button-large" type='submit' name='info_update' value='<?php echo __('Save Options','rvg-optimize-database');?>' style="font-weight:bold;" />
+      <input class="button-primary button-large" type='submit' name='info_update' value='<?php echo __('Save Settings','rvg-optimize-database');?>' style="font-weight:bold;" />
       &nbsp;
       <input class="button" type="button" name="optimizer" value="<?php echo __('Go To Optimizer','rvg-optimize-database');?>" onclick="self.location='tools.php?page=rvg-optimize-db.php'" style="font-weight:normal;" />
     </p>
   </div>
 </form>
 <?php
-} // rvg_odb_options_page ()
+} // rvg_odb_settings_page ()
 
 
 /********************************************************************************************
 
 	MAIN FUNCTION
-	FOR DELETING REVISIONS, TRASH, SPAM, TAGS ORPHANS AND OPTIMIZING DATABASE TABLES
+	FOR DELETING UNWANTED ITEMS AND OPTIMIZING DATABASE TABLES
 
 *********************************************************************************************/
 function rvg_optimize_db()
@@ -440,11 +487,11 @@ function rvg_optimize_db()
 
 	/****************************************************************************************
 	
-		DELETE REVISIONS
+		DELETE UNWANTED ITEMS
 	
 	******************************************************************************************/
 	
-	// GET OPTIONS AND SET DEFAULT VALUES
+	// GET SETTINGS AND SET DEFAULT VALUES
 	$max_revisions = get_option('rvg_odb_number');
 	if(!$max_revisions)
 	{	$max_revisions = 0;
@@ -478,6 +525,14 @@ function rvg_optimize_db()
 		update_option('rvg_clear_transients', $clear_transients);
 	}
 	$clear_transients_yn = ($clear_transients == 'N') ? __('NO','rvg-optimize-database') : __('YES','rvg-optimize-database');
+
+	// v3.1
+	$clear_pingbacks = get_option('rvg_clear_pingbacks');
+	if(!$clear_pingbacks)
+	{	$clear_pingbacks = 'N';
+		update_option('rvg_clear_pingbacks', $clear_pingbacks);
+	}
+	$clear_pingbacks_yn = ($clear_pingbacks == 'N') ? __('NO','rvg-optimize-database') : __('YES','rvg-optimize-database');
 
 	$rvg_odb_logging_on = get_option('rvg_odb_logging_on');
 	if(!$rvg_odb_logging_on)
@@ -532,12 +587,13 @@ function rvg_optimize_db()
 			echo '<div class="updated" style="position:relative;left:-15px;"><p><strong>Optimize Database after Deleting Revisions - LOG FILE DELETED</strong></p></div>';
 ?>
   <p><span style="font-style:italic;"><a href="http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/" target="_blank" style="font-weight:bold;">Optimize Database after Deleting Revisions v<?php echo $odb_version?></a> - <?php echo __('A WordPress Plugin by','rvg-optimize-database');?> <a href="http://cagewebdev.com/" target="_blank" style="font-weight:bold;">CAGE Web Design</a> | <a href="http://rvg.cage.nl/" target="_blank" style="font-weight:bold;">Rolf van Gelder</a>, Eindhoven, <?php echo __('The Netherlands','rvg-optimize-database');?></span></p>
-  <p><?php echo __('Current options','rvg-optimize-database');?>:<br />
+  <p><?php echo __('Current settings','rvg-optimize-database');?>:<br />
     <strong><?php echo __('Maximum number of - most recent - revisions to keep per post / page','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $max_revisions?></span><br />
     <strong><?php echo __('Delete all trashed items','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_trash_yn?></span><br />
     <strong><?php echo __('Delete all spammed items','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_spam_yn?></span><br />
     <strong><?php echo __('Delete unused tags','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_tags_yn?></span><br />
     <strong><?php echo __('Delete expired transients','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_transients_yn?></span><br />
+    <strong><?php echo __('Delete pingbacks and trackbacks','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $clear_pingbacks_yn?></span><br />    
     <strong><?php echo __('Keep a log','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_logging_on_yn?></span><br />
     <strong><?php echo __('Number of excluded tables','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $number_excluded?></span><br />
     <strong><?php echo __('Scheduler','rvg-optimize-database');?>:</strong> <span style="font-weight:bold;color:#00F;"><?php echo $rvg_odb_schedule_txt?></span>
@@ -558,13 +614,13 @@ function rvg_optimize_db()
 	}
     ?>
   <p class="submit">
-    <input class="button" type="button" name="change_options" value="<?php echo __('Change Options','rvg-optimize-database');?>" onclick="self.location='options-general.php?page=rvg_odb_admin'" style="font-weight:normal;" />
+    <input class="button" type="button" name="change_options" value="<?php echo __('Change Settings','rvg-optimize-database');?>" onclick="self.location='options-general.php?page=rvg_odb_admin'" style="font-weight:normal;" />
     <?php
 	if(file_exists(dirname(__FILE__).'/rvg-optimize-db-log.html'))
 	{
 ?>
     &nbsp;
-    <input class="button" type="button" name="view_log" value="<?php echo __('View Log File','rvg-optimize-database');?>" onclick="window.open('<?php echo $log_url?>','log','width=800,height=800,scrollbars=1')" style="font-weight:normal;" />
+    <input class="button" type="button" name="view_log" value="<?php echo __('View Log File','rvg-optimize-database');?>" onclick="window.open('<?php echo $log_url?>')" style="font-weight:normal;" />    
     &nbsp;
     <input class="button" type="button" name="delete_log" value="<?php echo __('Delete Log File','rvg-optimize-database');?>" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=delete_log'" style="font-weight:normal;" />
     <?php	
@@ -811,6 +867,45 @@ function rvg_optimize_db()
 	
 	// NUMBER OF transients DELETED FOR LOG FILE
 	$log_arr["transients"] = $total_deleted;
+	
+	/****************************************************************************************
+	
+		DELETE PINGBACKS AND TRACKBACKS (v3.1)
+	
+	******************************************************************************************/
+	if($clear_pingbacks == 'Y')
+	{
+		// DELETE UNUSED TAGS
+		$total_deleted = rvg_delete_pingbacks();
+	
+		if($total_deleted>0)
+		{	// PINGBACKS / TRACKBACKS DELETED
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td><span style="font-weight:bold;color:#00F;"><?php echo __('NUMBER OF PINGBACKS AND TRACKBACKS DELETED','rvg-optimize-database');?>:</span> <span style="font-weight:bold;"><?php echo $total_deleted;?></span></td>
+  </tr>
+</table>
+<?php			
+		}
+		else
+		{
+?>
+<span style="font-weight:bold;color:#000;padding-left:8px;">~~~~~</span>
+<table border="0" cellspacing="8" cellpadding="2">
+  <tr>
+    <td style="font-weight:bold;color:#21759b;"><?php echo __('No PINGBACKS nor TRACKBACKS found to delete','rvg-optimize-database');?>...</td>
+  </tr>
+</table>
+<?php		
+		} // if(count($results)>0)
+		
+	} // if($clear_pingbacks == 'Y')
+	
+	// NUMBER OF pingbacks / trackbacks DELETED (FOR LOG FILE)
+	$log_arr["pingbacks"] = $total_deleted;	
+	
 
 	/****************************************************************************************
 	
@@ -919,7 +1014,7 @@ function rvg_optimize_db()
 	{
 ?>
 &nbsp;
-<input class="button" type="button" name="view_log" value="<?php echo __('View Log File','rvg-optimize-database');?>" onclick="window.open('<?php echo $log_url?>','log','width=800,height=800,scrollbars=1')" style="font-weight:normal;" />
+<input class="button" type="button" name="view_log" value="<?php echo __('View Log File','rvg-optimize-database');?>" onclick="window.open('<?php echo $log_url?>')" style="font-weight:normal;" />
 &nbsp;
 <input class="button" type="button" name="delete_log" value="<?php echo __('Delete Log File','rvg-optimize-database');?>" onclick="self.location='tools.php?page=rvg-optimize-db.php&action=delete_log'" style="font-weight:normal;" />
 <?php	
@@ -936,7 +1031,7 @@ function rvg_optimize_db_cron()
 {
 	global $wpdb, $odb_version, $table_prefix;
 
-	// GET OPTIONS AND SET DEFAULT VALUES
+	// GET SETTINGS AND SET DEFAULT VALUES
 	$max_revisions = get_option('rvg_odb_number');
 	if(!$max_revisions)
 	{	$max_revisions = 0;
@@ -966,6 +1061,13 @@ function rvg_optimize_db_cron()
 	{	$clear_transients = 'N';
 		update_option('rvg_clear_transients', $clear_transients);
 	}
+	
+	// v3.1
+	$clear_pingbacks = get_option('rvg_clear_pingbacks');
+	if(!$clear_pingbacks)
+	{	$clear_pingbacks = 'N';
+		update_option('rvg_clear_pingbacks', $clear_pingbacks);
+	}	
 	
 	// GET THE SIZE OF THE DATABASE BEFORE OPTIMIZATION
 	$start_size = rvg_get_db_size();
@@ -1023,12 +1125,20 @@ function rvg_optimize_db_cron()
 	$log_arr["tags"] = $total_deleted;
 
 	if($clear_transients == "Y")
-	{	// DELETE UNUSED TAGS
+	{	// DELETE TRANSIENTS
 		$total_deleted = rvg_delete_transients();
 	}
 	
 	// NUMBER OF DELETED TAGS FOR LOG FILE
 	$log_arr["transients"] = $total_deleted;
+
+	// PINGBACKS AND TRACKBACKS (v3.1)
+	if($clear_pingbacks == "Y")
+	{	// DELETE PINGBACKS AND TRACKBACKS
+		$total_deleted = rvg_delete_pingbacks();
+	}
+	// NUMBER OF DELETED PINGBACKS AND TRACKBACKS FOR LOG FILE
+	$log_arr["pingbacks"] = $total_deleted;
 		
 	// DELETE ORPHANS
 	$total_deleted = rvg_delete_orphans(false);
@@ -1325,6 +1435,51 @@ function rvg_delete_transients()
 
 /********************************************************************************************
 
+	DELETE PINGBACKS AND TRACKBACKS (v3.1)
+
+*********************************************************************************************/
+function rvg_delete_pingbacks()
+{
+	global $wpdb;
+	
+	$total_deleted = 0;
+	
+	$sql = "
+	SELECT `comment_ID`
+	FROM $wpdb->comments
+	WHERE (
+		`comment_type` = 'pingback'
+		OR `comment_type` = 'trackback'
+	)
+	";
+
+	$results = $wpdb -> get_results($sql);
+	$total_deleted = count($results);
+
+	for($i=0; $i<count($results); $i++)
+	{	// DELETE METADATA FOR THIS COMMENT (IF ANY)
+		$sql_delete_meta = "
+		DELETE FROM $wpdb->commentmeta
+		WHERE `comment_id` = ".$results[$i] -> comment_ID."
+		";
+		$wpdb -> get_results($sql_delete_meta);
+	}
+	
+	$sql_delete_comments = "
+	DELETE FROM $wpdb->comments
+	WHERE (
+		`comment_type` = 'pingback'
+		OR `comment_type` = 'trackback'
+	)	
+	";
+	$wpdb -> get_results($sql_delete_comments);
+
+	return $total_deleted;
+} // rvg_delete_pingbacks ()
+
+
+/********************************************************************************************
+
 	DELETE ORPHAN POSTMETA RECORDS
 
 *********************************************************************************************/
@@ -1493,17 +1648,18 @@ td {
 </div>
 <table width="100%" border="0" cellspacing="6" cellpadding="1">
   <tr>
-    <th width="9%" align="left" valign="top">'.__('time','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('deleted<br />revisions','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('deleted<br />trash','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('deleted<br />spam','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('deleted<br />tags','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('deleted<br />transients','rvg-optimize-database').'</th>	  
-    <th width="9%" align="right" valign="top">'.__('deleted<br />orphans','rvg-optimize-database').'</th>	  
-    <th width="9%" align="right" valign="top">'.__('nr of optimized tables','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('database size BEFORE','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('database size AFTER','rvg-optimize-database').'</th>
-    <th width="9%" align="right" valign="top">'.__('SAVINGS','rvg-optimize-database').'</th>
+    <th width="8%" align="left" valign="top">'.__('time','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('deleted<br />revisions','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('deleted<br />trash','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('deleted<br />spam','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('deleted<br />tags','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('deleted<br />transients','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('deleted<br />pingbacks<br />trackbacks','rvg-optimize-database').'</th>		  
+    <th width="8%" align="right" valign="top">'.__('deleted<br />orphans','rvg-optimize-database').'</th>	  
+    <th width="8%" align="right" valign="top">'.__('nr of optimized tables','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('database size BEFORE','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('database size AFTER','rvg-optimize-database').'</th>
+    <th width="8%" align="right" valign="top">'.__('SAVINGS','rvg-optimize-database').'</th>
   </tr>
 </table>
 			';
@@ -1515,17 +1671,18 @@ td {
 		$html = '
 <table width="100%" border="0" cellspacing="6" cellpadding="0">  
   <tr>
-    <td width="9%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
-    <td width="9%" align="right" valign="top">'.$log_arr["revisions"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["trash"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["spam"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["tags"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["transients"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["orphans"].'</td>	
-    <td width="9%" align="right" valign="top">'.$log_arr["tables"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["before"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["after"].'</td>
-    <td width="9%" align="right" valign="top">'.$log_arr["savings"].'</td>
+    <td width="8%" valign="top"><strong>'.$log_arr["time"].'</strong></td>
+    <td width="8%" align="right" valign="top">'.$log_arr["revisions"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["trash"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["spam"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["tags"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["transients"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["pingbacks"].'</td>	
+    <td width="8%" align="right" valign="top">'.$log_arr["orphans"].'</td>	
+    <td width="8%" align="right" valign="top">'.$log_arr["tables"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["before"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["after"].'</td>
+    <td width="8%" align="right" valign="top">'.$log_arr["savings"].'</td>
   </tr>
 </table>		
 		';
