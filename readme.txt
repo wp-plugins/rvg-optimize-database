@@ -3,13 +3,13 @@ Contributors: CAGE Web Design | Rolf van Gelder
 Donate link: http://cagewebdev.com
 Plugin Name: Optimize Database after Deleting Revisions
 Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin
-Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler, transients, unused tags
+Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, clean up, trash, spam, trashed, spammed, database size, scheduler, transients, unused tags, pingback, trackback
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.1
-Stable tag: 3.0
-Version: 3.0
+Stable tag: 3.1
+Version: 3.1
 License: GPLv2 or later
 
 == Description ==
@@ -21,19 +21,21 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Deletes trashed posts, pages and comments (optional)
 * Deletes spammed comments (optional)
 * Deletes unused tags (optional)
+* Deletes 'expired transients' (optional)
+* Deletes 'pingbacks' and 'trackbacks' (optional)
 * Deletes 'orphan postmeta items'
-* Deletes 'expired transients'
 * Optimizes the database tables (optionally you can exclude certain tables from optimization)
 * Creates a log file of the optimizations (optional)
 * Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly at a specific time (optional)
 * 'Optimize DB (1 click)' link in the admin bar (optional)
 
 = Settings =
-You can find the settings page in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
+You can find the settings page in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Settings.
 
 = Starting the Optimization =
-You can start the Optimization in the WP Admin Panel &raquo; Tools &raquo; Optimize Database.
-Note: if you use the Scheduler the Optimization will run automatically!
+You can start the Optimization in the WP Admin Panel &raquo; Tools &raquo; Optimize Database.<br />
+Note: if you use the Scheduler the Optimization will run automatically!<br />
+Note: you also can click the 'Optimize DB (1 click)' link in the admin bar (if enabled)
 
 = Supported languages =
 * English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
@@ -52,23 +54,21 @@ http://wordpress.org/plugins/rvg-optimize-database/
 = Disclaimer =
 NO WARRANTY, USE IT AT YOUR OWN RISK!
 
-= Plugins by Rolf van Gelder =
-<em>Optimize Database after Deleting Revisions</em><br />
-http://wordpress.org/plugins/rvg-optimize-database/<br />
-<em>Rocket Reader (Speed reader)</em><br />
-http://wordpress.org/plugins/rocket-reader-speed-reader/<br />
-<em>Order your Posts Manually</em><br />
-http://wordpress.org/plugins/order-your-posts-manually/<br />
-<em>Float to Top Button</em><br />
-http://wordpress.org/plugins/float-to-top-button/
+= Plugins by CAGE Web Design | Rolf van Gelder =
+WordPress plugins created by CAGE Web Design | Rolf van Gelder<br />
+http://cagewebdev.com/index.php/wordpress-plugins/
 
 == Installation ==
 
 * Upload the Plugin to the `/wp-content/plugins/` directory
 * Activate the plugin in the WP Admin Panel &raquo; Plugins
-* Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Options.
+* Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Settings.
 
 == Changelog ==
+
+= 3.1 [01/29/2015] =
+* NEW: deletion of pingbacks and trackbacks (optional)
+* CHANGE: link to settings page in the main plugins page
 
 = 3.0 [12/28/2014] =
 * BUG FIX: tags only used in scheduled posts won't be deleted anymore (thanks Michael!)
@@ -153,7 +153,7 @@ http://wordpress.org/plugins/float-to-top-button/
 = 2.2.6 [03/05/2013] =
 * Text change: 'logging on' changed to 'keep a log' (thanks to: Neil Parks)
 * NEW: number of orphans deleted now also shown in the log file
-* NEW: 'Go To Optimizer' button on options page (thanks to: RonDsy)
+* NEW: 'Go To Optimizer' button on settings page (thanks to: RonDsy)
 
 = 2.2.5 [02/20/2013] =
 * Bug fix: fixed an (innocent) PHP warning (in error.log)
@@ -210,10 +210,10 @@ http://wordpress.org/plugins/float-to-top-button/
 * Some textual and link fixes
 
 = 1.1.6 [09/01/2012] =
-* Fixed the link to the options page
+* Fixed the link to the settings page
 
 = 1.1.3 [09/01/2012] =
-* Moved the 'Optimize DB Options' item to Dashboard 'Settings' Menu and the 'Optimize Database' item to the Dashboard 'Tools' Menu. That makes more sense!
+* Moved the 'Optimize DB Settings' item to Dashboard 'Settings' Menu and the 'Optimize Database' item to the Dashboard 'Tools' Menu. That makes more sense!
 
 = 1.1.2 [08/30/2012] =
 * Minor bug fix for the new option page
@@ -242,7 +242,7 @@ http://wordpress.org/plugins/float-to-top-button/
 == Frequently Asked Questions ==
 
 = How can I change the settings of this plugin? =
-* WP Admin Panel &raquo; Settings &raquo; Optimize DB Options'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and some more options.
+* WP Admin Panel &raquo; Settings &raquo; Optimize DB Settings'. There you can define the maximum number of - most recent - revisions you want to keep per post or page and some more settings.
 
 = How do I run this plugin? =
 * WP Admin Panel &raquo; Tools &raquo; Optimize Database. Then click the 'Start Optimization'-button.
