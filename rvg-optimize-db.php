@@ -304,11 +304,8 @@ function schedule_changed()
     <h2><?php echo __('Using Optimize Database after Deleting Revisions', 'rvg-optimize-database'); ?></h2>
     <blockquote>
       <p class="odb-bold">'<span class="odb-italic">Optimize Database after Deleting Revisions</span> ' <?php echo __('is an one-click plugin to clean and optimize your WordPress database','rvg-optimize-database');?></p>
-      <p><?php echo __('To start the optimization:','rvg-optimize-database');?><br />
-        <?php echo __('<span class="odb-bold">WP Admin Panel</span> &raquo; <span class="odb-bold">Tools</span> &raquo; <span class="odb-bold">Optimize Database</span>. Then click the \'<span class="odb-bold">Start Optimization</span>\'-button. Et voila!','rvg-optimize-database');?><br />
-        <?php echo __('Note: if you use the Scheduler the Optimization will run automatically!','rvg-optimize-database');?>
       <p><?php echo __('Plugin version:','rvg-optimize-database');?><br />
-        <span class="odb-bold">v<?php echo $odb_version ?> (<?php echo $odb_release_date?>)</span> </p>
+        <span class="odb-bold">v<?php echo $odb_version ?> (<?php echo $odb_release_date?>)</span></p>
       <p><span class="odb-bold"><?php echo __('Author','rvg-optimize-database');?>:</span><br />
         <span class="odb-bold"><a href="http://cagewebdev.com/" target="_blank">CAGE Web Design</a> | <a href="http://rvg.cage.nl/" target="_blank">Rolf van Gelder</a></span>, Eindhoven, <?php echo __('The Netherlands','rvg-optimize-database');?><br />
         <span class="odb-bold"><?php echo __('Plugin URL:','rvg-optimize-database');?></class><br />
