@@ -35,7 +35,7 @@ add_action('init', 'rvg_odb_action_init');
 *********************************************************************************************/
 function rvg_add_menu_page()
 {
-	add_menu_page( __('Optimize Database','rvg-optimize-database'), __('Optimize Database','rvg-optimize-database'), 'administrator', 'rvg-optimize-db.php', 'rvg_optimize_db', plugins_url( 'rvg-optimize-database/assets/icon.png' ), 81 );
+	add_menu_page( __('Optimize Database','rvg-optimize-database'), __('Optimize Database','rvg-optimize-database'), 'administrator', 'rvg-optimize-db.php', 'rvg_optimize_db', plugins_url( 'rvg-optimize-database/images/icon.png' ), 81 );
 }
 add_action( 'admin_menu', 'rvg_add_menu_page' );
 
