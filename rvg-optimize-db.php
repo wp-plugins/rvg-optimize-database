@@ -1,9 +1,9 @@
 <?php
-$odb_version      = '3.1.1';
+$odb_version      = '3.1.2';
 $odb_release_date = '02/20/2015';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 3.1.1
+ * @version 3.1.2
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
@@ -11,7 +11,7 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Description: Optimizes the Wordpress Database after Cleaning it out
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Author URI: http://cagewebdev.com
-Version: 3.1.1
+Version: 3.1.2
 */
 
 /********************************************************************************************
@@ -38,6 +38,20 @@ function rvg_add_menu_page()
 	add_menu_page( __('Optimize Database','rvg-optimize-database'), __('Optimize Database','rvg-optimize-database'), 'administrator', 'rvg-optimize-db.php', 'rvg_optimize_db', plugins_url( 'rvg-optimize-database/images/icon.png' ), 81 );
 }
 add_action( 'admin_menu', 'rvg_add_menu_page' );
+
+
+/********************************************************************************************
+
+	ADD THE 'OPTIMIZE DB SETTINGS' ITEM TO THE SETTINGS MENU
+
+*********************************************************************************************/
+function rvg_odb_admin_menu()
+{	
+	if (function_exists('add_options_page'))
+	{	add_options_page(__('Optimize DB Settings'), __('Optimize DB Settings','rvg-optimize-database'), 'manage_options', 'rvg_odb_admin', 'rvg_odb_settings_page');
+    }
+}
+add_action( 'admin_menu', 'rvg_odb_admin_menu' );
 
 
 /********************************************************************************************

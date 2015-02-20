@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.1.1
-Stable tag: 3.1.1
-Version: 3.1.1
+Stable tag: 3.1.2
+Version: 3.1.2
 License: GPLv2 or later
 
 == Description ==
@@ -65,6 +65,9 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Settings.
 
 == Changelog ==
+= 3.1.2 [02/20/2015] =
+
+* BUG FIX: fixed the link to the settings page
 
 = 3.1.1 [02/20/2015] =
 * NEW: added plugin banners and icons
