@@ -1,9 +1,9 @@
 <?php
-$odb_version      = '3.1.2';
-$odb_release_date = '02/20/2015';
+$odb_version      = '3.1.3';
+$odb_release_date = '02/21/2015';
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 3.1.2
+ * @version 3.1.3
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
@@ -11,7 +11,7 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Description: Optimizes the Wordpress Database after Cleaning it out
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Author URI: http://cagewebdev.com
-Version: 3.1.2
+Version: 3.1.3
 */
 
 /********************************************************************************************
@@ -30,30 +30,84 @@ add_action('init', 'rvg_odb_action_init');
 
 /********************************************************************************************
 
-	ADD A LINK TO THE ADMIN MENU (v3.1.1)
+	ADD THE 'OPTIMIZE DATABASE' ITEM TO THE TOOLS MENU
 
 *********************************************************************************************/
-function rvg_add_menu_page()
-{
-	add_menu_page( __('Optimize Database','rvg-optimize-database'), __('Optimize Database','rvg-optimize-database'), 'administrator', 'rvg-optimize-db.php', 'rvg_optimize_db', plugins_url( 'rvg-optimize-database/images/icon.png' ), 81 );
+function optimize_db_main()
+{	if (function_exists('add_management_page'))
+	{	add_management_page(
+			__('Optimize Database','rvg-optimize-database'),
+			__('Optimize Database','rvg-optimize-database'),
+			'administrator',
+			'rvg-optimize-db.php',
+			'rvg_optimize_db');
+    }
 }
-add_action( 'admin_menu', 'rvg_add_menu_page' );
+if(get_option('rvg_odb_adminmenu') != "Y") add_action('admin_menu', 'optimize_db_main');
 
 
 /********************************************************************************************
 
-	ADD THE 'OPTIMIZE DB SETTINGS' ITEM TO THE SETTINGS MENU
+	'ICON MODE': ADD A LINK TO THE ADMIN MENU (v3.1.3)
+
+*********************************************************************************************/
+function rvg_add_menu_page()
+{
+	if (function_exists('add_menu_page'))
+	{
+		add_menu_page(
+			__('Optimize Database','rvg-optimize-database'),
+			__('Optimize Database','rvg-optimize-database'),
+			'administrator',
+			'rvg-optimize-db.php',
+			'rvg_optimize_db',
+			plugins_url('rvg-optimize-database/images/icon.png')
+		);
+	}
+}
+if(get_option('rvg_odb_adminmenu') == "Y") add_action('admin_menu', 'rvg_add_menu_page');
+
+
+/********************************************************************************************
+
+	ADD THE 'OPTIMIZE DB SETTINGS' ITEM TO THE SETTINGS MENU (v3.1.3)
 
 *********************************************************************************************/
 function rvg_odb_admin_menu()
 {	
 	if (function_exists('add_options_page'))
-	{	add_options_page(__('Optimize DB Settings'), __('Optimize DB Settings','rvg-optimize-database'), 'manage_options', 'rvg_odb_admin', 'rvg_odb_settings_page');
+	{	add_options_page(
+			__('Optimize Database', 'rvg-optimize-database'),
+			__('Optimize Database', 'rvg-optimize-database'),
+			'manage_options',
+			'rvg_odb_admin',
+			'rvg_odb_settings_page');
     }
 }
-add_action( 'admin_menu', 'rvg_odb_admin_menu' );
+if(get_option('rvg_odb_adminmenu') != "Y") add_action('admin_menu', 'rvg_odb_admin_menu');
 
 
+/********************************************************************************************
+
+	'ICON MODE': REGISTER OPTION PAGE BUT HIDE IT FROM THE ADMIN MENU (v3.1.3)
+
+*********************************************************************************************/
+function register_odb_options()
+{
+	if (function_exists('add_submenu_page'))
+	{	add_submenu_page(
+			null,	// HIDE FROM MENU!
+			__('Optimize Database', 'rvg-optimize-database'),
+			__('Optimize Database', 'rvg-optimize-database'),
+			'manage_options',
+			'rvg_odb_admin',
+			'rvg_odb_settings_page'
+		);
+	}
+}
+if(get_option('rvg_odb_adminmenu') == "Y") add_action('admin_menu', 'register_odb_options');
+
+ 
 /********************************************************************************************
  *
  *	SHOW A LINK TO THE PLUGIN SETTINGS ON THE MAIN PLUGINS PAGE (v3.1)
@@ -207,6 +261,12 @@ function rvg_odb_settings_page()
 		if(isset($_POST['rvg_odb_adminbar']))
 			$rvg_odb_adminbar = $_POST['rvg_odb_adminbar'];
 		update_option('rvg_odb_adminbar', $rvg_odb_adminbar);
+
+		// v3.1.3
+		$rvg_odb_adminmenu = 'N';
+		if(isset($_POST['rvg_odb_adminmenu']))
+			$rvg_odb_adminmenu = $_POST['rvg_odb_adminmenu'];
+		update_option('rvg_odb_adminmenu', $rvg_odb_adminmenu);
 		
 		$rvg_odb_logging_on = 'N';
 		if(isset($_POST['rvg_odb_logging_on']))
@@ -286,6 +346,9 @@ function rvg_odb_settings_page()
 	
 	$rvg_odb_adminbar = get_option('rvg_odb_adminbar');
 	if(!$rvg_odb_adminbar) $rvg_odb_adminbar = 'N';
+	
+	$rvg_odb_adminmenu = get_option('rvg_odb_adminmenu');
+	if(!$rvg_odb_adminmenu) $rvg_odb_adminmenu = 'N';	
 	?>
 <script type="text/javascript">
 function schedule_changed()
@@ -317,6 +380,7 @@ function schedule_changed()
     <h2><?php echo __('Optimize Database after Deleting Revisions - Settings','rvg-optimize-database');?></h2>
     <?php
 if($rvg_odb_adminbar == 'Y')  $rvg_odb_adminbar_checked  = ' checked="checked"'; else $rvg_odb_adminbar_checked = '';	
+if($rvg_odb_adminmenu == 'Y')  $rvg_odb_adminmenu_checked  = ' checked="checked"'; else $rvg_odb_adminmenu_checked = '';
 if($rvg_clear_trash == 'Y') $rvg_clear_trash_checked = ' checked="checked"'; else $rvg_clear_trash_checked = '';
 if($rvg_clear_spam == 'Y')  $rvg_clear_spam_checked  = ' checked="checked"'; else $rvg_clear_spam_checked = '';
 if($rvg_clear_tags == 'Y')  $rvg_clear_tags_checked  = ' checked="checked"'; else $rvg_clear_tags_checked = '';
@@ -392,6 +456,11 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
                 <tr>
                   <td align="right" valign="top"><span class="odb-bold"><?php echo __('Show \'1-click\' link in Admin Bar','rvg-optimize-database');?></span></td>
                   <td valign="top"><input name="rvg_odb_adminbar" type="checkbox" value="Y" <?php echo $rvg_odb_adminbar_checked?> />
+                    <?php echo __('(change will be visible after loading the next page)','rvg-optimize-database');?></td>
+                </tr>
+                <tr>
+                  <td align="right" valign="top"><span class="odb-bold"><?php echo __('Show an icon in the Admin Menu','rvg-optimize-database');?></span></td>
+                  <td valign="top"><input name="rvg_odb_adminmenu" type="checkbox" value="Y" <?php echo $rvg_odb_adminmenu_checked?> />
                     <?php echo __('(change will be visible after loading the next page)','rvg-optimize-database');?></td>
                 </tr>
               </table></td>
