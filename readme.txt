@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.1.1
-Stable tag: 3.1.2
-Version: 3.1.2
+Stable tag: 3.1.3
+Version: 3.1.3
 License: GPLv2 or later
 
 == Description ==
@@ -28,9 +28,10 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Creates a log file of the optimizations (optional)
 * Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly at a specific time (optional)
 * 'Optimize DB (1 click)' link in the admin bar (optional)
+* 'Optimize Database' Icon in the admin menu (optional)
 
 = Settings =
-You can find the settings page in the WP Admin Panel &raquo; Optimize Database.
+You can find the settings page in the WP Admin Panel &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 
 = Starting the Optimization =
 You can start the Optimization in the WP Admin Panel &raquo; Optimize Database.<br />
@@ -62,11 +63,13 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 
 * Upload the Plugin to the `/wp-content/plugins/` directory
 * Activate the plugin in the WP Admin Panel &raquo; Plugins
-* Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize DB Settings.
+* Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 
 == Changelog ==
-= 3.1.2 [02/20/2015] =
+= 3.1.3 [02/21/2015] =
+* NEW: showing the icon in the admin menu is now configurable via the settings page
 
+= 3.1.2 [02/20/2015] =
 * BUG FIX: fixed the link to the settings page
 
 = 3.1.1 [02/20/2015] =
@@ -252,10 +255,10 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 == Frequently Asked Questions ==
 
 = How can I change the settings of this plugin? =
-* WP Admin Panel &raquo; Optimize Database. Then click the 'Change Settings'-button. There you can define the maximum number of - most recent - revisions you want to keep per post or page and some more settings.
+* Change the settings in the WP Admin Panel &raquo; Settings &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 
 = How do I run this plugin? =
-* WP Admin Panel &raquo; Optimize Database. Then click the 'Start Optimization'-button.
+* WP Admin Panel &raquo; Optimize Database. Then click the 'Start Optimization'-button -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 * Click the 'Optimize DB (1 click)' link in the Admin Bar (if enabled)
 
 = Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database? =
