@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.1.1
-Stable tag: 3.1.3
-Version: 3.1.3
+Stable tag: 3.1.4
+Version: 3.1.4
 License: GPLv2 or later
 
 == Description ==
@@ -66,6 +66,12 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 
 == Changelog ==
+= 3.1.4 [02/28/2015] =
+* NEW: optimization timer
+* CHANGE: from now on InnoDB tables are skipped from optimization
+* CHANGE: various minor improvements
+* BUG FIX: removed strtolower while fetching database properties
+
 = 3.1.3 [02/21/2015] =
 * NEW: showing the icon in the admin menu is now configurable via the settings page
 
@@ -261,8 +267,8 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * WP Admin Panel &raquo; Optimize Database. Then click the 'Start Optimization'-button -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 * Click the 'Optimize DB (1 click)' link in the Admin Bar (if enabled)
 
-= Why do I see 'Table does not support optimize, doing recreate + analyze instead' while optimizing my database? =
-* That is because the table type of that table is not 'MyISAM'
+= Why do I see 'InnoDB table: skipped...'? =
+* That's because optimizing InnoDB tables is not really efficient, so change the table type to MyISAM to have them being optimized.
 
 = I scheduled the optimization for 8pm but it runs at 6pm (my local time) =
 * The scheduler uses the local time of the web server which can differ from your own local time
