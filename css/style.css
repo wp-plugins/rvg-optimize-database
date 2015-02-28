@@ -30,9 +30,12 @@
 	width: 100px;
 	height: 1px;
 	border-bottom: solid 1px #999;
-	margin-top: 16px;
-	margin-bottom: 14px;
+	margin-top: 7px;
+	margin-bottom: 7px;
 	margin-left: 10px;
+}
+.odb-optimizing-table {
+	margin-top: 16px;
 }
 .odb-underline-red {
 	text-decoration: underline;
