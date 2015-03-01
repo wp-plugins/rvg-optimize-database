@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Optimize Database after Deleting Revisions v2.8.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-01 14:42+0100\n"
-"PO-Revision-Date: 2015-03-01 14:42+0100\n"
-"Last-Translator: Rolf van Gelder <info@cagewebdev.com>\n"
+"POT-Creation-Date: 2015-03-01 15:05+0100\n"
+"PO-Revision-Date: 2015-03-01 16:22+0100\n"
+"Last-Translator: Fabio Marzocca <marzoccafabio@gmail.com>\n"
 "Language-Team: CAGE <info@cagewebdev.com>\n"
-"Language: sr_RS\n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.4\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
@@ -25,17 +25,17 @@ msgstr ""
 #: rvg-optimize-db.php:60 rvg-optimize-db.php:80 rvg-optimize-db.php:81
 #: rvg-optimize-db.php:100 rvg-optimize-db.php:101
 msgid "Optimize Database"
-msgstr "Optimize Database"
+msgstr "Ottimizza il Database"
 
 # @ optimize_db
 #: rvg-optimize-db.php:136
 msgid "Optimize DB (1 click)"
-msgstr "Optimizuj bazu podataka (1 klik)"
+msgstr "Ottimizza il DB (con 1 click)"
 
 # @ default
 #: rvg-optimize-db.php:165
 msgid "Once Weekly"
-msgstr "Jednom nedeljno"
+msgstr "Una volta a settimana"
 
 # @ default
 #: rvg-optimize-db.php:201
@@ -45,124 +45,126 @@ msgstr "YmdGis"
 
 #: rvg-optimize-db.php:318
 msgid "Optimize Database after Deleting Revisions SETTINGS UPDATED"
-msgstr ""
+msgstr "Optimize Database after Deleting Revisions IMPOSTAZIONI AGGIORNATE"
 
 #: rvg-optimize-db.php:320
 msgid ""
 "Click <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold"
 "\">HERE</a> to run the optimization"
 msgstr ""
+"Clicca <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold"
+"\">QUI</a> per eseguire l'ottimizzazione"
 
 #: rvg-optimize-db.php:372
 msgid "Using Optimize Database after Deleting Revisions"
-msgstr "Upotreba Optimize Database after Deleting Revisions"
+msgstr "Utilizzando Ottimizza il database dopo l'eliminazione Revisioni"
 
 #: rvg-optimize-db.php:374
 msgid "is an one-click plugin to clean and optimize your WordPress database"
 msgstr ""
-"je plugin na 1 klik koji čisti i unapređuje vašu WordPress bazu podataka"
+"è un plugin per pulire e ottimizzare il vostro database Wordpress con un "
+"click"
 
 #: rvg-optimize-db.php:375
 msgid "Plugin version:"
-msgstr "Plugin verzija:"
+msgstr "Versione Plugin:"
 
 #: rvg-optimize-db.php:377
 msgid "Author"
-msgstr "Autor"
+msgstr "Autore"
 
-#: rvg-optimize-db.php:378 rvg-optimize-db.php:656 rvg-optimize-db.php:1735
+#: rvg-optimize-db.php:378 rvg-optimize-db.php:656 rvg-optimize-db.php:1736
 msgid "The Netherlands"
-msgstr "Holandija"
+msgstr "Paesi Bassi"
 
 #: rvg-optimize-db.php:379
 msgid "Plugin URL:"
-msgstr "URL Plugin-a:"
+msgstr "URL del plugin:"
 
 #: rvg-optimize-db.php:381
 msgid "Download URL:"
-msgstr "Download URL:"
+msgstr "URL per scaricare:"
 
 #: rvg-optimize-db.php:385
 msgid "Optimize Database after Deleting Revisions - Settings"
-msgstr ""
+msgstr "Optimize Database after Deleting Revisions - Impostazioni"
 
 #: rvg-optimize-db.php:403 rvg-optimize-db.php:658
 msgid "Maximum number of - most recent - revisions to keep per post / page"
 msgstr ""
-"Najveći broj - najskorijih - revizija koje treba održavati za svaki post/"
-"stranicu"
+"Massimo numero di revisioni recenti da mantenere per ogni articolo / pagina"
 
 #: rvg-optimize-db.php:404
 msgid "('0' means: delete <u>ALL</u> revisions)"
-msgstr "('0' znači: obriši <u>SVE</u> revizije)"
+msgstr "('0' significa: cancella <u>TUTTE</u> le revisioni)"
 
 #: rvg-optimize-db.php:408 rvg-optimize-db.php:659
 msgid "Delete all trashed items"
-msgstr "Obriši sve stavke u korpi za otpatke"
+msgstr "Cancella il cestino"
 
 #: rvg-optimize-db.php:412 rvg-optimize-db.php:660
 msgid "Delete all spammed items"
-msgstr "Obriši sve spam stavke"
+msgstr "Cancella tutti gli elementi di spam"
 
 #: rvg-optimize-db.php:416 rvg-optimize-db.php:661
 msgid "Delete unused tags"
-msgstr "Obriši neiskorišćene oznake"
+msgstr "Cancella tags non usati"
 
 #: rvg-optimize-db.php:420 rvg-optimize-db.php:662
 msgid "Delete expired transients"
-msgstr "Obriši sve prolazne stavke koje su istekle"
+msgstr "Cancella transienti scaduti"
 
 #: rvg-optimize-db.php:424 rvg-optimize-db.php:663
 msgid "Delete pingbacks and trackbacks"
-msgstr ""
+msgstr "Cancella pingbacks e trackbacks"
 
 #: rvg-optimize-db.php:428 rvg-optimize-db.php:664
 msgid "Keep a log"
-msgstr "Vodi dnevnik"
+msgstr "Mantieni un log"
 
 #: rvg-optimize-db.php:432 rvg-optimize-db.php:666
 msgid "Scheduler"
-msgstr "Planer"
+msgstr "Pianificatore"
 
 #: rvg-optimize-db.php:434 rvg-optimize-db.php:630
 msgid "NOT SCHEDULED"
-msgstr "NIJE PLANIRANO"
+msgstr "NON PIANIFICATO"
 
 #: rvg-optimize-db.php:435
 msgid "run optimization HOURLY"
-msgstr "pokreni optimizaciju NA SVAKI SAT"
+msgstr "esegui l'ottimizzazione OGNI ORA"
 
 #: rvg-optimize-db.php:436
 msgid "run optimization TWICE A DAY"
-msgstr "pokreni optimizaciju DVA PUTA DNEVNO"
+msgstr "esegui l'ottimizzazione DUE VOLTE AL GIORNO"
 
 #: rvg-optimize-db.php:437
 msgid "run optimization DAILY"
-msgstr "pokreni optimizaciju JEDNOM DNEVNO"
+msgstr "esegui l'ottimizzazione UNA VOLTA AL GIORNO"
 
 #: rvg-optimize-db.php:438
 msgid "run optimization WEEKLY"
-msgstr "pokreni optimizaciju JEDNOM NEDELJNO"
+msgstr "esegui l'ottimizzazione UNA VOLTA A SETTIMANA"
 
 #: rvg-optimize-db.php:444
 msgid "Time"
-msgstr "Vreme"
+msgstr "Ora"
 
 #: rvg-optimize-db.php:450
 msgid "hrs"
-msgstr "Sat"
+msgstr "ore"
 
 #: rvg-optimize-db.php:462
 msgid "Show '1-click' link in Admin Bar"
-msgstr "Prikaži ‘1-klik’ link u traci za meni administratora"
+msgstr "Mostra il link '1-click' nella Barra di amministrazione"
 
 #: rvg-optimize-db.php:464 rvg-optimize-db.php:469
 msgid "(change will be visible after loading the next page)"
-msgstr "(promena će biti vidljiva nakon učitavanja sledeće stranice)"
+msgstr "(la modifica sarà visibile dopo il caricamento della prossima pagina)"
 
 #: rvg-optimize-db.php:467
 msgid "Show an icon in the Admin Menu"
-msgstr ""
+msgstr "Mostra un'icona nel Menu Amministratore"
 
 #: rvg-optimize-db.php:481
 msgid ""
@@ -170,26 +172,29 @@ msgid ""
 "\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</span> BE "
 "OPTIMIZED!</span>"
 msgstr ""
+"ESCLUDI TABELLE DALL'OTTIMIZZAZIONE: <span class=\"odb-underline-red\">LE "
+"TABELLE SELEZIONATE</span><span class=\"odb-underline-red\">NON</span> "
+"SARANNO OTTIMIZZATE!</span>"
 
 #: rvg-optimize-db.php:482
 msgid "check all tables"
-msgstr "štikliraj sve tabele"
+msgstr "seleziona tutte le tabelle"
 
 #: rvg-optimize-db.php:482
 msgid "uncheck all tables"
-msgstr "poništi štikliranje svih tabela"
+msgstr "deseleziona tutte le tabelle"
 
 #: rvg-optimize-db.php:482
 msgid "check all NON-WordPress tables"
-msgstr "štikliraj sve tabele koje NISU WordPress "
+msgstr "seleziona tutte le tabelle NON-WordPress"
 
 #: rvg-optimize-db.php:520
 msgid "Save Settings"
-msgstr ""
+msgstr "Salva le impostazioni"
 
 #: rvg-optimize-db.php:522
 msgid "Go To Optimizer"
-msgstr "Pokreni optimizator"
+msgstr "Vai all'ottimizzatore"
 
 # @ default
 #: rvg-optimize-db.php:548
@@ -200,330 +205,348 @@ msgstr "G:i"
 #: rvg-optimize-db.php:573 rvg-optimize-db.php:580 rvg-optimize-db.php:587
 #: rvg-optimize-db.php:594 rvg-optimize-db.php:602 rvg-optimize-db.php:609
 msgid "NO"
-msgstr "NE"
+msgstr "NO"
 
 #: rvg-optimize-db.php:573 rvg-optimize-db.php:580 rvg-optimize-db.php:587
 #: rvg-optimize-db.php:594 rvg-optimize-db.php:602 rvg-optimize-db.php:609
 msgid "YES"
-msgstr "DA"
+msgstr "SI"
 
 #: rvg-optimize-db.php:618
 msgid "ONCE HOURLY"
-msgstr "SVAKOG SATA"
+msgstr "UNA VOLTA L'ORA"
 
 #: rvg-optimize-db.php:620
 msgid "TWICE DAILY"
-msgstr "DVA PUTA DNEVNO"
+msgstr "DUE VOLTE AL GIORNO"
 
 #: rvg-optimize-db.php:622
 msgid "ONCE DAILY"
-msgstr "JEDNOM DNEVNO"
+msgstr "UNA VOLTA AL GIORNO"
 
 #: rvg-optimize-db.php:624
 msgid "ONCE WEEKLY"
-msgstr "JEDNOM NEDELJNO"
+msgstr "UNA VOLTA A SETTIMANA"
 
 # @ rvg-optimize-database
 #: rvg-optimize-db.php:650
 msgid "Optimize your WordPress Database"
-msgstr "Optimizujte svoju WordPress bazu podataka"
+msgstr "Ottimizza il tuo Database WordPress"
 
-#: rvg-optimize-db.php:656 rvg-optimize-db.php:1735
+#: rvg-optimize-db.php:656 rvg-optimize-db.php:1736
 msgid "A WordPress Plugin by"
-msgstr "WordPress Plugin kreirao:"
+msgstr "Un Plugin Wordpress di"
 
 #: rvg-optimize-db.php:657
 msgid "Current settings"
-msgstr ""
+msgstr "Impostazioni correnti"
 
 #: rvg-optimize-db.php:665
 msgid "Number of excluded tables"
-msgstr "Broj isključenih tabela"
+msgstr "Numero di tabelle escluse"
 
 #: rvg-optimize-db.php:672
 msgid "Next scheduled run"
-msgstr "Sledeća planirana optimizacija"
+msgstr "Prossima esecuzione pianficata"
 
 #: rvg-optimize-db.php:679
 msgid "Total savings since the first run"
-msgstr "Ukupno sačuvanih od prvog pokretanja "
+msgstr "Risparmio totale dalla prima esecuzione"
 
 #: rvg-optimize-db.php:684
 msgid "Change Settings"
-msgstr ""
+msgstr "Modifica le impostazioni"
 
 #: rvg-optimize-db.php:690 rvg-optimize-db.php:1093
 msgid "View Log File"
-msgstr "Pregledaj datoteku dnevnika"
+msgstr "Vedi il file di blog"
 
 #: rvg-optimize-db.php:692 rvg-optimize-db.php:1095
 msgid "Delete Log File"
-msgstr "Obriši datoteku dnevnika"
+msgstr "Cancella il log"
 
 #: rvg-optimize-db.php:701
 msgid "Start Optimization"
-msgstr "Pokreni optimizaciju"
+msgstr "Inizia l'ottimizzazione"
 
 #: rvg-optimize-db.php:712
 msgid "Starting Optimization"
-msgstr "Optimizacija počinje"
+msgstr "Inizio ottimizzazione"
 
 # @ default
 #: rvg-optimize-db.php:718
 msgctxt "timezone date format"
 msgid "m/d/YH:i:s"
-msgstr "m/d/YH:i:s"
+msgstr "d/m/YH:i:s"
 
 #: rvg-optimize-db.php:731
 msgid "DELETING REVISIONS"
-msgstr "BRISANJE REVIZIJA"
+msgstr "CANCELLO LE REVISIONI"
 
 #: rvg-optimize-db.php:735
 msgid "post / page"
-msgstr "post/stranica"
+msgstr "articolo / pagina"
 
 #: rvg-optimize-db.php:736
 msgid "revision date"
-msgstr "datum revizije"
+msgstr "data di revisione"
 
 #: rvg-optimize-db.php:737
 msgid "revisions deleted"
-msgstr "revizija obrisana"
+msgstr "revisioni cancellate"
 
 #: rvg-optimize-db.php:744
 msgid "total number of revisions deleted"
-msgstr "ukupan broj obrisanih revizija"
+msgstr "numero totale di revisioni cancellate"
 
 #: rvg-optimize-db.php:755
 msgid "No REVISIONS found to delete"
-msgstr "NISU PRONAĐENE REVIZIJE za brisanje"
+msgstr "Nessuna REVISIONE trovata da cancellare"
 
 #: rvg-optimize-db.php:781
 msgid "DELETING TRASHED ITEMS"
-msgstr "BRISANJE STAVKI U KORPI ZA OTPATKE"
+msgstr "CANCELLAZIONE DEL CESTINO"
 
 #: rvg-optimize-db.php:785
 msgid "type"
-msgstr "tip"
+msgstr "tipo"
 
 #: rvg-optimize-db.php:786
 msgid "IP address / title"
-msgstr "IP adresa/naslov"
+msgstr "indirizzo IP / titolo"
 
 #: rvg-optimize-db.php:787
 msgid "date"
-msgstr "datum"
+msgstr "data"
 
 #: rvg-optimize-db.php:802
 msgid "No TRASHED ITEMS found to delete"
-msgstr "NISU PRONAĐENE STAVKE za brisanje u korpi za otpatke "
+msgstr "Nessun elemento trovato nel CESTINO"
 
 #: rvg-optimize-db.php:830
 msgid "DELETING SPAMMED ITEMS"
-msgstr "BRISANJE SPAM STAVKI"
+msgstr "CANCELLO ELEMENTI DI SPAM"
 
 #: rvg-optimize-db.php:834
 msgid "comment author"
-msgstr "komentarišite autora"
+msgstr "autore del commenti"
 
 #: rvg-optimize-db.php:835
 msgid "comment author email"
-msgstr "komentarišite email autora"
+msgstr "email dell'autore del commento"
 
 #: rvg-optimize-db.php:836
 msgid "comment date"
-msgstr "komentarišite datum"
+msgstr "data del commento"
 
 #: rvg-optimize-db.php:851
 msgid "No SPAMMED ITEMS found to delete"
-msgstr "NISU PRONAĐENE SPAM STAVKE za brisanje"
+msgstr "Nessun elemento trovato nello SPAM"
 
 #: rvg-optimize-db.php:878
 msgid "NUMBER OF UNUSED TAGS DELETED"
-msgstr "BROJ NEUPOTREBLJENIH OBRISANIH OZNAKA"
+msgstr "NUMERO DI TAG NON USATI CANCELLATI"
 
 #: rvg-optimize-db.php:889
 msgid "No UNUSED TAGS found to delete"
-msgstr "NISU PRONAĐENE NEUPOTREBLJENE OZNAKE za brisanje"
+msgstr "Nessun TAG NON USATO trovato da cancellare"
 
 #: rvg-optimize-db.php:916
 msgid "NUMBER OF EXPIRED TRANSIENTS DELETED"
-msgstr "BROJ OBRISANIH, ISTEKLIH PROLAZNIH STAVKI "
+msgstr "NUMERO DI TRANSIENTI SCADUTI CANCELLATI"
 
 #: rvg-optimize-db.php:927
 msgid "No EXPIRED TRANSIENTS found to delete"
-msgstr "Nisu pronađene istekle, prolazne stavke za brisanje "
+msgstr "Nessun TRANSIENTE SCADUTO trovato da cancellare"
 
 #: rvg-optimize-db.php:954
 msgid "NUMBER OF PINGBACKS AND TRACKBACKS DELETED"
-msgstr ""
+msgstr "NUMERO DI PINGBACKS e TRACKBACKS CANCELLATI"
 
 #: rvg-optimize-db.php:965
 msgid "No PINGBACKS nor TRACKBACKS found to delete"
-msgstr ""
+msgstr "Nessun PINGBACK o TRACKBACK da cancellare"
 
 #: rvg-optimize-db.php:989
 msgid "NUMBER OF POSTMETA ORPHANS DELETED"
-msgstr "BROJ OBRISANIH POSTMETA SIROČIĆA "
+msgstr "NUMERO DI POSTMETA ORFANI CANCELLATI"
 
 #: rvg-optimize-db.php:1000
 msgid "No POSTMETA ORPHANS found to delete"
-msgstr "Nisu pronađeni postmeta siročići za brisanje"
+msgstr "Nessun POSTMETA ORFANO trovato da cancellare"
 
 #: rvg-optimize-db.php:1018
 msgid "OPTIMIZING DATABASE TABLES"
-msgstr "Optimizovanje tabela baze podataka"
+msgstr "OTTIMIZZAZIONE TABELLE DATABASE"
 
 #: rvg-optimize-db.php:1022
 msgid "table name"
-msgstr "naziv tabele"
+msgstr "nome tabella"
 
 #: rvg-optimize-db.php:1023
 msgid "optimization result"
-msgstr "rezultat optimizacije"
+msgstr "risultato ottimizzazione"
 
 #: rvg-optimize-db.php:1024
 msgid "engine"
-msgstr "sredstvo"
+msgstr "motore"
 
 #: rvg-optimize-db.php:1025
 msgid "table rows"
-msgstr "redovi tabele"
+msgstr "righe tabella"
 
 #: rvg-optimize-db.php:1026
 msgid "table size"
-msgstr "veličina tabele"
+msgstr "dimensione tabella"
 
-#: rvg-optimize-db.php:1051 rvg-optimize-db.php:1750
+#: rvg-optimize-db.php:1051 rvg-optimize-db.php:1751
 msgid "SAVINGS"
-msgstr "SAČUVANO"
+msgstr "RISPARMI"
 
 #: rvg-optimize-db.php:1055
 msgid "size of the database"
-msgstr "veličina baze podataka"
+msgstr "dimensione del database"
 
 #: rvg-optimize-db.php:1058
 msgid "BEFORE optimization"
-msgstr "PRE optimizacije"
+msgstr "PRIMA dell'ottimizzazione"
 
 #: rvg-optimize-db.php:1062
 msgid "AFTER optimization"
-msgstr "POSLE optimizacije"
+msgstr "DOPO l'ottimizzazione"
 
 #: rvg-optimize-db.php:1066
 msgid "SAVINGS THIS TIME"
-msgstr "KOLIKO JE SAČUVANO STAVKI OVOG PUTA"
+msgstr "RISPARMI DI QUESTA ESECUZIONE"
 
 #: rvg-optimize-db.php:1070
 msgid "TOTAL SAVINGS SINCE THE FIRST RUN"
-msgstr "UKUPNO SAČUVANIH STAVKI OD PRVOG POKRETANJA"
+msgstr "RISPARMI TOTALI DALLA PRIMA ESECUZIONE"
 
 #: rvg-optimize-db.php:1083
 msgid "DONE"
-msgstr "URAĐENO"
+msgstr "ESEGUITO"
+
+# Optimization took xxx seconds
+#: rvg-optimize-db.php:1085
+msgid "Optimization took"
+msgstr "L'ottimizzazione ha impiegato"
+
+# Optimization took xxx seconds
+#: rvg-optimize-db.php:1085
+msgid "seconds"
+msgstr "secondi"
 
 #: rvg-optimize-db.php:1654
 msgid "InnoDB table: skipped..."
-msgstr ""
+msgstr "Tabella InnoDB: saltata"
 
 #: rvg-optimize-db.php:1660
-msgid "TABLE OPTIMIZED!"
-msgstr ""
+msgid "TABLE OPTIMIZED"
+msgstr "TABELLA OTTIMIZZATA"
 
-#: rvg-optimize-db.php:1739
-msgid "time"
-msgstr "vreme"
+#: rvg-optimize-db.php:1661
+msgid "Table is already up to date"
+msgstr "La tabella è già aggiornata"
 
 #: rvg-optimize-db.php:1740
-msgid "deleted<br />revisions"
-msgstr "obrisane <br />revizije"
+msgid "time"
+msgstr "tempo"
 
 #: rvg-optimize-db.php:1741
-msgid "deleted<br />trash"
-msgstr "obrisano <br /> iz korpe za otpatke "
+msgid "deleted<br />revisions"
+msgstr "revisioni<br />cancellate"
 
 #: rvg-optimize-db.php:1742
-msgid "deleted<br />spam"
-msgstr "obrisani <br />spam"
+msgid "deleted<br />trash"
+msgstr "cestino<br/>cancellato"
 
 #: rvg-optimize-db.php:1743
-msgid "deleted<br />tags"
-msgstr "obrisane <br /> oznake"
+msgid "deleted<br />spam"
+msgstr "spam<br />cancellato"
 
 #: rvg-optimize-db.php:1744
-msgid "deleted<br />transients"
-msgstr "obrisane <br /> prolazne stavke"
+msgid "deleted<br />tags"
+msgstr "tags<br />cancellati"
 
 #: rvg-optimize-db.php:1745
-msgid "deleted<br />pingbacks<br />trackbacks"
-msgstr ""
+msgid "deleted<br />transients"
+msgstr "transienti<br />cancellati"
 
 #: rvg-optimize-db.php:1746
+msgid "deleted<br />pingbacks<br />trackbacks"
+msgstr "pingback<br />trackbacks<br />cancellati"
+
+#: rvg-optimize-db.php:1747
 msgid "deleted<br />orphans"
-msgstr "obrisani <br /> siročići"
+msgstr "orfani<br />cancellati"
 
 # @ rvg-optimize-database
-#: rvg-optimize-db.php:1747
-msgid "nr of optimized tables"
-msgstr "broj optimizovanih tabela"
-
 #: rvg-optimize-db.php:1748
-msgid "database size BEFORE"
-msgstr "baza podataka PRE"
+msgid "nr of optimized tables"
+msgstr "numero di tabelle ottimizzate"
 
 #: rvg-optimize-db.php:1749
+msgid "database size BEFORE"
+msgstr "dimensione del database PRIMA"
+
+#: rvg-optimize-db.php:1750
 msgid "database size AFTER"
-msgstr "baza podataka POSLE"
+msgstr "dimensione del database DOPO"
 
 # @ default
 #~ msgid "Optimize DB Options"
-#~ msgstr "Optimize DB opcije"
+#~ msgstr "Opzioni di ottimizzazione del DB"
 
 #~ msgid "Optimize Database after Deleting Revisions OPTIONS UPDATED"
-#~ msgstr "Optimize Database after Deleting Revisions OPCIJE AŽURIRANE"
+#~ msgstr "Optimize Database after Deleting Revisions OPZIONI AGGIORNATE"
 
 #~ msgid ""
 #~ "Click <a href=\"tools.php?page=rvg-optimize-db.php\" style=\"font-weight:"
 #~ "bold\">HERE</a> to run the optimization"
 #~ msgstr ""
-#~ "Kliknite <a href=\"tools.php?page=rvg-optimize-db.php\" style=\"font-"
-#~ "weight:bold\">OVDE</a> da biste pokrenuli optimizaciju "
+#~ "Clicca <a href=\"tools.php?page=rvg-optimize-db.php\" style=\"font-weight:"
+#~ "bold\">QUI</a> per iniziare l'ottimizzazione"
 
 #~ msgid "To start the optimization:"
-#~ msgstr "Da biste započeli optimizaciju:"
+#~ msgstr "Per iniziare l'ottimizzazione:"
 
 #~ msgid ""
 #~ "<strong>WP Admin Panel</strong> &raquo; <strong>Tools</strong> &raquo; "
 #~ "<strong>Optimize Database</strong>. Then click the '<strong>Start "
 #~ "Optimization</strong>'-button. Et voila!"
 #~ msgstr ""
-#~ "<strong>WP Admin Panel</strong> &raquo; <strong>Alati</strong> &raquo; "
-#~ "<strong>Optimizuj bazu podataka</strong>. Zatim kliknite na<strong>Počni "
-#~ "optimizaciju</strong>'-taster. To je to!"
+#~ "<strong>Pannello amministrazione WP</strong> &raquo; <strong>Strumenti</"
+#~ "strong> &raquo; <strong>Ottimizza il database</strong>. Poi clicca il "
+#~ "bottone '<strong>Inizia ottimizzazione</strong>'. Et voila!"
 
 #~ msgid ""
 #~ "Note: if you use the Scheduler the Optimization will run automatically!"
 #~ msgstr ""
-#~ "Napomena: ako koristite planer, optimizacija će se pokrenuti automatski"
+#~ "Nota: se usi la Pianificazione, l'ottimizzazione verrà eseguita "
+#~ "automaticamente!"
 
 #~ msgid "Optimize Database after Deleting Revisions - Options"
-#~ msgstr "Optimize Database after Deleting Revisions - Opcije"
+#~ msgstr "Ottimizza il database dopo l'eliminazione delle revisioni - Opzioni"
 
 #~ msgid ""
 #~ "EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span style=\"text-decoration:"
 #~ "underline;color:#F00;\">CHECKED</span> TABLES <span style=\"text-"
 #~ "decoration:underline;color:#F00;\">WON'T</span> BE OPTIMIZED!</span>"
 #~ msgstr ""
-#~ "ISKLJUČI TABELE BAZE PODATAKA IZ OPTIMIZACIJE: <span style=\"text-"
-#~ "decoration:underline;color:#F00;\">CHECKED</span> TABLES <span style="
-#~ "\"text-decoration:underline;color:#F00;\">WON'T</span> BE OPTIMIZED!</"
-#~ "span>"
+#~ "ESCLUDI TABELLE DALL'OTTIMIZZAZIONE: <span style=\"text-decoration:"
+#~ "underline;color:#F00;\">LE TABELLE SELEZIONATE</span><span style=\"text-"
+#~ "decoration:underline;color:#F00;\">NON</span> SARANNO OTTIMIZZATE!</span>"
 
 #~ msgid "Save Options"
-#~ msgstr "Sačuvaj opcije"
+#~ msgstr "Salva le opzioni"
 
 #~ msgid "Current options"
-#~ msgstr "Trenutne opcije"
+#~ msgstr "Attuali opzioni"
 
 #~ msgid "Change Options"
-#~ msgstr "Promeni opcije"
+#~ msgstr "Modifica le opzioni"
+
+# @ rvg-optimize-database
+#~ msgid "Hello world!"
+#~ msgstr "CIAO!"
