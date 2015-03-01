@@ -1,6 +1,6 @@
 <?php
 $odb_version      = '3.1.4';
-$odb_release_date = '02/28/2015';
+$odb_release_date = '03/01/2015';
 /**
  * @package Optimize Database after Deleting Revisions
  * @version 3.1.4
@@ -1082,7 +1082,7 @@ $total_time = round(($finish - $odb_start_time), 4);
 ?>
 <span class="odb-bold odb-blue odb-padding-left"><?php echo __('DONE','rvg-optimize-database');?>!</span><br />
 <br />
-<span class="odb-padding-left"><?php echo 'Optimization took <strong>'.$total_time.'</strong> seconds.'?></span>
+<span class="odb-padding-left"><?php echo __('Optimization took', 'rvg-optimize-database').' <strong>'.$total_time.'</strong> '.__('seconds', 'rvg-optimize-database').'.'?></span>
 <?php
 	if(file_exists(dirname(__FILE__).'/rvg-optimize-db-log.html'))
 	{
@@ -1657,7 +1657,8 @@ function rvg_optimize_tables($display)
 			{	$query  = "OPTIMIZE TABLE ".$tables[$i][0];
 				$result = $wpdb->get_results($query);
 				$msg    = $result[0]->Msg_text;
-				$msg = str_replace('OK', __('TABLE OPTIMIZED!', 'rvg-optimize-database'), $msg);
+				$msg = str_replace('OK', __('TABLE OPTIMIZED', 'rvg-optimize-database'), $msg);
+				$msg = str_replace('Table is already up to date', __('Table is already up to date', 'rvg-optimize-database'), $msg);
 			}
 			
 			if($display)

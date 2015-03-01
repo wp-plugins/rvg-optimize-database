@@ -42,6 +42,7 @@ Note: you also can click the 'Optimize DB (1 click)' link in the admin bar (if e
 * English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
 * Dutch   [nl_NL] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
 * Serbian [sr_RS] - translated by Ogi Djuraskovic, FirstSiteGuide  - http://firstsiteguide.com
+* Italian [it_IT] - translated by Fabio Marzocca
 
 = Author =
 CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands - http://cagewebdev.com - http://rvg.cage.nl
@@ -66,7 +67,8 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 
 == Changelog ==
-= 3.1.4 [02/28/2015] =
+= 3.1.4 [03/01/2015] =
+* NEW: italian language support [it_IT] added (thanks Fabio Marzocca!)
 * NEW: optimization timer
 * CHANGE: from now on InnoDB tables are skipped from optimization
 * CHANGE: various minor improvements
