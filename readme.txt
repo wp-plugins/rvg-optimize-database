@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.1.1
-Stable tag: 3.1.4
-Version: 3.1.4
+Stable tag: 3.2
+Version: 3.2
 License: GPLv2 or later
 
 == Description ==
@@ -29,6 +29,7 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly at a specific time (optional)
 * 'Optimize DB (1 click)' link in the admin bar (optional)
 * 'Optimize Database' Icon in the admin menu (optional)
+* MULTISITE compatible: optimizes all sites in the network with one click
 
 = Settings =
 You can find the settings page in the WP Admin Panel &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
@@ -67,6 +68,10 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 
 == Changelog ==
+= 3.2 [03/18/2015] =
+* NEW: MULTISITE support added
+* CHANGE: various minor improvements
+
 = 3.1.4 [03/01/2015] =
 * NEW: italian language support [it_IT] added (thanks Fabio Marzocca!)
 * NEW: optimization timer
