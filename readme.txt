@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.1.1
-Stable tag: 3.2.1
-Version: 3.2.1
+Stable tag: 3.3
+Version: 3.3
 License: GPLv2 or later
 
 == Description ==
@@ -29,6 +29,7 @@ This plugin is a 'One Click' WordPress Database Cleaner / Optimizer.
 * Optimization can be scheduled to automatically run once hourly, twice daily, once daily or once weekly at a specific time (optional)
 * 'Optimize DB (1 click)' link in the admin bar (optional)
 * 'Optimize Database' Icon in the admin menu (optional)
+* MULTISITE compatible: optimizes all sites in the network with one click
 
 = Settings =
 You can find the settings page in the WP Admin Panel &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
@@ -37,6 +38,12 @@ You can find the settings page in the WP Admin Panel &raquo; Optimize Database -
 You can start the Optimization in the WP Admin Panel &raquo; Optimize Database.<br />
 Note: if you use the Scheduler the Optimization will run automatically!<br />
 Note: you also can click the 'Optimize DB (1 click)' link in the admin bar (if enabled)
+
+= Multisite Support =
+* Install the plugin as Network Administrator (Network Admin &raquo; Plugins)
+* 'Network Activate' the plugin
+* The settings are the same for ALL sites in the network, so if you change a setting for one site, it will be used for all other sites.
+* If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 = Supported languages =
 * English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
@@ -62,11 +69,23 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 
 == Installation ==
 
+= Single site =
 * Upload the Plugin to the `/wp-content/plugins/` directory
 * Activate the plugin in the WP Admin Panel &raquo; Plugins
 * Change the settings (if needed) in the WP Admin Panel &raquo; Settings &raquo; Optimize Database -or- via the WP Admin Panel &raquo; Optimize Database icon (depends on settings)
 
+= Multisite =
+* Install the plugin as Network Administrator (Network Admin &raquo; Plugins)
+* 'Network Activate' the plugin
+* The settings are the same for ALL sites in the network, so if you change a setting for one site, it will be used for all other sites.
+* If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
+
 == Changelog ==
+= 3.3 [03/27/2015] =
+* NEW: MULTISITE support added (second try ;-))
+* CHANGE: various minor improvements
+* BUG FIX: sub-sites are accessible again (in the admin panel)
+
 = 3.2.1 [03/18/2015] =
 * CHANGE: due to problems, I removed the MULTISITE support again for now... Sorry about that!
 

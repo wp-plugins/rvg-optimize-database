@@ -37,6 +37,10 @@
 .odb-optimizing-table {
 	margin-top: 16px;
 }
+.odb-optimized {
+	color: #00F;
+	font-weight: bold;
+}
 .odb-underline-red {
 	text-decoration: underline;
 	color: #F00;
@@ -52,4 +56,23 @@
 .odb-not-found {
 	font-weight: bold;
 	color: #21759B;
+}
+.odb-schedule-select {
+	font-size: inherit;
+	padding: 0px;
+	margin: 0px;
+}
+.odb-schedulehour {
+	display: none;
+}
+.odb-schedulehour-select {
+	font-size: inherit;
+}
+.odb-table-excludes {
+	margin-top: 10px;
+	border: solid 1px #CCC;
+	padding: 10px;
+}
+.odb-table-excludes td {
+	padding: 3px;
 }
