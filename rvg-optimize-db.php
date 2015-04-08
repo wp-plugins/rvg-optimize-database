@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 3.3
+ * @version 3.3.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
@@ -9,11 +9,11 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Description: Optimizes the Wordpress Database after Cleaning it out
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Author URI: http://cagewebdev.com
-Version: 3.3
+Version: 3.3.1
 */
 
-$odb_version      = '3.3';
-$odb_release_date = '03/27/2015';
+$odb_version      = '3.3.1';
+$odb_release_date = '04/08/2015';
 // v3.3 - MULTISITE
 $odb_ms_prefixes  = array();
 $odb_ms_blogids   = array();
@@ -691,7 +691,7 @@ function rvg_optimize_db()
 {
 	global $wpdb, $odb_version, $odb_ms_prefixes;
 
-	// v3.3.3 - GET NETWORK INFORMATION (MULTISITE)
+	// v3.3 - GET NETWORK INFORMATION (MULTISITE)
 	rvg_odb_network_info();
 
 	// PAGE LOAD COUNTER
@@ -1326,7 +1326,10 @@ $total_time = round(($finish - $odb_start_time), 4);
 *********************************************************************************************/
 function rvg_optimize_db_cron()
 {
-	global $wpdb, $odb_version;
+	global $wpdb, $odb_version, $odb_ms_prefixes;
+
+	// v3.3.1 - GET NETWORK INFORMATION (MULTISITE)
+	rvg_odb_network_info();
 
 	// GET SETTINGS AND SET DEFAULT VALUES
 	$max_revisions = rvg_odb_get_option('rvg_odb_number');
