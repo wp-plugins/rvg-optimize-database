@@ -186,7 +186,8 @@ add_action( 'rvg_optimize_database', 'rvg_optimize_db_cron' );
 register_deactivation_hook( __FILE__, 'rvg_deactivate_plugin' );
 function rvg_deactivate_plugin()
 {	// CLEAR CURRENT SCHEDULE (IF ANY)
-	wp_clear_scheduled_hook('rvg_optimize_database');	
+	wp_clear_scheduled_hook('rvg_optimize_database');
+	wp_clear_scheduled_hook('rvg_scheduled_run');
 } // rvg_deactivate_plugin()
 
 // RE-SCHEDULE TASK WHEN RE-ACTIVATED (OR AFTER UPDATE)
@@ -300,11 +301,10 @@ function rvg_odb_settings_page()
 
 	// v3.3 - GET THE OPTIONS FROM THE TABLES OF THE MAIN SITE (IN CASE OF MULTISITE)
 	// if(function_exists('switch_to_blog')) switch_to_blog(1);
-
-	$timezone_format  = _x('YmdGis', 'timezone date format');
-	$current_datetime = date_i18n($timezone_format);
+	
+	$current_datetime = Date('YmdHis');
 	$current_date     = substr($current_datetime, 0, 8);
-	$current_hour     = substr($current_datetime, 8, 2);
+	$current_hour     = substr($current_datetime, 8, 2);	
 	
 	if(isset($_REQUEST['delete_log']))
 		if($_REQUEST['delete_log'] == "Y") @unlink(dirname(__FILE__).'/rvg-optimize-db-log.html');
@@ -381,9 +381,16 @@ function rvg_odb_settings_page()
 		rvg_odb_update_option('rvg_odb_schedule', $rvg_odb_schedule);
 
 		$rvg_odb_schedulehour = '';
-		if(isset($_POST['rvg_odb_schedulehour']))
-			$rvg_odb_schedulehour = $_POST['rvg_odb_schedulehour'];
-		rvg_odb_update_option('rvg_odb_schedulehour', $rvg_odb_schedulehour);
+		// v3.3.1
+		if($rvg_odb_schedule == 'daily' || $rvg_odb_schedule == 'weekly')
+		{
+			if(isset($_POST['rvg_odb_schedulehour']))
+				$rvg_odb_schedulehour = $_POST['rvg_odb_schedulehour'];
+			rvg_odb_update_option('rvg_odb_schedulehour', $rvg_odb_schedulehour);
+		}
+		else
+			// WIPE THE HOUR
+			rvg_odb_update_option('rvg_odb_schedulehour', '');
 
 		// CLEAR CURRENT SCHEDULE (IF ANY)
 		wp_clear_scheduled_hook('rvg_optimize_database');
@@ -394,10 +401,11 @@ function rvg_odb_settings_page()
 			{	
 				$time = 0;
 				if($rvg_odb_schedulehour == '')
-				{	$time = time();
-				}
+					// 'hourly', 'twicedaily'
+					$time = time();
 				else
 				{
+					// 'daily', 'weekly'
 					if($rvg_odb_schedulehour <= $current_hour)
 					    // NEXT RUN TOMORROW
 						$newdatetime = date('YmdHis', strtotime($current_date.$rvg_odb_schedulehour.'0000'.' + 1 day'));
@@ -700,8 +708,7 @@ function rvg_optimize_db()
 	$time  = $time[1] + $time[0];
 	$odb_start_time = $time;
 
-	$timezone_format = _x('G:i', 'timezone date format');
-	$current_hour    = date_i18n($timezone_format);
+	$current_hour = Date('H:i');
 
 	if(isset($_REQUEST['action']))
 		if($_REQUEST['action'] == "delete_log")
@@ -786,7 +793,7 @@ function rvg_optimize_db()
 	}
 	else
 	{	$timestamp = wp_next_scheduled('rvg_optimize_database');
-		$nextrun = date_i18n('M j, Y @ G:i', $timestamp);
+		$nextrun   = Date('M j, Y @ H:i', $timestamp);
 	}
 	
 	$total_savings = rvg_odb_get_option('rvg_odb_total_savings');
@@ -902,8 +909,7 @@ function rvg_optimize_db()
 	$start_size = rvg_get_db_size();
 
 	// TIMESTAMP FOR LOG FILE
-	$timezone_format  = _x('m/d/YH:i:s', 'timezone date format');
-	$current_datetime = date_i18n($timezone_format);	
+	$current_datetime = Date('m/d/YH:i:s');
 	$log_arr = array("time" => substr($current_datetime, 0, 10).'<br />'.substr($current_datetime,10));
 
 	// FIND REVISIONS
