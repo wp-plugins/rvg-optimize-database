@@ -1,6 +1,16 @@
 @charset "utf-8";
 /* CSS Document */
-
+.odb-title-bar {
+	width: 96%;
+	background-color: #0074a2;
+	color: #FFF !important;
+	display: inline-block;
+	padding-left: 16px;
+	margin-top: 30px;
+}
+.odb-title-bar h2 {
+	color: #FFF;
+}
 .odb-bold {
 	font-weight: 900;
 }
@@ -11,11 +21,17 @@
 	font-style: italic;
 }
 .odb-blue {
-	color: #00F;
+	/*color: #00F;*/
+	color: #0074a2;
+}
+.odb-action {
+	font-size: 13px;
+	font-weight: bold;
+	color: #000;
 }
 .odb-wp-table {
 	font-weight: bold;
-	color: #00F;
+	color: #0074a2;
 }
 .odb-padding-left {
 	padding-left: 8px;
@@ -26,19 +42,11 @@
 .odb-border-top {
 	border-top: solid 1px #999;
 }
-.odb-separator {
-	width: 100px;
-	height: 1px;
-	border-bottom: solid 1px #999;
-	margin-top: 7px;
-	margin-bottom: 7px;
-	margin-left: 10px;
-}
 .odb-optimizing-table {
 	margin-top: 16px;
 }
 .odb-optimized {
-	color: #00F;
+	color: #0074a2;
 	font-weight: bold;
 }
 .odb-underline-red {
@@ -50,12 +58,25 @@
 	left: -15px;
 }
 .odb-found {
+	font-size: 13px;
 	font-weight: bold;
-	color: #633;
+	color: #000;
+}
+.odb-found-number {
+	margin-left: 8px;
+	margin-bottom: 18px;
+	font-size: 13px;
+	font-weight: bold;
+	color: #000;
+}
+.odb-result-table {
+	background-color: #E8E8E8;
+	margin-bottom: 20px;
 }
 .odb-not-found {
-	font-weight: bold;
-	color: #21759B;
+	margin-left: 8px;
+	margin-bottom: 16px;
+	color: #999;
 }
 .odb-schedule-select {
 	font-size: inherit;
@@ -76,3 +97,33 @@
 .odb-table-excludes td {
 	padding: 3px;
 }
+/********************************************************
+ *
+ *	OPTIONS FORM
+ *
+ ********************************************************/
+#odb-options-tables-container {
+	text-align: center;
+}
+#odb-options-tables-wrapper {
+	width: 97%;
+	display: inline-block;
+	/*border: solid 1px #CCC;*/
+	margin-top: 16px;
+	margin-left: -16px;
+	padding: 8px 0 8px 0;
+}
+.odb-options-table {
+	background-color: #f0f0f0;
+	display: inline-block;
+	height: 17px;
+	margin: 3px;
+	border: solid 1px #E0E0E0;
+	overflow: hidden;
+	padding: 2px;
+	text-align: left;
+	white-space: nowrap;
+	width: 200px;
+}
+/*#odb-options-buttons {
+}*/
