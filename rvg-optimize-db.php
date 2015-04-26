@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 3.4
+ * @version 3.4.1
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
@@ -9,11 +9,11 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Description: Optimizes the Wordpress Database after Cleaning it out
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Author URI: http://cagewebdev.com
-Version: 3.4
+Version: 3.4.1
 */
 
-$odb_version      = '3.4';
-$odb_release_date = '04/24/2015';
+$odb_version      = '3.4.1';
+$odb_release_date = '04/26/2015';
 
 // v3.3 - MULTISITE
 $odb_ms_prefixes  = array();
@@ -652,7 +652,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 			if($excluded == 'excluded') $cb_checked = ' checked';			
 		?>
               <div class="odb-options-table<?php echo $class;?>" title="<?php echo $tables[$i][0];?>">
-                <input id="cb_<?php echo $tables[$i][0];?>" name="cb_<?php echo $tables[$i][0];?><!---->" type="checkbox" value="1"<?php echo $cb_checked; ?>  />
+                <input id="cb_<?php echo $tables[$i][0];?>" name="cb_<?php echo $tables[$i][0];?>" type="checkbox" value="1"<?php echo $cb_checked; ?>  />
                 <?php echo $tables[$i][0];?></span></div>
               <?php
 		}
