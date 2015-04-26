@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.2
-Stable tag: 3.4
-Version: 3.4
+Stable tag: 3.4.1
+Version: 3.4.1
 License: GPLv2 or later
 
 == Description ==
@@ -82,6 +82,9 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 3.4.1 [04/26/2015] =
+* BUG FIX: fixed a bug for the excluded tables (didn't work anymore)
+
 = 3.4 [04/24/2015] =
 * NEW: Ukrainian translation (uk_UA) added
 * CHANGE: updates for Dutch and Italian translations
