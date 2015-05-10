@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.2.1
-Stable tag: 3.4.1
-Version: 3.4.1
+Stable tag: 3.4.2
+Version: 3.4.2
 License: GPLv2 or later
 
 == Description ==
@@ -82,6 +82,9 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 3.4.2 [05/10/2015] =
+* BUG FIX: fixed a bug (options didn't get saved in old multisite installs) Many thanks to Pat who helped me fixing the issue!
+
 = 3.4.1 [04/26/2015] =
 * BUG FIX: fixed a bug for the excluded tables (didn't work anymore)
 
