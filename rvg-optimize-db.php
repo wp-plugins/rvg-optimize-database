@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optimize Database after Deleting Revisions
- * @version 3.4.1
+ * @version 3.4.2
  */
 /*
 Plugin Name: Optimize Database after Deleting Revisions
@@ -9,11 +9,11 @@ Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-rev
 Description: Optimizes the Wordpress Database after Cleaning it out
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Author URI: http://cagewebdev.com
-Version: 3.4.1
+Version: 3.4.2
 */
 
-$odb_version      = '3.4.1';
-$odb_release_date = '04/26/2015';
+$odb_version      = '3.4.2';
+$odb_release_date = '05/10/2015';
 
 // v3.3 - MULTISITE
 $odb_ms_prefixes  = array();
@@ -202,6 +202,31 @@ function rvg_activate_plugin()
 	}
 } // rvg_activate_plugin()
 
+register_uninstall_hook( __FILE__, 'rvg_odb_uninstall');
+function rvg_odb_uninstall()
+{
+	global $wpdb, $odb_ms_prefixes;
+	
+	$tables = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`", ARRAY_N);
+	
+	// DELETE ALL POSSIBLY EXCLUDED TABLES
+	for ($i=0; $i<count($tables); $i++) rvg_odb_delete_option('rvg_ex_'.$tables[$i][0].'');
+	
+	// DELETE THE OTHER OPTIONS	
+	rvg_odb_delete_option('rvg_clear_pingbacks');
+	rvg_odb_delete_option('rvg_clear_spam');
+	rvg_odb_delete_option('rvg_clear_tags');
+	rvg_odb_delete_option('rvg_clear_transients');
+	rvg_odb_delete_option('rvg_clear_trash');
+	rvg_odb_delete_option('rvg_odb_adminbar');
+	rvg_odb_delete_option('rvg_odb_adminmenu');
+	rvg_odb_delete_option('rvg_odb_logging_on');
+	rvg_odb_delete_option('rvg_odb_number');
+	rvg_odb_delete_option('rvg_odb_schedule');
+	rvg_odb_delete_option('rvg_odb_schedulehour');
+	rvg_odb_delete_option('rvg_odb_total_savings');
+} // rvg_odb_uninstall()
+
 
 /********************************************************************************************
  *
@@ -232,20 +257,20 @@ function rvg_odb_network_info()
  *
  *	GET AN OPTION FROM THE ROOT SITE OPTION TABLE
  *
+ *	Revision: v3.4.2
+ *
  ********************************************************************************************/
-function rvg_odb_get_option($option)
+function rvg_odb_get_option($option, $default = false)
 {
-	global $wpdb;
-
-	$sql = "
-	SELECT `option_value`
-	  FROM ".$wpdb->base_prefix."options
-	 WHERE `option_name` = '".$option."'
-	";
-	$res = $wpdb->get_results($sql);
-	
-	if(isset($res[0]->option_value)) return $res[0]->option_value;
-	return '';
+	if(is_multisite() &&
+		function_exists('is_plugin_active_for_network') &&
+		is_plugin_active_for_network('rvg-optimize-db/rvg-optimize-db.php'))
+	{
+		return get_site_option($option, $default);
+	} else
+	{
+		return get_option($option, $default);
+	}
 } // rvg_odb_get_option()
 
 
@@ -253,39 +278,41 @@ function rvg_odb_get_option($option)
  *
  *	SAVE AN OPTION TO THE ROOT SITE OPTION TABLE
  *
+ *	Revision: v3.4.2
+ *
  ********************************************************************************************/
 function rvg_odb_update_option($option, $value)
 {
-	global $wpdb;
-	
-	$sql = "
-	SELECT COUNT(*) cnt
-	  FROM ".$wpdb->base_prefix."options
-	 WHERE `option_name` = '".$option."'
-	";
-	$res = $wpdb->get_results($sql);
-	
-	if(isset($res[0]->cnt) && $res[0]->cnt > 0)
-	{	$sql = "
-		UPDATE ".$wpdb->base_prefix."options
-		   SET `option_value` = '".$value."'
-		 WHERE `option_name` = '".$option."'
-		";
+	if(is_multisite() &&
+		function_exists('is_plugin_active_for_network') &&
+		is_plugin_active_for_network('rvg-optimize-db/rvg-optimize-db.php'))
+	{
+		return update_site_option( $option, $value);
+	} else
+	{
+		return update_option( $option, $value);
 	}
-	else
-	{	$sql = "
-		INSERT INTO ".$wpdb->base_prefix."options
-		     (option_name, option_value)
-			 VALUES
-			 (	'".$option."',
-			 	'".$value."'
-			 )
-		";
-	}
-	$wpdb->get_results($sql);
-	
-	return;
 } // rvg_odb_update_option()
+
+
+/********************************************************************************************
+ *
+ *	DELETE AN OPTION TO THE ROOT SITE OPTION TABLE
+ *
+ *	Since: v3.4.2
+ *
+ ********************************************************************************************/
+function rvg_odb_delete_option($option)
+{
+	if(is_multisite() && function_exists('is_plugin_active_for_network') &&
+		is_plugin_active_for_network('rvg-optimize-db/rvg-optimize-db.php'))
+	{
+		return delete_site_option($option);
+	} else
+	{
+		return delete_option($option);
+	}
+} // rvg_odb_delete_option()
 
 
 /********************************************************************************************
@@ -296,13 +323,13 @@ function rvg_odb_update_option($option, $value)
 function rvg_odb_settings_page()
 {
 	global $odb_version, $odb_release_date, $wpdb, $table_prefix, $odb_ms_prefixes;
+
+	$tables = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`", ARRAY_N);
 	
 	// v3.3 - GET NETWORK INFORMATION (MULTISITE)
 	rvg_odb_network_info();
 
 	// v3.3 - GET THE OPTIONS FROM THE TABLES OF THE MAIN SITE (IN CASE OF MULTISITE)
-	// if(function_exists('switch_to_blog')) switch_to_blog(1);
-	
 	$current_datetime = Date('YmdHis');
 	$current_date     = substr($current_datetime, 0, 8);
 	$current_hour     = substr($current_datetime, 8, 2);	
@@ -315,15 +342,12 @@ function rvg_odb_settings_page()
 	{
 		// v2.8.3
 		check_admin_referer('odb_action', 'odb_nonce');
+
+		// DELETE ALL EXCLUDED TABLES
+		for ($i=0; $i<count($tables); $i++)
+			rvg_odb_delete_option('rvg_ex_'.$tables[$i][0].'');
 		
-		# DELETE ALL EXCLUDED TABLES (FROM THE ROOT OPTIONS TABLE)
-		$sql = "
-		DELETE FROM ".$wpdb->base_prefix."options
-		 WHERE `option_name` LIKE 'rvg_ex_%'
-		";
-		$wpdb->get_results($sql);
-		
-		# ADD EXCLUDED TABLES
+		// ADD EXCLUDED TABLES
 		foreach ($_POST as $key => $value)
 		{	if(substr($key,0,3) == 'cb_')
 				rvg_odb_update_option('rvg_ex_'.substr($key,3).'', 'excluded');
@@ -638,7 +662,6 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
           </a> | <a href="javascript:;" onclick="jQuery(':not([id^=cb_<?php echo $odb_ms_prefixes[0]; ?>])').filter('[id^=cb_]').attr('checked',true);">
           <?php _e('check all NON-WordPress tables','rvg-optimize-database');?>
           </a></span>
-          <?php $tables = $wpdb->get_results("SHOW TABLES FROM `".DB_NAME."`", ARRAY_N);?>
           <div id="odb-options-tables-container">
             <div id="odb-options-tables-wrapper">
               <?php
@@ -648,7 +671,7 @@ if($rvg_odb_logging_on == 'Y')  $rvg_odb_logging_on_checked  = ' checked="checke
 			for($j=0; $j<count($odb_ms_prefixes); $j++)
 				if(substr($tables[$i][0], 0, strlen($odb_ms_prefixes[$j])) == $odb_ms_prefixes[$j]) $class = ' odb-wp-table';
 			$cb_checked = '';
-			$excluded = rvg_odb_get_option('rvg_ex_'.$tables[$i][0].'');
+			$excluded = rvg_odb_get_option('rvg_ex_'.$tables[$i][0].'');	
 			if($excluded == 'excluded') $cb_checked = ' checked';			
 		?>
               <div class="odb-options-table<?php echo $class;?>" title="<?php echo $tables[$i][0];?>">
@@ -1627,8 +1650,6 @@ function rvg_delete_tags()
 	// LOOP THROUGH THE NETWORK
 	for($i=0; $i<count($odb_ms_blogids); $i++)
 	{
-		if(function_exists('switch_to_blog')) switch_to_blog($odb_ms_blogids[$i]);
-		
 		$tags = get_terms('post_tag', array('hide_empty' => 0));
 		for($j=0; $j<count($tags); $j++)
 		{
@@ -1641,9 +1662,6 @@ function rvg_delete_tags()
 			}			
 		}
 	} // for($i=0; $i<count($odb_ms_blogids); $i++)
-	
-	// SWITCH BACK TO MAIN SITE
-	// if(function_exists('switch_to_blog')) switch_to_blog(1);
 	
 	return $total_deleted;
 } // rvg_delete_tags()
@@ -1887,7 +1905,7 @@ function rvg_optimize_tables($display)
 	for ($i=0; $i<count($tables); $i++)
 	{
 		$excluded = rvg_odb_get_option('rvg_ex_'.$tables[$i][0]);
-		
+				
 		if(!$excluded)
 		{	# TABLE NOT EXCLUDED
 			$cnt++;
