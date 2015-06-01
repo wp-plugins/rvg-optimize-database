@@ -7,9 +7,9 @@ Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, cl
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
-Tested up to: 4.2.2
-Stable tag: 3.4.2
-Version: 3.4.2
+Tested up to: 4.2.1
+Stable tag: 3.4.3
+Version: 3.4.3
 License: GPLv2 or later
 
 == Description ==
@@ -46,10 +46,11 @@ Note: you also can click the 'Optimize DB (1 click)' link in the admin bar (if e
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 = Supported languages =
-* English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
 * Dutch [nl_NL] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
-* Serbian [sr_RS] - translated by Ogi Djuraskovic, FirstSiteGuide  - http://firstsiteguide.com
+* English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
 * Italian [it_IT] - translated by Fabio Marzocca
+* Serbian [sr_RS] - translated by Ogi Djuraskovic, FirstSiteGuide  - http://firstsiteguide.com
+* Swedish [sv_SE] - translated by P.E.
 * Ukranian [uk_UA] - translated by Anna Goriacha, Coupofy - http://coupofy.com
 
 = Author =
@@ -82,8 +83,11 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 3.4.3 [06/01/2015] =
+* NEW: Swedish translation (sv_SE) added
+
 = 3.4.2 [05/10/2015] =
-* BUG FIX: fixed a bug (options didn't get saved in old multisite installs) Many thanks to Pat who helped me fixing the issue!
+* BUG FIX: fixed a bug (options didn't get saved in old multisite installs)
 
 = 3.4.1 [04/26/2015] =
 * BUG FIX: fixed a bug for the excluded tables (didn't work anymore)
