@@ -7,9 +7,9 @@ Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, cl
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
-Tested up to: 4.2.1
-Stable tag: 3.4.3
-Version: 3.4.3
+Tested up to: 4.2.2
+Stable tag: 3.4.4
+Version: 3.4.4
 License: GPLv2 or later
 
 == Description ==
@@ -48,6 +48,7 @@ Note: you also can click the 'Optimize DB (1 click)' link in the admin bar (if e
 = Supported languages =
 * Dutch [nl_NL] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
 * English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
+* German [de_DE] - translated by the.mnbvcx
 * Italian [it_IT] - translated by Fabio Marzocca
 * Serbian [sr_RS] - translated by Ogi Djuraskovic, FirstSiteGuide  - http://firstsiteguide.com
 * Swedish [sv_SE] - translated by P.E.
@@ -83,6 +84,9 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 3.4.4 [06/03/2015] =
+* NEW: German translation (de_DE) added
+
 = 3.4.3 [06/01/2015] =
 * NEW: Swedish translation (sv_SE) added
 
