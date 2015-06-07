@@ -85,6 +85,9 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 3.4.5 [06/07/2015] =
+* NEW: Russian translation (ru_RU) added
+
 = 3.4.4 [06/03/2015] =
 * NEW: German translation (de_DE) added
 
