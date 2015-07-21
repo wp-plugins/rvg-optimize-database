@@ -46,7 +46,7 @@ Note: you also can click the 'Optimize DB (1 click)' link in the admin bar (if e
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 = Supported languages =
-* Danish [da_DK] - translated by Alexander Leo-Hansen
+* Danish [da_DK] - translated by Alexander Leo-Hansen - http://alexanderleohansen.dk
 * Dutch [nl_NL] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
 * English [en_US] - translated by Rolf van Gelder, CAGE Web Design - http://cagewebdev.com
 * German [de_DE] - translated by the.mnbvcx
