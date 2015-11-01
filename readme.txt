@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.3.1
-Stable tag: 3.4.9
-Version: 3.4.9
+Stable tag: 3.5.1
+Version: 3.5.1
 License: GPLv2 or later
 
 == Description ==
@@ -86,6 +86,12 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 3.5.1 [11/01/2015] =
+* BUG FIX: Views are skipped from the optimization
+
+= 3.5 [10/24/2015] =
+* CHANGE: Stylesheet is only loaded on required admin pages
+
 = 3.4.9 [10/23/2015] =
 * BUG FIX: Bug fixed for deleting unused tags
 
