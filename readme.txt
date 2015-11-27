@@ -7,9 +7,9 @@ Tags: database, delete, revisions, optimize, post, posts, page, pages, clean, cl
 Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
-Tested up to: 4.3.1
-Stable tag: 3.5.1
-Version: 3.5.1
+Tested up to: 4.4
+Stable tag: 4.0.1
+Version: 4.0.1
 License: GPLv2 or later
 
 == Description ==
@@ -86,6 +86,15 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 4.0.1 [11/27/2015] =
+* NEW: New option: optimize InnoDB tables too
+* BUG FIX: Localization fixed for extra cron schedules
+* BUG FIX: De-activation issue on update fixed
+
+= 4.0 [11/22/2015] =
+* NEW: Total rewrite of the code (OO code)
+* CHANGE: Many changes and bug fixes
+
 = 3.5.1 [11/01/2015] =
 * BUG FIX: Views are skipped from the optimization
 
@@ -344,6 +353,7 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 
 = Why do I see 'InnoDB table: skipped...'? =
 * That's because optimizing InnoDB tables is not really efficient, so change the table type to MyISAM to have them being optimized.
+* Update: if you want to optimize your InnoDB tables too, just check the 'Optimize InnoDB tables too' option on the settings page
 
 = I scheduled the optimization for 8pm but it runs at 6pm (my local time) =
 * The scheduler uses the local time of the web server which can differ from your own local time
