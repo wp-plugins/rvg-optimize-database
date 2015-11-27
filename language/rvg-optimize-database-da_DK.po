@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Optimize Database after Deleting Revisions v3.4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-21 22:08+0100\n"
-"PO-Revision-Date: 2015-07-21 22:09+0100\n"
+"POT-Creation-Date: 2015-11-20 17:03+0100\n"
+"PO-Revision-Date: 2015-11-20 17:03+0100\n"
 "Last-Translator: Rolf van Gelder <info@cagewebdev.com>\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -15,151 +15,460 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Poedit-Basepath: C:\\Users\\rvgelder.KC15435\\Documents\\My Dropbox"
-"\\WordPress\\wp-plugins\\rvg-optimize-db\n"
+"X-Poedit-Basepath: C:\\My Dropbox\\WordPress\\wp-plugins\\rvg-optimize-db\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
-# @ rvg-optimize-database
-#: rvg-optimize-db.php:47 rvg-optimize-db.php:48 rvg-optimize-db.php:69
-#: rvg-optimize-db.php:70 rvg-optimize-db.php:90 rvg-optimize-db.php:91
-#: rvg-optimize-db.php:110 rvg-optimize-db.php:111
-msgid "Optimize Database"
-msgstr "Optimer Database"
+#: classes/odb-cleaner.php:35
+msgid "Cleaning Database"
+msgstr "Optimerer Database"
 
-# @ optimize_db
-#: rvg-optimize-db.php:149
-msgid "Optimize DB (1 click)"
-msgstr "Optimer DB (1 klik)"
+#: classes/odb-cleaner.php:78
+msgid "DELETED REVISIONS"
+msgstr "SLETTEDE REVISIONER"
 
-# @ default
-#: rvg-optimize-db.php:178
-msgid "Once Weekly"
+#: classes/odb-cleaner.php:83 classes/odb-cleaner.php:142
+#: classes/odb-cleaner.php:203
+msgid "prefix"
+msgstr "prefix"
+
+#: classes/odb-cleaner.php:84
+msgid "post / page"
+msgstr "post / side"
+
+#: classes/odb-cleaner.php:85
+msgid "revision date"
+msgstr "revision dato"
+
+#: classes/odb-cleaner.php:86
+msgid "revisions deleted"
+msgstr "revisioner slettet"
+
+#: classes/odb-cleaner.php:98
+msgid "total number of revisions deleted"
+msgstr "totale antal revisioner slettet"
+
+#: classes/odb-cleaner.php:110
+msgid "No REVISIONS found to delete"
+msgstr "Ingen REVISIONER blev fundet"
+
+#: classes/odb-cleaner.php:137
+msgid "DELETED TRASHED ITEMS"
+msgstr "SLETTET TING I PAPIRKURVEN"
+
+#: classes/odb-cleaner.php:143
+msgid "type"
+msgstr "type"
+
+#: classes/odb-cleaner.php:144
+msgid "IP address / title"
+msgstr "IP adresse / titel"
+
+#: classes/odb-cleaner.php:145
+msgid "date"
+msgstr "dato"
+
+#: classes/odb-cleaner.php:157
+msgid "total number of trashed items deleted"
+msgstr "totale antal ting fra papirkurven slettet"
+
+#: classes/odb-cleaner.php:170
+msgid "No TRASHED ITEMS found to delete"
+msgstr "Ingen TING FRA PAPIRKURVEN blev slettet"
+
+#: classes/odb-cleaner.php:198
+msgid "DELETEED SPAMMED ITEMS"
+msgstr "SLETTEDE TING FRA SPAM"
+
+#: classes/odb-cleaner.php:204
+msgid "comment author"
+msgstr "kommentar forfatter"
+
+#: classes/odb-cleaner.php:205
+msgid "comment author email"
+msgstr "kommentar forfatter email"
+
+#: classes/odb-cleaner.php:206
+msgid "comment date"
+msgstr "kommentar dato"
+
+#: classes/odb-cleaner.php:218
+msgid "total number of spammed items deleted"
+msgstr "totale antal ting i spam blev slettet"
+
+#: classes/odb-cleaner.php:231
+msgid "No SPAMMED ITEMS found to delete"
+msgstr "Ingen TING FRA SPAM blev slettet"
+
+#: classes/odb-cleaner.php:256
+msgid "NUMBER OF UNUSED TAGS DELETED"
+msgstr "ANTAL AF UBENYTTEDE TAGS DER BLEV SLETTET"
+
+#: classes/odb-cleaner.php:266
+msgid "No UNUSED TAGS found to delete"
+msgstr "Ingen UBENYTTEDE TAGS blev slettet"
+
+#: classes/odb-cleaner.php:290
+msgid "NUMBER OF EXPIRED TRANSIENTS DELETED"
+msgstr "ANTALLET AF UDLØBNE TRANSIENTER DER BLEV SLETTET"
+
+#: classes/odb-cleaner.php:300
+msgid "No EXPIRED TRANSIENTS found to delete"
+msgstr "Ingen UDLØBNE TRANSIENTER blev slettet"
+
+#: classes/odb-cleaner.php:324
+msgid "NUMBER OF PINGBACKS AND TRACKBACKS DELETED"
+msgstr "ANTAL AF PINBACKS OG TRACKBACK DER BLEV SLETTET"
+
+#: classes/odb-cleaner.php:334
+msgid "No PINGBACKS nor TRACKBACKS found to delete"
+msgstr "Ingen PINGBACKS eller TRACKBACKS blev slettet"
+
+#: classes/odb-cleaner.php:355
+msgid "NUMBER OF POSTMETA ORPHANS DELETED"
+msgstr "ANTAL AF POSTMETA FORÆLDRELØSE SLETTET"
+
+#: classes/odb-cleaner.php:365
+msgid "No POSTMETA ORPHANS found to delete"
+msgstr "Ingen POSTMETA FORÆLDRELÆSE blev fundet"
+
+#: classes/odb-cleaner.php:393
+msgid "Optimizing Database Tables"
+msgstr "Optimering Database Tabeller"
+
+#: classes/odb-cleaner.php:400
+msgid "table name"
+msgstr "tabel navn"
+
+#: classes/odb-cleaner.php:401
+msgid "optimization result"
+msgstr "optimering resultat"
+
+#: classes/odb-cleaner.php:402
+msgid "engine"
+msgstr "motor"
+
+#: classes/odb-cleaner.php:403
+msgid "table rows"
+msgstr "tabel rækker"
+
+#: classes/odb-cleaner.php:404
+msgid "table size"
+msgstr "tabel størrelse"
+
+#: classes/odb-cleaner.php:452
+msgid "Savings"
+msgstr "Besparelse"
+
+#: classes/odb-cleaner.php:459
+msgid "size of the database"
+msgstr "størrelse på database"
+
+#: classes/odb-cleaner.php:462
+msgid "BEFORE optimization"
+msgstr "FØR optimering"
+
+#: classes/odb-cleaner.php:466
+msgid "AFTER optimization"
+msgstr "EFTER optimering"
+
+#: classes/odb-cleaner.php:470
+msgid "SAVINGS THIS TIME"
+msgstr "OPRYDNING DENNE GANG"
+
+#: classes/odb-cleaner.php:474
+msgid "TOTAL SAVINGS SINCE THE FIRST RUN"
+msgstr "SAMLET OPRYDNING SIDEN FØRSTE OPTIMERING"
+
+#: classes/odb-cleaner.php:501
+msgid "DONE!"
+msgstr "FÆRDIG!"
+
+# Optimization took xxx seconds
+#: classes/odb-cleaner.php:506
+msgid "Optimization took"
+msgstr "Optimering varede"
+
+# Optimization took xxx seconds
+#: classes/odb-cleaner.php:506
+msgid "seconds"
+msgstr "sekunder"
+
+#: classes/odb-cleaner.php:514 classes/odb-displayer.php:131
+msgid "View Log File"
+msgstr "Vis Log Fil"
+
+#: classes/odb-cleaner.php:516 classes/odb-displayer.php:133
+msgid "Delete Log File"
+msgstr "Slet Log Fil"
+
+#: classes/odb-cleaner.php:1043
+msgid "InnoDB table: skipped..."
+msgstr "InnoDB tabel: skippet…"
+
+#: classes/odb-cleaner.php:1049
+msgid "<span class=\"odb-optimized\">TABLE OPTIMIZED</span>"
+msgstr "<span class=\"odb-optimized\">TABEL OPTIMERET</span>"
+
+#: classes/odb-cleaner.php:1050
+msgid "Table is already up to date"
+msgstr "Tabel er allerede optimeret"
+
+#: classes/odb-displayer.php:28
+msgid "YES"
+msgstr "JA"
+
+#: classes/odb-displayer.php:29
+msgid "NO"
+msgstr "NEJ"
+
+#: classes/odb-displayer.php:40
+msgid "EVERY FIVE MINUTES"
+msgstr ""
+
+#: classes/odb-displayer.php:42
+msgid "ONCE HOURLY"
+msgstr "Hver time"
+
+#: classes/odb-displayer.php:44
+msgid "TWICE DAILY"
+msgstr "To gange om dagen"
+
+#: classes/odb-displayer.php:46
+msgid "ONCE DAILY"
+msgstr "En gang om dagen"
+
+#: classes/odb-displayer.php:48
+msgid "ONCE WEEKLY"
 msgstr "En gang om ugen"
 
-#: rvg-optimize-db.php:449
-msgid "Optimize Database after Deleting Revisions SETTINGS UPDATED"
-msgstr "Optimer Database efter sletning af revisioner INDSTILLINGER OPDATERET"
-
-#: rvg-optimize-db.php:451
-msgid ""
-"Click <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold"
-"\">HERE</a> to run the optimization"
-msgstr ""
-"Klik <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold\">HER</"
-"a> for at starte processen"
-
-#: rvg-optimize-db.php:517
-msgid "Optimize Database after Deleting Revisions"
-msgstr "Optimer Database efter sletning af revisioner"
-
-#: rvg-optimize-db.php:521
-msgid "is an one-click plugin to clean and optimize your WordPress database"
-msgstr "er et plugin til at rense og optimere din WordPress database"
-
-#: rvg-optimize-db.php:524
-msgid "Plugin version:"
-msgstr "Plugin version:"
-
-#: rvg-optimize-db.php:528
-msgid "Author:"
-msgstr "Forfatter:"
-
-#: rvg-optimize-db.php:531 rvg-optimize-db.php:841 rvg-optimize-db.php:2007
-msgid "The Netherlands"
-msgstr "Holland"
-
-#: rvg-optimize-db.php:534
-msgid "Plugin URL:"
-msgstr "Plugin URL:"
-
-#: rvg-optimize-db.php:538
-msgid "Download URL:"
-msgstr "Download URL:"
-
-#: rvg-optimize-db.php:545
-msgid "Settings"
-msgstr "Indstillinger"
-
-#: rvg-optimize-db.php:553
-msgid ""
-"Maximum number of - most recent - revisions<br />to keep per post / page"
-msgstr ""
-"Max antal af - seneste - revisioner<br />for at beholde pr. post / side"
-
-#: rvg-optimize-db.php:557
-msgid "('0' means: delete <u>ALL</u> revisions)"
-msgstr "('0' betyder: slet <u>ALT</u> revisioner)"
-
-#: rvg-optimize-db.php:561 rvg-optimize-db.php:850
-msgid "Delete trashed items"
-msgstr "Slet indhold i papirkurven"
-
-#: rvg-optimize-db.php:567 rvg-optimize-db.php:853
-msgid "Delete spammed items"
-msgstr "Slet indhold i spam"
-
-#: rvg-optimize-db.php:573 rvg-optimize-db.php:856
-msgid "Delete unused tags"
-msgstr "Slet ikke brugte tags"
-
-#: rvg-optimize-db.php:579 rvg-optimize-db.php:859
-msgid "Delete expired transients"
-msgstr "Slet udløbne transienter"
-
-#: rvg-optimize-db.php:585 rvg-optimize-db.php:862
-msgid "Delete pingbacks and trackbacks"
-msgstr "Slet pingbacks og trackbacks"
-
-#: rvg-optimize-db.php:591 rvg-optimize-db.php:865
-msgid "Keep a log"
-msgstr "Opbevar en log"
-
-#: rvg-optimize-db.php:597 rvg-optimize-db.php:871
-msgid "Scheduler"
-msgstr "Planlæg"
-
-#: rvg-optimize-db.php:601 rvg-optimize-db.php:808
+#: classes/odb-displayer.php:49 includes/settings-page.php:174
 msgid "NOT SCHEDULED"
 msgstr "Ikke planlagt"
 
-#: rvg-optimize-db.php:604
-msgid "run optimization HOURLY"
-msgstr "kør optimering hver time"
+#: classes/odb-displayer.php:54
+msgid "Current settings"
+msgstr "Nuværende indstillinger"
 
-#: rvg-optimize-db.php:607
-msgid "run optimization TWICE A DAY"
-msgstr "kør optimering to gange om dagen"
+#: classes/odb-displayer.php:57
+msgid "Maximum number of - most recent - revisions to keep per post / page"
+msgstr "Max antal af - seneste - revisioner for at beholde pr. post / side"
 
-#: rvg-optimize-db.php:610
-msgid "run optimization DAILY"
-msgstr "kør optimering hver dag"
+#: classes/odb-displayer.php:58 includes/settings-page.php:133
+msgid "Delete trashed items"
+msgstr "Slet indhold i papirkurven"
 
-#: rvg-optimize-db.php:613
-msgid "run optimization WEEKLY"
-msgstr "kør optimering hver uge"
+#: classes/odb-displayer.php:59 includes/settings-page.php:139
+msgid "Delete spammed items"
+msgstr "Slet indhold i spam"
 
-#: rvg-optimize-db.php:621
-msgid "Time"
-msgstr "Tid"
+#: classes/odb-displayer.php:60 includes/settings-page.php:145
+msgid "Delete unused tags"
+msgstr "Slet ikke brugte tags"
 
-#: rvg-optimize-db.php:628
+#: classes/odb-displayer.php:61 includes/settings-page.php:151
+msgid "Delete expired transients"
+msgstr "Slet udløbne transienter"
+
+#: classes/odb-displayer.php:62 includes/settings-page.php:157
+msgid "Delete pingbacks and trackbacks"
+msgstr "Slet pingbacks og trackbacks"
+
+#: classes/odb-displayer.php:63 includes/settings-page.php:163
+msgid "Keep a log"
+msgstr "Opbevar en log"
+
+#: classes/odb-displayer.php:64
+msgid "Last run"
+msgstr ""
+
+#: classes/odb-displayer.php:64 classes/odb-displayer.php:73
+#: includes/settings-page.php:208
 msgid "hrs"
 msgstr "timer"
 
-#: rvg-optimize-db.php:641
+#: classes/odb-displayer.php:65
+msgid "Number of excluded tables"
+msgstr "Antal af ekskluderede tabeller"
+
+#: classes/odb-displayer.php:66 includes/settings-page.php:170
+msgid "Scheduler"
+msgstr "Planlæg"
+
+#: classes/odb-displayer.php:73
+msgid "Next scheduled run"
+msgstr "Næste planlagte optimering"
+
+#: classes/odb-displayer.php:73
+msgid "current server time"
+msgstr ""
+
+#: classes/odb-displayer.php:78
+msgid "Total savings since the first run"
+msgstr "Samlet oprydning siden første optimering"
+
+#: classes/odb-displayer.php:95
+msgid "Optimize Database after Deleting Revisions"
+msgstr "Optimer Database efter sletning af revisioner"
+
+#: classes/odb-displayer.php:98
+msgid ""
+"A popular 'one-click' plugin to clean and optimize your WordPress database."
+msgstr ""
+
+#: classes/odb-displayer.php:101
+msgid "Plugin version"
+msgstr ""
+
+#: classes/odb-displayer.php:102
+msgid "Plugin page"
+msgstr ""
+
+#: classes/odb-displayer.php:103
+msgid "Download page"
+msgstr ""
+
+#: classes/odb-displayer.php:104
+msgid "Author"
+msgstr "Skapare"
+
+#: classes/odb-displayer.php:105
+msgid "Company"
+msgstr ""
+
+#: classes/odb-displayer.php:106
+msgid "Donation page"
+msgstr ""
+
+#: classes/odb-displayer.php:124
+msgid "Change Settings"
+msgstr "Ændre indstillinger"
+
+#: classes/odb-displayer.php:139
+msgid "Start Optimization"
+msgstr "Start optimering"
+
+#: classes/odb-logger.php:55
+msgid "A WordPress Plugin by"
+msgstr "Et Wordpress Plugin af"
+
+#: classes/odb-logger.php:55
+msgid "The Netherlands"
+msgstr "Holland"
+
+#: classes/odb-logger.php:59
+msgid "time"
+msgstr "tid"
+
+#: classes/odb-logger.php:60
+msgid "deleted<br />revisions"
+msgstr "slettede<br />revisioner"
+
+#: classes/odb-logger.php:61
+msgid "deleted<br />trash"
+msgstr "slettet<br />papirkurv"
+
+#: classes/odb-logger.php:62
+msgid "deleted<br />spam"
+msgstr "slettet<br />spam"
+
+#: classes/odb-logger.php:63
+msgid "deleted<br />tags"
+msgstr "slettede<br />tags"
+
+#: classes/odb-logger.php:64
+msgid "deleted<br />transients"
+msgstr "slettede<br />trasienter"
+
+#: classes/odb-logger.php:65
+msgid "deleted<br />pingbacks<br />trackbacks"
+msgstr "slettede<br />pingbacks<br />trackbacks"
+
+#: classes/odb-logger.php:66
+msgid "deleted<br />orphans"
+msgstr "slettede<br />forældreløse"
+
+# @ rvg-optimize-database
+#: classes/odb-logger.php:67
+msgid "nr of optimized tables"
+msgstr "nr af optimerede tabeller"
+
+#: classes/odb-logger.php:68
+msgid "database size BEFORE"
+msgstr "database størrelse FØR"
+
+#: classes/odb-logger.php:69
+msgid "database size AFTER"
+msgstr "database størrelse EFTER"
+
+#: classes/odb-logger.php:70
+msgid "SAVINGS"
+msgstr "OPRYDNING"
+
+# @ default
+#: classes/odb-scheduler.php:34
+msgid "Once Weekly"
+msgstr "En gang om ugen"
+
+#: classes/odb-scheduler.php:39
+msgid "Every Five Minutes"
+msgstr ""
+
+#: includes/settings-page.php:82
+msgid "Optimize Database after Deleting Revisions SETTINGS UPDATED"
+msgstr "Optimer Database efter sletning af revisioner INDSTILLINGER OPDATERET"
+
+#: includes/settings-page.php:84
+msgid ""
+"Click <a href=\"tools.php?page=rvg-optimize-database\" class=\"odb-bold"
+"\">HERE</a> to run the optimization"
+msgstr ""
+
+#: includes/settings-page.php:120 rvg-optimize-db.php:257
+msgid "Settings"
+msgstr "Indstillinger"
+
+#: includes/settings-page.php:125
+msgid "Maximum number of - most recent - revisions<br>to keep per post / page"
+msgstr ""
+
+#: includes/settings-page.php:129
+msgid "('0' means: delete <u>ALL</u> revisions)"
+msgstr "('0' betyder: slet <u>ALT</u> revisioner)"
+
+#: includes/settings-page.php:184
+msgid "run optimization HOURLY"
+msgstr "kør optimering hver time"
+
+#: includes/settings-page.php:187
+msgid "run optimization TWICE A DAY"
+msgstr "kør optimering to gange om dagen"
+
+#: includes/settings-page.php:190
+msgid "run optimization DAILY"
+msgstr "kør optimering hver dag"
+
+#: includes/settings-page.php:193
+msgid "run optimization WEEKLY"
+msgstr "kør optimering hver uge"
+
+#: includes/settings-page.php:200
+msgid "Time"
+msgstr "Tid"
+
+#: includes/settings-page.php:223
 msgid "Show '1-click' link in Admin Bar"
 msgstr "Vis ‘1-klik’ link i Admin Baren"
 
-#: rvg-optimize-db.php:644 rvg-optimize-db.php:651
+#: includes/settings-page.php:226 includes/settings-page.php:233
 msgid "(change will be visible after loading the next page)"
 msgstr "(ændringer vil være synlige efter indlæsning af næste side)"
 
-#: rvg-optimize-db.php:648
+#: includes/settings-page.php:230
 msgid "Show an icon in the Admin Menu"
 msgstr "Vis et ikon i Admin Menuen"
 
-#: rvg-optimize-db.php:656
+#: includes/settings-page.php:239
 msgid ""
 "EXCLUDE DATABASE TABLES FROM OPTIMIZATION: <span class=\"odb-underline-red"
 "\">CHECKED</span> TABLES <span class=\"odb-underline-red\">WON'T</span> BE "
@@ -169,331 +478,72 @@ msgstr ""
 "\">KONTROLLERET</span> TABELLER <span class=\"odb-underline-red\">KAN IKKE</"
 "span> OPTIMER!</span>"
 
-#: rvg-optimize-db.php:659
+#: includes/settings-page.php:245
 msgid "check all tables"
 msgstr "marker alle tabeller"
 
-#: rvg-optimize-db.php:661
+#: includes/settings-page.php:247
 msgid "uncheck all tables"
 msgstr "marker ikke alle tabeller"
 
-#: rvg-optimize-db.php:663
+#: includes/settings-page.php:249
 msgid "check all NON-WordPress tables"
 msgstr "marker alle IKKE-WordPres tabeller"
 
-#: rvg-optimize-db.php:687
+#: includes/settings-page.php:276
 msgid "Save Settings"
 msgstr "Gem indstillinger"
 
-#: rvg-optimize-db.php:689
+#: includes/settings-page.php:278
 msgid "Go To Optimizer"
 msgstr "Gå til optimeringen"
 
-#: rvg-optimize-db.php:751 rvg-optimize-db.php:758 rvg-optimize-db.php:765
-#: rvg-optimize-db.php:772 rvg-optimize-db.php:780 rvg-optimize-db.php:787
-msgid "NO"
-msgstr "NEJ"
+# @ rvg-optimize-database
+#: rvg-optimize-db.php:229 rvg-optimize-db.php:230 rvg-optimize-db.php:244
+#: rvg-optimize-db.php:245 rvg-optimize-db.php:286 rvg-optimize-db.php:287
+#: rvg-optimize-db.php:305 rvg-optimize-db.php:306
+msgid "Optimize Database"
+msgstr "Optimer Database"
 
-#: rvg-optimize-db.php:751 rvg-optimize-db.php:758 rvg-optimize-db.php:765
-#: rvg-optimize-db.php:772 rvg-optimize-db.php:780 rvg-optimize-db.php:787
-msgid "YES"
-msgstr "JA"
+# @ optimize_db
+#: rvg-optimize-db.php:273
+msgid "Optimize DB (1 click)"
+msgstr "Optimer DB (1 klik)"
 
-#: rvg-optimize-db.php:796
-msgid "ONCE HOURLY"
-msgstr "Hver time"
+#: rvg-optimize-db.php:451
+msgid "Optimize Database after Deleting Revisions LOG FILE HAS BEEN DELETED"
+msgstr ""
 
-#: rvg-optimize-db.php:798
-msgid "TWICE DAILY"
-msgstr "To gange om dagen"
+#~ msgid ""
+#~ "Click <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold"
+#~ "\">HERE</a> to run the optimization"
+#~ msgstr ""
+#~ "Klik <a href=\"tools.php?page=rvg-optimize-db.php\" class=\"odb-bold"
+#~ "\">HER</a> for at starte processen"
 
-#: rvg-optimize-db.php:800
-msgid "ONCE DAILY"
-msgstr "En gang om dagen"
+#~ msgid "is an one-click plugin to clean and optimize your WordPress database"
+#~ msgstr "er et plugin til at rense og optimere din WordPress database"
 
-#: rvg-optimize-db.php:802
-msgid "ONCE WEEKLY"
-msgstr "En gang om ugen"
+#~ msgid ""
+#~ "Maximum number of - most recent - revisions<br />to keep per post / page"
+#~ msgstr ""
+#~ "Max antal af - seneste - revisioner<br />for at beholde pr. post / side"
 
 # @ rvg-optimize-database
-#: rvg-optimize-db.php:830
-msgid "Optimize your WordPress Database"
-msgstr "Optimer din WordPress Database"
+#~ msgid "Optimize your WordPress Database"
+#~ msgstr "Optimer din WordPress Database"
 
-#: rvg-optimize-db.php:839 rvg-optimize-db.php:2007
-msgid "A WordPress Plugin by"
-msgstr "Et Wordpress Plugin af"
+#~ msgid "Plugin version:"
+#~ msgstr "Plugin version:"
 
-#: rvg-optimize-db.php:844
-msgid "Current settings"
-msgstr "Nuværende indstillinger"
+#~ msgid "Author:"
+#~ msgstr "Forfatter:"
 
-#: rvg-optimize-db.php:847
-msgid "Maximum number of - most recent - revisions to keep per post / page"
-msgstr "Max antal af - seneste - revisioner for at beholde pr. post / side"
+#~ msgid "Plugin URL:"
+#~ msgstr "Plugin URL:"
 
-#: rvg-optimize-db.php:868
-msgid "Number of excluded tables"
-msgstr "Antal af ekskluderede tabeller"
-
-#: rvg-optimize-db.php:879
-msgid "Next scheduled run"
-msgstr "Næste planlagte optimering"
-
-#: rvg-optimize-db.php:888
-msgid "Total savings since the first run"
-msgstr "Samlet oprydning siden første optimering"
-
-#: rvg-optimize-db.php:895
-msgid "Change Settings"
-msgstr "Ændre indstillinger"
-
-#: rvg-optimize-db.php:901 rvg-optimize-db.php:1311
-msgid "View Log File"
-msgstr "Vis Log Fil"
-
-#: rvg-optimize-db.php:903 rvg-optimize-db.php:1313
-msgid "Delete Log File"
-msgstr "Slet Log Fil"
-
-#: rvg-optimize-db.php:912
-msgid "Start Optimization"
-msgstr "Start optimering"
-
-#: rvg-optimize-db.php:925
-msgid "Cleaning Database"
-msgstr "Optimerer Database"
-
-#: rvg-optimize-db.php:948
-msgid "DELETED REVISIONS"
-msgstr "SLETTEDE REVISIONER"
-
-#: rvg-optimize-db.php:953 rvg-optimize-db.php:1004 rvg-optimize-db.php:1056
-msgid "prefix"
-msgstr "prefix"
-
-#: rvg-optimize-db.php:954
-msgid "post / page"
-msgstr "post / side"
-
-#: rvg-optimize-db.php:955
-msgid "revision date"
-msgstr "revision dato"
-
-#: rvg-optimize-db.php:956
-msgid "revisions deleted"
-msgstr "revisioner slettet"
-
-#: rvg-optimize-db.php:963
-msgid "total number of revisions deleted"
-msgstr "totale antal revisioner slettet"
-
-#: rvg-optimize-db.php:973
-msgid "No REVISIONS found to delete"
-msgstr "Ingen REVISIONER blev fundet"
-
-#: rvg-optimize-db.php:999
-msgid "DELETED TRASHED ITEMS"
-msgstr "SLETTET TING I PAPIRKURVEN"
-
-#: rvg-optimize-db.php:1005
-msgid "type"
-msgstr "type"
-
-#: rvg-optimize-db.php:1006
-msgid "IP address / title"
-msgstr "IP adresse / titel"
-
-#: rvg-optimize-db.php:1007
-msgid "date"
-msgstr "dato"
-
-#: rvg-optimize-db.php:1014
-msgid "total number of trashed items deleted"
-msgstr "totale antal ting fra papirkurven slettet"
-
-#: rvg-optimize-db.php:1024
-msgid "No TRASHED ITEMS found to delete"
-msgstr "Ingen TING FRA PAPIRKURVEN blev slettet"
-
-#: rvg-optimize-db.php:1051
-msgid "DELETEED SPAMMED ITEMS"
-msgstr "SLETTEDE TING FRA SPAM"
-
-#: rvg-optimize-db.php:1057
-msgid "comment author"
-msgstr "kommentar forfatter"
-
-#: rvg-optimize-db.php:1058
-msgid "comment author email"
-msgstr "kommentar forfatter email"
-
-#: rvg-optimize-db.php:1059
-msgid "comment date"
-msgstr "kommentar dato"
-
-#: rvg-optimize-db.php:1066
-msgid "total number of spammed items deleted"
-msgstr "totale antal ting i spam blev slettet"
-
-#: rvg-optimize-db.php:1076
-msgid "No SPAMMED ITEMS found to delete"
-msgstr "Ingen TING FRA SPAM blev slettet"
-
-#: rvg-optimize-db.php:1100
-msgid "NUMBER OF UNUSED TAGS DELETED"
-msgstr "ANTAL AF UBENYTTEDE TAGS DER BLEV SLETTET"
-
-#: rvg-optimize-db.php:1108
-msgid "No UNUSED TAGS found to delete"
-msgstr "Ingen UBENYTTEDE TAGS blev slettet"
-
-#: rvg-optimize-db.php:1132
-msgid "NUMBER OF EXPIRED TRANSIENTS DELETED"
-msgstr "ANTALLET AF UDLØBNE TRANSIENTER DER BLEV SLETTET"
-
-#: rvg-optimize-db.php:1140
-msgid "No EXPIRED TRANSIENTS found to delete"
-msgstr "Ingen UDLØBNE TRANSIENTER blev slettet"
-
-#: rvg-optimize-db.php:1164
-msgid "NUMBER OF PINGBACKS AND TRACKBACKS DELETED"
-msgstr "ANTAL AF PINBACKS OG TRACKBACK DER BLEV SLETTET"
-
-#: rvg-optimize-db.php:1172
-msgid "No PINGBACKS nor TRACKBACKS found to delete"
-msgstr "Ingen PINGBACKS eller TRACKBACKS blev slettet"
-
-#: rvg-optimize-db.php:1193
-msgid "NUMBER OF POSTMETA ORPHANS DELETED"
-msgstr "ANTAL AF POSTMETA FORÆLDRELØSE SLETTET"
-
-#: rvg-optimize-db.php:1201
-msgid "No POSTMETA ORPHANS found to delete"
-msgstr "Ingen POSTMETA FORÆLDRELÆSE blev fundet"
-
-#: rvg-optimize-db.php:1218
-msgid "Optimizing Database Tables"
-msgstr "Optimering Database Tabeller"
-
-#: rvg-optimize-db.php:1226
-msgid "table name"
-msgstr "tabel navn"
-
-#: rvg-optimize-db.php:1227
-msgid "optimization result"
-msgstr "optimering resultat"
-
-#: rvg-optimize-db.php:1228
-msgid "engine"
-msgstr "motor"
-
-#: rvg-optimize-db.php:1229
-msgid "table rows"
-msgstr "tabel rækker"
-
-#: rvg-optimize-db.php:1230
-msgid "table size"
-msgstr "tabel størrelse"
-
-#: rvg-optimize-db.php:1256
-msgid "Savings"
-msgstr "Besparelse"
-
-#: rvg-optimize-db.php:1264
-msgid "size of the database"
-msgstr "størrelse på database"
-
-#: rvg-optimize-db.php:1267
-msgid "BEFORE optimization"
-msgstr "FØR optimering"
-
-#: rvg-optimize-db.php:1271
-msgid "AFTER optimization"
-msgstr "EFTER optimering"
-
-#: rvg-optimize-db.php:1275
-msgid "SAVINGS THIS TIME"
-msgstr "OPRYDNING DENNE GANG"
-
-#: rvg-optimize-db.php:1279
-msgid "TOTAL SAVINGS SINCE THE FIRST RUN"
-msgstr "SAMLET OPRYDNING SIDEN FØRSTE OPTIMERING"
-
-#: rvg-optimize-db.php:1294
-msgid "DONE!"
-msgstr "FÆRDIG!"
-
-# Optimization took xxx seconds
-#: rvg-optimize-db.php:1300
-msgid "Optimization took"
-msgstr "Optimering varede"
-
-# Optimization took xxx seconds
-#: rvg-optimize-db.php:1302
-msgid "seconds"
-msgstr "sekunder"
-
-#: rvg-optimize-db.php:1925
-msgid "InnoDB table: skipped..."
-msgstr "InnoDB tabel: skippet…"
-
-#: rvg-optimize-db.php:1931
-msgid "<span class=\"odb-optimized\">TABLE OPTIMIZED</span>"
-msgstr "<span class=\"odb-optimized\">TABEL OPTIMERET</span>"
-
-#: rvg-optimize-db.php:1932
-msgid "Table is already up to date"
-msgstr "Tabel er allerede optimeret"
-
-#: rvg-optimize-db.php:2011
-msgid "time"
-msgstr "tid"
-
-#: rvg-optimize-db.php:2012
-msgid "deleted<br />revisions"
-msgstr "slettede<br />revisioner"
-
-#: rvg-optimize-db.php:2013
-msgid "deleted<br />trash"
-msgstr "slettet<br />papirkurv"
-
-#: rvg-optimize-db.php:2014
-msgid "deleted<br />spam"
-msgstr "slettet<br />spam"
-
-#: rvg-optimize-db.php:2015
-msgid "deleted<br />tags"
-msgstr "slettede<br />tags"
-
-#: rvg-optimize-db.php:2016
-msgid "deleted<br />transients"
-msgstr "slettede<br />trasienter"
-
-#: rvg-optimize-db.php:2017
-msgid "deleted<br />pingbacks<br />trackbacks"
-msgstr "slettede<br />pingbacks<br />trackbacks"
-
-#: rvg-optimize-db.php:2018
-msgid "deleted<br />orphans"
-msgstr "slettede<br />forældreløse"
-
-# @ rvg-optimize-database
-#: rvg-optimize-db.php:2019
-msgid "nr of optimized tables"
-msgstr "nr af optimerede tabeller"
-
-#: rvg-optimize-db.php:2020
-msgid "database size BEFORE"
-msgstr "database størrelse FØR"
-
-#: rvg-optimize-db.php:2021
-msgid "database size AFTER"
-msgstr "database størrelse EFTER"
-
-#: rvg-optimize-db.php:2022
-msgid "SAVINGS"
-msgstr "OPRYDNING"
+#~ msgid "Download URL:"
+#~ msgstr "Download URL:"
 
 #~ msgid "<strong>TABLE OPTIMIZED</strong>"
 #~ msgstr "<strong>TABEL GEOPTIMALISEERD</strong>"
@@ -509,9 +559,6 @@ msgstr "OPRYDNING"
 
 #~ msgid "Using Optimize Database after Deleting Revisions"
 #~ msgstr "Med hjälp av Optimize Database after Deleting Revisions"
-
-#~ msgid "Author"
-#~ msgstr "Skapare"
 
 #~ msgid "Optimize Database after Deleting Revisions - Settings"
 #~ msgstr "Optimize Database after Deleting Revisions - Inställningar"

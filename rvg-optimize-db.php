@@ -1,17 +1,9 @@
 <?php
-/**
- * @package Optimize Database after Deleting Revisions
- * @version 3.5.1
- */
-/*
-Plugin Name: Optimize Database after Deleting Revisions
-Plugin URI: http://cagewebdev.com/index.php/optimize-database-after-deleting-revisions-wordpress-plugin/
-Description: Optimizes the Wordpress Database after Cleaning it out
-Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
-Author URI: http://cagewebdev.com
-Version: 3.5.1
-*/
-
+/********************************************************************************************
+ *
+ *	THIS FILE IS JUST HERE TO FIX THE RE-ACTIVATION ISSUE AFTER UPDATE
+ *
+ ********************************************************************************************/
 $odb_version      = '3.5.1';
 $odb_release_date = '11/01/2015';
 
