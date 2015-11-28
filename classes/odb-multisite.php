@@ -57,6 +57,9 @@ class ODB_MultiSite
 	 ********************************************************************************************/
 	function odb_ms_update_option($option, $value)
 	{
+		// v4.0.2
+		global $odb_class;
+		
 		if(is_multisite() &&
 			function_exists('is_plugin_active_for_network') &&
 				is_plugin_active_for_network($odb_class->odb_main_file))
@@ -71,6 +74,9 @@ class ODB_MultiSite
 	 ********************************************************************************************/
 	function odb_ms_delete_option($option)
 	{
+		// v4.0.2
+		global $odb_class;
+				
 		if(is_multisite() &&
 			function_exists('is_plugin_active_for_network') &&
 				is_plugin_active_for_network($odb_class->odb_main_file))

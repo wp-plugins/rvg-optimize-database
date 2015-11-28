@@ -169,17 +169,17 @@ echo '
               <td width="50%" valign="top"><input name="rvg_clear_pingbacks" type="checkbox" value="Y" '.$cb_ping.'></td>
             </tr>
             <tr>
-              <td width="50%" align="right" valign="top"><span class="odb-bold">
-                '.__('Keep a log',$this->odb_txt_domain).'
-                </span></td>
-              <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" '.$cb_logging.'></td>
-            </tr>
-            <tr>
               <td align="right" valign="top"><span class="odb-bold">
                 '. __('Optimize InnoDB tables too',$this->odb_txt_domain).'
                 </span></td>
               <td valign="top"><input name="rvg_odb_optimize_innodb" type="checkbox" value="Y" '.$cb_optimize_innodb.'></td>
             </tr>			
+            <tr>
+              <td width="50%" align="right" valign="top"><span class="odb-bold">
+                '.__('Keep a log',$this->odb_txt_domain).'
+                </span></td>
+              <td width="50%" valign="top"><input name="rvg_odb_logging_on" type="checkbox" value="Y" '.$cb_logging.'></td>
+            </tr>	
             <tr>
               <td width="50%" align="right"><span class="odb-bold">
                 '.__('Scheduler',$this->odb_txt_domain).'

@@ -8,8 +8,8 @@ Author URI: http://cagewebdev.com
 Author: CAGE Web Design | Rolf van Gelder, Eindhoven, The Netherlands
 Requires at least: 2.8
 Tested up to: 4.4
-Stable tag: 4.0.1
-Version: 4.0.1
+Stable tag: 4.0.2
+Version: 4.0.2
 License: GPLv2 or later
 
 == Description ==
@@ -86,6 +86,9 @@ http://cagewebdev.com/index.php/wordpress-plugins/
 * If you run the plugin from any of the sites, it will cleanup ALL the sites in the network!
 
 == Changelog ==
+= 4.0.2 [11/28/2015] =
+* BUG FIX: Settings weren't saved correctly for MultiSites
+
 = 4.0.1 [11/27/2015] =
 * NEW: New option: optimize InnoDB tables too
 * BUG FIX: Localization fixed for extra cron schedules
